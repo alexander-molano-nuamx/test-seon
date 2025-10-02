@@ -1,0 +1,199 @@
+.login {
+    width: 100%;
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    align-items: center;
+    justify-content: center;
+    background-image: url("/background.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-color: #000;
+    text-align: center;
+    font-size: 48px;
+    color: #fff;
+    font-family: Roboto;
+}
+
+.idKcHeader {
+    width: 100%;
+    max-width: 1440px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* centra verticalmente el texto */
+    padding: 40px;
+    box-sizing: border-box;
+    gap: 24px;
+}
+
+/* Imagen alineada a la derecha */
+.idKcHeaderImage {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Texto centrado */
+.idKcHeaderText {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.sistemaDeEmisiones {
+    font-size: 3rem;
+    line-height: 116.7%;
+    color: var(--color-white);
+    font-family: var(--font-roboto);
+}
+
+.logoIcon {
+    width: 213px;
+    height: 49px;
+}
+
+.cardPf {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 10px;
+    font-size: 24px;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.cardBackground {
+    border-radius: 16px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 30px 40px 40px;
+}
+
+.headerCard3 {
+    width: 420px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 0px;
+    box-sizing: border-box;
+    gap: 25px;
+}
+
+.h1 {
+    width: 100%;
+    position: relative;
+    font-size: 1.5rem;
+    line-height: 133.4%;
+    font-family: var(--font-roboto);
+    color: var(--color-gray-300);
+    text-align: center;
+    display: inline-block;
+}
+
+.kcContent {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 15px;
+    text-align: left;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.kcFormButtonsIniciarSesio {
+    width: 100%;
+}
+
+.textFieldCustom {
+    width: 100%;
+    background-color: var(--color-white);
+    border-radius: 4px;
+    font-family: var(--font-roboto);
+    color: var(--color-gray-300);
+    border: 2px solid var(--color-orangered);
+    margin-top: -8px;
+    /* padding: 0px 12px; */
+}
+
+.textFieldCustom label {
+    color: var(--color-orangered);
+    font-size: var(--fs-12);
+    /* background: var(--color-white); */
+    margin-bottom: -8px;
+    margin-left: 12px;
+    /* top: -8px; */
+}
+
+.textFieldCustom .MuiFilledInput-root {
+    background-color: var(--color-white);
+    border-radius: 4px;
+    padding: var(--padding-8) 0;
+    font-size: var(--fs-16);
+    line-height: var(--lh-24);
+}
+
+.textFieldCustom .MuiInputBase-input {
+    padding: var(--padding-8);
+}
+
+.textFieldCustom .MuiFormHelperText-root {
+    padding-left: 14px;
+    font-size: var(--fs-12);
+    color: var(--color-gray-100);
+}
+
+.textFieldCustom .MuiInputAdornment-root {
+    color: var(--color-gray-200);
+}
+
+.textFieldCustom .MuiIconButton-root {
+    padding: var(--padding-4);
+    height: var(--height-24);
+    width: var(--width-24);
+}
+
+.textFieldCustom .MuiInputBase-root {
+    border-color: var(--color-orangered) !important;
+}
+
+.textFieldCustom label {
+    transform: none !important;
+    position: static !important;
+}
+
+/* Ajuste visual del label para inputs con shrink: true */
+.textFieldCustom .MuiInputLabel-root {
+    transform: translate(12px, 6px) scale(1) !important;
+    font-size: var(--fs-12);
+    font-weight: 400;
+    color: var(--color-orangered);
+    background-color: var(--color-white);
+    padding: 0 4px;
+    pointer-events: none;
+}
+
+/* .textFieldCustom .MuiInputLabel-root {
+    display: none;
+} */
+
+.forgotPasswordLink {
+    font-size: var(--fs-14);
+    color: var(--color-orangered);
+    text-decoration: none;
+    font-family: var(--font-roboto);
+    cursor: pointer;
+    transition: text-decoration 0.2s ease;
+}
+
+.forgotPasswordLink:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,57 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500&display=swap");
+@import "tailwindcss";
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: black !important;
+}
+
+:root {
+  --color-gray-100: rgba(0, 0, 0, 0.6);
+  --color-gray-200: rgba(0, 0, 0, 0.38);
+  --color-gray-300: rgba(0, 0, 0, 0.87);
+  --color-orangered: #ff4201;
+  --color-silver: #b8b8b8;
+  --color-white: #fff;
+
+  --padding-0: 0px;
+  --padding-4: 4px;
+  --padding-8: 8px;
+
+  --font-roboto: Roboto;
+
+  --fs-12: 12px;
+  --fs-16: 16px;
+
+  --height-24: 24px;
+  --width-24: 24px;
+
+  --lh-24: 24px;
+}
+
+:root {
+  --color-gray-100: rgba(0, 0, 0, 0.6);
+  --color-gray-200: rgba(0, 0, 0, 0.38);
+  --color-gray-300: rgba(0, 0, 0, 0.87);
+  --color-orangered: #ff4201;
+  --color-silver: #b8b8b8;
+  --color-white: #fff;
+
+  --padding-0: 0px;
+  --padding-4: 4px;
+  --padding-8: 8px;
+
+  --font-roboto: Roboto;
+
+  --fs-12: 12px;
+  --fs-14: 14px;
+  --fs-16: 16px;
+
+  --height-24: 24px;
+  --width-24: 24px;
+
+  --lh-24: 24px;
+}
