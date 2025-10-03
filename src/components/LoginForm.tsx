@@ -111,7 +111,7 @@ export function LoginForm() {
       {/* reCAPTCHA */}
       <Box mt={1} width="100%" display="flex" justifyContent="left">
         <ReCAPTCHA
-          sitekey="6LcEs9srAAAAALVss2OgzIBtogU9zjJNno73c4yp"
+          sitekey="6LeBlN0rAAAAAB-hyhZDXZrFNEVibSW6bO548Kwi"
           onChange={handleRecaptchaChange}
         />
       </Box>
