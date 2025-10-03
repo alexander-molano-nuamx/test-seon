@@ -64,11 +64,10 @@ export function LoginForm() {
           <TextField
             {...field}
             label="Ingresar Correo Electrónico"
-            aria-label="asdasda"
+            aria-label=""
             variant="outlined"
             fullWidth
             className={styles.textFieldCustom}
-            InputProps={{ disableUnderline: true }}
             InputLabelProps={{ shrink: true }} // 👈 hace que el label esté fijo arriba
             error={!!errors.email}
             helperText={errors.email?.message}
