@@ -5,6 +5,7 @@ import { Roboto } from "next/font/google";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { theme } from "@/theme/theme";
 import "./globals.css";
+import Script from "next/script";
 
 const roboto = Roboto({
   weight: ["400", "500"],
@@ -29,6 +30,19 @@ export default function RootLayout({
           <CssBaseline />
           {children}
         </ThemeProvider>
+        {/* ✅ Hotjar Tracking Code */}
+        <Script id="hotjar" strategy="afterInteractive">
+          {`
+            (function(h,o,t,j,a,r){
+                h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                h._hjSettings={hjid:6537479,hjsv:6};
+                a=o.getElementsByTagName('head')[0];
+                r=o.createElement('script');r.async=1;
+                r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+          `}
+        </Script>
       </body>
     </html>
   );
