@@ -91,7 +91,7 @@ export function MainContent({ sidebarWidth }: MainContentProps) {
         {/* Filters */}
         <Paper sx={{ p: 2, mb: 2 }}>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <TextField
                 fullWidth
                 placeholder="Buscar Promotor"
@@ -106,7 +106,7 @@ export function MainContent({ sidebarWidth }: MainContentProps) {
                 size="small"
               />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <FormControl fullWidth size="small">
                 <InputLabel>
                   Fechas de Final de Recepción de Aceptaci..
@@ -123,7 +123,7 @@ export function MainContent({ sidebarWidth }: MainContentProps) {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <FormControl fullWidth size="small">
                 <InputLabel>Estado</InputLabel>
                 <Select label="Estado">
@@ -139,7 +139,7 @@ export function MainContent({ sidebarWidth }: MainContentProps) {
 
         {/* Summary Cards */}
         <Grid container spacing={2} sx={{ mb: 2 }}>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
             <Card sx={{ backgroundColor: "#f4f4f4", minHeight: 60 }}>
               <CardContent
                 sx={{ display: "flex", alignItems: "center", gap: 1, py: 1.5 }}
@@ -151,7 +151,7 @@ export function MainContent({ sidebarWidth }: MainContentProps) {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
             <Card sx={{ backgroundColor: "#f4f4f4", minHeight: 60 }}>
               <CardContent
                 sx={{ display: "flex", alignItems: "center", gap: 1, py: 1.5 }}
