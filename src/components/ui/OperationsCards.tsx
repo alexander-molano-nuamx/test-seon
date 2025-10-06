@@ -1,0 +1,212 @@
+import React from "react";
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Chip,
+  Pagination,
+  Grid,
+} from "@mui/material";
+
+import Image from "next/image";
+
+interface Operation {
+  id: number;
+  status: "vigente" | "cerrada" | "finalizada" | "adjudicada";
+  issuer: string;
+  issuerLogo?: string;
+  operationType: string;
+  totalAmount: string;
+  closeDate: string;
+  seriesNumber: string;
+}
+
+interface OperationsCardsProps {
+  dataCard: Operation[];
+}
+
+const getStatusChip = (status: Operation["status"]) => {
+  const statusConfig = {
+    vigente: { label: "Vigente", bg: "rgba(46,125,50,0.3)" },
+    cerrada: { label: "Cerrada", bg: "rgba(0,0,0,0.08)" },
+    finalizada: { label: "Finalizada", bg: "rgba(0,0,0,0.08)" },
+    adjudicada: { label: "Adjudicada", bg: "#f8e2da" },
+  };
+
+  const config = statusConfig[status];
+  return (
+    <Chip
+      label={config.label}
+      size="small"
+      sx={{
+        backgroundColor: config.bg,
+        color: "rgba(0,0,0,0.87)",
+        fontSize: "13px",
+        height: 24,
+      }}
+    />
+  );
+};
+
+export function OperationsCards({ dataCard: data }: OperationsCardsProps) {
+  const [page, setPage] = React.useState(1);
+  const itemsPerPage = 8;
+
+  const handleChangePage = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage(value);
+  };
+
+  const startIndex = (page - 1) * itemsPerPage;
+  const displayedData = data.slice(startIndex, startIndex + itemsPerPage);
+
+  return (
+    <Box>
+      <Grid container spacing={2}>
+        {displayedData.map((operation) => (
+          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={operation.id}>
+            <Card
+              sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                borderRadius: 2,
+                boxShadow: "0 1px 3px rgba(0,0,0,0.12)",
+                transition: "box-shadow 0.3s",
+                "&:hover": {
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                },
+              }}
+            >
+              <CardContent sx={{ flexGrow: 1, p: 2 }}>
+                {/* Logo y estado */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    mb: 2,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 60,
+                      height: 60,
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Image
+                      src={operation.issuerLogo || "/assets/default.png"}
+                      alt={operation.issuer}
+                      width={60}
+                      height={60}
+                      style={{ objectFit: "contain" }}
+                    />
+                  </Box>
+                  {getStatusChip(operation.status)}
+                </Box>
+
+                {/* Tipo de operación */}
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontSize: "16px",
+                    fontWeight: 500,
+                    color: "#3D3D3D",
+                    mb: 1,
+                    minHeight: "48px",
+                  }}
+                >
+                  {operation.operationType}
+                </Typography>
+
+                {/* Series */}
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontSize: "14px",
+                    color: "rgba(0,0,0,0.6)",
+                    mb: 2,
+                  }}
+                >
+                  {operation.seriesNumber}
+                </Typography>
+
+                {/* Monto */}
+                <Box sx={{ mb: 2 }}>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      fontSize: "12px",
+                      color: "#FF4201",
+                      fontWeight: 500,
+                    }}
+                  >
+                    Monto total ofertado
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontSize: "16px",
+                      fontWeight: 500,
+                      color: "#3D3D3D",
+                    }}
+                  >
+                    {operation.totalAmount}
+                  </Typography>
+                </Box>
+
+                {/* Fecha de aceptaciones */}
+                <Box>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      fontSize: "12px",
+                      color: "rgba(0,0,0,0.6)",
+                    }}
+                  >
+                    Fecha de Aceptaciones
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontSize: "14px",
+                      color: "#3D3D3D",
+                    }}
+                  >
+                    {operation.closeDate}
+                  </Typography>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+
+      {/* Paginación */}
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+        <Pagination
+          count={Math.ceil(data.length / itemsPerPage)}
+          page={page}
+          onChange={handleChangePage}
+          color="primary"
+          sx={{
+            "& .MuiPaginationItem-root": {
+              color: "#3D3D3D",
+            },
+            "& .Mui-selected": {
+              backgroundColor: "#FF4201 !important",
+              color: "#fff",
+            },
+          }}
+        />
+      </Box>
+    </Box>
+  );
+}

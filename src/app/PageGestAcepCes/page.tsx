@@ -17,6 +17,7 @@ import {
   CalendarToday as CalendarTodayIcon,
   Description as DescriptionIcon,
 } from "@mui/icons-material";
+
 import { RestrictedDevice } from "@/components/RestrictedDevice";
 import { AppHeader } from "@/components/AppHeader";
 import { AppSidebar } from "@/components/AppSidebar";
@@ -66,7 +67,7 @@ export default function PageGestAcepCes() {
           mt: "56px",
           ml: sidebarOpen ? 0 : `-${drawerWidth}px`,
           transition: "margin 0.3s",
-          backgroundColor: "#fff",
+          backgroundColor: "#f5f5f5",
           minHeight: "calc(100vh - 56px)",
         }}
       >
@@ -116,7 +117,7 @@ export default function PageGestAcepCes() {
         >
           {/* Buscador */}
           <TextField
-            placeholder="Buscar Emisor"
+            placeholder="Buscar Promotor"
             variant="outlined"
             InputProps={{
               startAdornment: (
@@ -218,10 +219,10 @@ export default function PageGestAcepCes() {
                 borderRadius: "4px",
               }}
             >
-              <MenuItem value="adjudicada">Adjudicada</MenuItem>
-              <MenuItem value="cerrada">Cerrada</MenuItem>
-              <MenuItem value="finalizada">Finalizada</MenuItem>
-              <MenuItem value="vigente">Vigente</MenuItem>
+              <MenuItem value="">Todos</MenuItem>
+              <MenuItem value="pendiente">Pendiente</MenuItem>
+              <MenuItem value="aprobado">Aprobado</MenuItem>
+              <MenuItem value="rechazado">Rechazado</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -238,8 +239,9 @@ export default function PageGestAcepCes() {
           {/* Tarjeta 1 - Fecha final */}
           <Box
             sx={{
-              flex: "1 1 400px",
-              backgroundColor: "var(--grey-50)",
+              flex: "1 1 calc(50% - 8px)",
+              minWidth: "300px",
+              backgroundColor: "#fff",
               p: 2,
               borderRadius: "8px",
               boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
@@ -253,11 +255,13 @@ export default function PageGestAcepCes() {
               Fecha final de gestión de aceptaciones: 5 de Octubre 2025
             </Typography>
           </Box>
+
           {/* Tarjeta 2 - Cantidad de operaciones */}
           <Box
             sx={{
-              flex: "1 1 400px",
-              backgroundColor: "var(--grey-50)",
+              flex: "1 1 calc(50% - 8px)",
+              minWidth: "300px",
+              backgroundColor: "#fff",
               p: 2,
               borderRadius: "8px",
               boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
@@ -271,9 +275,10 @@ export default function PageGestAcepCes() {
               Cantidad de operaciones: 50
             </Typography>
           </Box>
-          {/* Tabla de Operaciones */}
-          <OperationsTable /> {/* ← AQUÍ está la tabla */}
         </Box>
+
+        {/* Tabla de Operaciones */}
+        <OperationsTable />
       </Box>
     </Box>
   );

@@ -11,8 +11,16 @@ import {
   Link,
   Box,
   TablePagination,
+  Typography,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@mui/material";
+import {
+  ViewList as ViewListIcon,
+  ViewModule as ViewModuleIcon,
+} from "@mui/icons-material";
 import Image from "next/image";
+import { OperationsCards } from "@/components/ui/OperationsCards";
 
 interface Operation {
   id: number;
@@ -25,6 +33,7 @@ interface Operation {
   offerAmount: string;
   totalAmount: string;
   closeDate: string;
+  seriesNumber: string;
 }
 
 const mockData: Operation[] = [
@@ -39,6 +48,7 @@ const mockData: Operation[] = [
     offerAmount: "1.000.000",
     totalAmount: "43.000.000.00",
     closeDate: "15 de marzo 2024",
+    seriesNumber: "No de Series 7",
   },
   {
     id: 2,
@@ -51,6 +61,7 @@ const mockData: Operation[] = [
     offerAmount: "234.870.000",
     totalAmount: "234.870.00",
     closeDate: "15 de marzo 2024",
+    seriesNumber: "No de Series 7",
   },
   {
     id: 3,
@@ -63,6 +74,7 @@ const mockData: Operation[] = [
     offerAmount: "500.000",
     totalAmount: "20.000.000",
     closeDate: "15 de marzo 2024",
+    seriesNumber: "No de Series 7",
   },
   {
     id: 4,
@@ -75,6 +87,7 @@ const mockData: Operation[] = [
     offerAmount: "300.000",
     totalAmount: "900.000",
     closeDate: "15 de marzo 2024",
+    seriesNumber: "No de Series 7",
   },
   {
     id: 5,
@@ -87,6 +100,7 @@ const mockData: Operation[] = [
     offerAmount: "70.000",
     totalAmount: "2.660.000",
     closeDate: "15 de marzo 2024",
+    seriesNumber: "No de Series 7",
   },
   {
     id: 6,
@@ -99,6 +113,7 @@ const mockData: Operation[] = [
     offerAmount: "2.500.000",
     totalAmount: "50.000.000",
     closeDate: "15 de marzo 2024",
+    seriesNumber: "No de Series 7",
   },
   {
     id: 7,
@@ -111,6 +126,7 @@ const mockData: Operation[] = [
     offerAmount: "348.454.870",
     totalAmount: "348.454.870",
     closeDate: "15 de marzo 2024",
+    seriesNumber: "No de Series 7",
   },
   {
     id: 8,
@@ -123,6 +139,7 @@ const mockData: Operation[] = [
     offerAmount: "10.000.000",
     totalAmount: "12.300.000",
     closeDate: "15 de marzo 2024",
+    seriesNumber: "No de Series 7",
   },
   {
     id: 9,
@@ -135,6 +152,7 @@ const mockData: Operation[] = [
     offerAmount: "1.250.000",
     totalAmount: "75.000.000",
     closeDate: "15 de marzo 2024",
+    seriesNumber: "No de Series 7",
   },
   {
     id: 10,
@@ -147,6 +165,7 @@ const mockData: Operation[] = [
     offerAmount: "450.000",
     totalAmount: "1.250.000",
     closeDate: "15 de marzo 2024",
+    seriesNumber: "No de Series 7",
   },
 ];
 
@@ -176,6 +195,7 @@ const getStatusChip = (status: Operation["status"]) => {
 export function OperationsTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [viewMode, setViewMode] = React.useState<"table" | "cards">("table");
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -188,216 +208,278 @@ export function OperationsTable() {
     setPage(0);
   };
 
+  const handleViewModeChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newViewMode: "table" | "cards" | null
+  ) => {
+    if (newViewMode !== null) {
+      setViewMode(newViewMode);
+    }
+  };
+
   return (
     <Box>
-      <TableContainer
-        component={Paper}
+      {/* Selector de vista */}
+      <Box
         sx={{
-          border: "1px solid rgba(0,0,0,0.12)",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          mb: 2,
+          gap: 1,
         }}
       >
-        <Table>
-          <TableHead>
-            <TableRow sx={{ backgroundColor: "#fafafa" }}>
-              <TableCell
-                sx={{
-                  fontWeight: 500,
-                  fontSize: "14px",
-                  color: "rgba(0,0,0,0.87)",
-                }}
-              >
-                Detalles
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: 500,
-                  fontSize: "14px",
-                  color: "rgba(0,0,0,0.87)",
-                }}
-              >
-                Estado
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: 500,
-                  fontSize: "14px",
-                  color: "rgba(0,0,0,0.87)",
-                }}
-              >
-                Emisor
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: 500,
-                  fontSize: "14px",
-                  color: "rgba(0,0,0,0.87)",
-                }}
-              >
-                Tipo de Operación
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: 500,
-                  fontSize: "14px",
-                  color: "rgba(0,0,0,0.87)",
-                }}
-              >
-                Nemotécnico
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: 500,
-                  fontSize: "14px",
-                  color: "rgba(0,0,0,0.87)",
-                }}
-              >
-                Fecha de Inicio ...
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: 500,
-                  fontSize: "14px",
-                  color: "rgba(0,0,0,0.87)",
-                }}
-              >
-                Cantidad de la Oferta
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: 500,
-                  fontSize: "14px",
-                  color: "rgba(0,0,0,0.87)",
-                }}
-              >
-                Monto de la Oferta
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: 500,
-                  fontSize: "14px",
-                  color: "rgba(0,0,0,0.87)",
-                }}
-              >
-                Fecha de Cierre Ingreso de Aceptaciones/Cesiones
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {mockData
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => (
-                <TableRow
-                  key={row.id}
-                  hover
-                  sx={{
-                    "&:hover": {
-                      backgroundColor: "rgba(0,0,0,0.04)",
-                    },
-                  }}
-                >
-                  <TableCell sx={{ padding: "0 12px 0 0", width: "132px" }}>
-                    <Link
-                      href="#"
+        <Typography variant="body2" sx={{ color: "#3D3D3D", fontSize: "14px" }}>
+          Ver
+        </Typography>
+        <ToggleButtonGroup
+          value={viewMode}
+          exclusive
+          onChange={handleViewModeChange}
+          size="small"
+          sx={{
+            "& .MuiToggleButton-root": {
+              border: "1px solid rgba(0,0,0,0.12)",
+              color: "#3D3D3D",
+              padding: "4px 8px",
+              "&.Mui-selected": {
+                backgroundColor: "#FF4201",
+                color: "#fff",
+                "&:hover": {
+                  backgroundColor: "#FF3700",
+                },
+              },
+            },
+          }}
+        >
+          <ToggleButton value="table" aria-label="vista de tabla">
+            <ViewListIcon sx={{ fontSize: 20 }} />
+          </ToggleButton>
+          <ToggleButton value="cards" aria-label="vista de tarjetas">
+            <ViewModuleIcon sx={{ fontSize: 20 }} />
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+
+      {/* Mostrar tabla o tarjetas según el modo */}
+      {viewMode === "table" ? (
+        <>
+          <TableContainer
+            component={Paper}
+            sx={{
+              border: "1px solid rgba(0,0,0,0.12)",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+            }}
+          >
+            <Table>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: "#fafafa" }}>
+                  <TableCell
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: "14px",
+                      color: "rgba(0,0,0,0.87)",
+                    }}
+                  >
+                    Detalles
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: "14px",
+                      color: "rgba(0,0,0,0.87)",
+                    }}
+                  >
+                    Estado
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: "14px",
+                      color: "rgba(0,0,0,0.87)",
+                    }}
+                  >
+                    Emisor
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: "14px",
+                      color: "rgba(0,0,0,0.87)",
+                    }}
+                  >
+                    Tipo de Operación
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: "14px",
+                      color: "rgba(0,0,0,0.87)",
+                    }}
+                  >
+                    Nemotécnico
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: "14px",
+                      color: "rgba(0,0,0,0.87)",
+                    }}
+                  >
+                    Fecha de Inicio ...
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: "14px",
+                      color: "rgba(0,0,0,0.87)",
+                    }}
+                  >
+                    Cantidad de la Oferta
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: "14px",
+                      color: "rgba(0,0,0,0.87)",
+                    }}
+                  >
+                    Monto de la Oferta
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: "14px",
+                      color: "rgba(0,0,0,0.87)",
+                    }}
+                  >
+                    Fecha de Cierre Ingreso de Aceptaciones/Cesiones
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {mockData
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => (
+                    <TableRow
+                      key={row.id}
+                      hover
                       sx={{
-                        color: "#FF4201",
-                        textDecoration: "underline",
-                        fontSize: "14px",
-                        display: "block",
-                        width: "100%",
-                        height: "100%",
-                        padding: "16px",
                         "&:hover": {
-                          color: "#FF3700",
-                          backgroundColor: "rgba(255, 66, 1, 0.04)",
+                          backgroundColor: "rgba(0,0,0,0.04)",
                         },
                       }}
                     >
-                      Ver Detalles
-                    </Link>
-                  </TableCell>
-                  <TableCell>{getStatusChip(row.status)}</TableCell>
-                  <TableCell>
-                    <Box
-                      sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
-                    >
-                      <Box
-                        sx={{
-                          width: 64,
-                          height: 48,
-                          position: "relative",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
+                      <TableCell sx={{ padding: 0 }}>
+                        <Link
+                          href="#"
+                          sx={{
+                            color: "#FF4201",
+                            textDecoration: "underline",
+                            fontSize: "14px",
+                            display: "block",
+                            width: "100%",
+                            height: "100%",
+                            padding: "16px",
+                            "&:hover": {
+                              color: "#FF3700",
+                              backgroundColor: "rgba(255, 66, 1, 0.04)",
+                            },
+                          }}
+                        >
+                          Ver Detalles
+                        </Link>
+                      </TableCell>
+                      <TableCell>{getStatusChip(row.status)}</TableCell>
+                      <TableCell>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1.5,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: 32,
+                              height: 32,
+                              position: "relative",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <Image
+                              src={row.issuerLogo || "/assets/default.png"}
+                              alt={row.issuer}
+                              width={32}
+                              height={32}
+                              style={{ objectFit: "contain" }}
+                            />
+                          </Box>
+                          <span style={{ fontSize: "14px" }}>{row.issuer}</span>
+                        </Box>
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
                       >
-                        <Image
-                          src={row.issuerLogo || "/assets/default.png"}
-                          alt={row.issuer}
-                          width={48}
-                          height={48}
-                          style={{ objectFit: "contain" }}
-                        />
-                      </Box>
-                      {/* <span style={{ fontSize: "14px" }}>{row.issuer}</span> */}
-                    </Box>
-                  </TableCell>
-                  <TableCell
-                    sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
-                  >
-                    {row.operationType}
-                  </TableCell>
-                  <TableCell
-                    sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
-                  >
-                    {row.nemotechnical}
-                  </TableCell>
-                  <TableCell
-                    sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
-                  >
-                    {row.startDate}
-                  </TableCell>
-                  <TableCell
-                    sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
-                  >
-                    {row.offerAmount}
-                  </TableCell>
-                  <TableCell
-                    sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
-                  >
-                    {row.totalAmount}
-                  </TableCell>
-                  <TableCell
-                    sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
-                  >
-                    {row.closeDate}
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                        {row.operationType}
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
+                      >
+                        {row.nemotechnical}
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
+                      >
+                        {row.startDate}
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
+                      >
+                        {row.offerAmount}
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
+                      >
+                        {row.totalAmount}
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
+                      >
+                        {row.closeDate}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={mockData.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage="Filas por página:"
-        labelDisplayedRows={({ from, to, count }) =>
-          `${from}-${to} de ${count}`
-        }
-        sx={{
-          backgroundColor: "#fff",
-          borderTop: "1px solid rgba(0,0,0,0.12)",
-          "& .MuiTablePagination-toolbar": {
-            justifyContent: "flex-end",
-          },
-        }}
-      />
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={mockData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            labelRowsPerPage="Filas por página:"
+            labelDisplayedRows={({ from, to, count }) =>
+              `${from}-${to} de ${count}`
+            }
+            sx={{
+              backgroundColor: "#fff",
+              borderTop: "1px solid rgba(0,0,0,0.12)",
+              "& .MuiTablePagination-toolbar": {
+                justifyContent: "flex-end",
+              },
+            }}
+          />
+        </>
+      ) : (
+        <OperationsCards dataCard={mockData} />
+      )}
     </Box>
   );
 }
