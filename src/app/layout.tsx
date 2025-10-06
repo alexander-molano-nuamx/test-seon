@@ -2,7 +2,7 @@
 
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
 import { theme } from "@/theme/theme";
 import "./globals.css";
 import Script from "next/script";
@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={roboto.variable}>
+    <html lang="es" className={theme.typography.fontFamily}>
       <body className={`antialiased bg-transparent`}>
         <ThemeProvider theme={theme}>
           <CssBaseline />

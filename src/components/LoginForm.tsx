@@ -14,6 +14,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "@/styles/index.module.css";
 
 const schema = yup
@@ -28,30 +29,75 @@ const schema = yup
 
 type LoginData = yup.InferType<typeof schema>;
 
+// Usuarios válidos para acceder al sistema
+const VALID_USERS = [
+  {
+    email: "admin@seon.com",
+    password: "Admin123",
+  },
+  {
+    email: "usuario1@kallpa.com",
+    password: "Kallpa2024",
+  },
+  {
+    email: "gestor@operaciones.com",
+    password: "Gestor456",
+  },
+];
+
 export function LoginForm() {
+  const router = useRouter();
   const {
     control,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<LoginData>({
     resolver: yupResolver(schema),
   });
 
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleRecaptchaChange = (token: string | null) => {
     setCaptchaToken(token);
   };
 
   const handleTogglePassword = () => setShowPassword((prev) => !prev);
-  const onSubmit = (data: LoginData) => {
+
+  const onSubmit = async (data: LoginData) => {
     if (!captchaToken) {
       alert("Por favor completa el reCAPTCHA");
       return;
     }
-    console.log("🚀 Datos del formulario:", data);
-    console.log("🔐 Token CAPTCHA:", captchaToken);
-    // Aquí iría la lógica de login real (fetch / auth)
+
+    setIsLoading(true);
+
+    // Simular un pequeño delay de autenticación
+    setTimeout(() => {
+      // Verificar si el usuario existe en la lista de usuarios válidos
+      const userExists = VALID_USERS.find(
+        (user) => user.email === data.email && user.password === data.password
+      );
+
+      if (userExists) {
+        console.log("✅ Login exitoso:", data.email);
+        // Redirigir a PageGestAcepCes
+        router.push("/PageGestAcepCes");
+      } else {
+        // Mostrar error si las credenciales no son válidas
+        setError("email", {
+          type: "manual",
+          message: "Credenciales inválidas",
+        });
+        setError("password", {
+          type: "manual",
+          message: "Credenciales inválidas",
+        });
+        setIsLoading(false);
+      }
+    }, 500);
   };
 
   return (
@@ -68,9 +114,10 @@ export function LoginForm() {
             variant="outlined"
             fullWidth
             className={styles.textFieldCustom}
-            InputLabelProps={{ shrink: true }} // 👈 hace que el label esté fijo arriba
+            InputLabelProps={{ shrink: true }}
             error={!!errors.email}
             helperText={errors.email?.message}
+            disabled={isLoading}
           />
         )}
       />
@@ -96,9 +143,10 @@ export function LoginForm() {
                 </InputAdornment>
               ),
             }}
-            InputLabelProps={{ shrink: true }} // 👈 forzar label fijo
+            InputLabelProps={{ shrink: true }}
             error={!!errors.password}
             helperText={errors.password?.message}
+            disabled={isLoading}
           />
         )}
       />
@@ -123,9 +171,12 @@ export function LoginForm() {
           variant="contained"
           fullWidth
           className={styles.kcFormButtonsIniciarSesio}
+          disabled={isLoading}
         >
           <div className={styles.base}>
-            <div className={styles.button}>Iniciar sesión</div>
+            <div className={styles.button}>
+              {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
+            </div>
           </div>
         </Button>
       </Box>
