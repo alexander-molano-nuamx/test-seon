@@ -84,7 +84,7 @@ export function AppSidebar({ open, width = 240 }: AppSidebarProps) {
 
   return (
     <Drawer
-      variant="persistent"
+      variant="permanent"
       open={open}
       sx={{
         width: open ? width : 0,
@@ -94,7 +94,11 @@ export function AppSidebar({ open, width = 240 }: AppSidebarProps) {
           boxSizing: "border-box",
           borderRight: "1px solid #e0e0e0",
           marginTop: "56px",
-          transition: "width 0.3s",
+          transition: "transform 0.3s ease-in-out",
+          transform: open ? "translateX(0)" : `translateX(-${width}px)`,
+          position: "fixed",
+          height: "calc(100vh - 56px)",
+          overflowY: "auto",
         },
       }}
     >

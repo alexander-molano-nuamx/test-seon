@@ -1,17 +1,9 @@
 "use client";
 
-import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
-import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
+import { ThemeProvider, CssBaseline } from "@mui/material";
 import { theme } from "@/theme/theme";
 import "./globals.css";
 import Script from "next/script";
-
-const roboto = Roboto({
-  weight: ["400", "500"],
-  subsets: ["latin"],
-  variable: "--font-roboto",
-});
 
 // export const metadata: Metadata = {
 //   title: "Test SEON",

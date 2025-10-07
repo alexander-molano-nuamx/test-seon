@@ -22,6 +22,12 @@ import {
 import Image from "next/image";
 import { OperationsCards } from "@/components/ui/OperationsCards";
 
+interface OperationsTableProps {
+  searchEmisor?: string;
+  filterDate?: string;
+  filterStatus?: string;
+}
+
 interface Operation {
   id: number;
   status: "vigente" | "cerrada" | "finalizada" | "adjudicada";
@@ -34,6 +40,7 @@ interface Operation {
   totalAmount: string;
   closeDate: string;
   seriesNumber: string;
+  currency?: string;
 }
 
 const mockData: Operation[] = [
@@ -47,8 +54,9 @@ const mockData: Operation[] = [
     startDate: "15 de marzo 2024",
     offerAmount: "1.000.000",
     totalAmount: "43.000.000.00",
-    closeDate: "15 de marzo 2024",
+    closeDate: "03 de octubre - 15 de octubre 2025",
     seriesNumber: "No de Series 7",
+    currency: "PEN",
   },
   {
     id: 2,
@@ -57,11 +65,12 @@ const mockData: Operation[] = [
     issuerLogo: "/assets/credicorp.png",
     operationType: "Colocación RF",
     nemotechnical: "CREDIECXAMPLE",
-    startDate: "15 de marzo 2024",
+    startDate: "22 de marzo 2024",
     offerAmount: "234.870.000",
     totalAmount: "234.870.00",
-    closeDate: "15 de marzo 2024",
+    closeDate: "03 de octubre - 17 de octubre 2025",
     seriesNumber: "No de Series 7",
+    currency: "USD",
   },
   {
     id: 3,
@@ -70,11 +79,12 @@ const mockData: Operation[] = [
     issuerLogo: "/assets/kallpa.png",
     operationType: "OPA",
     nemotechnical: "KALLPEXEMPLO",
-    startDate: "15 de marzo 2024",
+    startDate: "28 de marzo 2024",
     offerAmount: "500.000",
     totalAmount: "20.000.000",
-    closeDate: "15 de marzo 2024",
+    closeDate: "03 de octubre - 19 de octubre 2025",
     seriesNumber: "No de Series 7",
+    currency: "PEN",
   },
   {
     id: 4,
@@ -86,8 +96,9 @@ const mockData: Operation[] = [
     startDate: "15 de marzo 2024",
     offerAmount: "300.000",
     totalAmount: "900.000",
-    closeDate: "15 de marzo 2024",
+    closeDate: "03 de octubre - 22 de octubre 2025",
     seriesNumber: "No de Series 7",
+    currency: "USD",
   },
   {
     id: 5,
@@ -99,8 +110,9 @@ const mockData: Operation[] = [
     startDate: "15 de marzo 2024",
     offerAmount: "70.000",
     totalAmount: "2.660.000",
-    closeDate: "15 de marzo 2024",
+    closeDate: "03 de octubre - 25 de octubre 2025",
     seriesNumber: "No de Series 7",
+    currency: "PEN",
   },
   {
     id: 6,
@@ -112,8 +124,9 @@ const mockData: Operation[] = [
     startDate: "15 de marzo 2024",
     offerAmount: "2.500.000",
     totalAmount: "50.000.000",
-    closeDate: "15 de marzo 2024",
+    closeDate: "03 de octubre - 28 de octubre 2025",
     seriesNumber: "No de Series 7",
+    currency: "PEN",
   },
   {
     id: 7,
@@ -125,8 +138,9 @@ const mockData: Operation[] = [
     startDate: "15 de marzo 2024",
     offerAmount: "348.454.870",
     totalAmount: "348.454.870",
-    closeDate: "15 de marzo 2024",
+    closeDate: "03 de octubre - 29 de octubre 2025",
     seriesNumber: "No de Series 7",
+    currency: "PEN",
   },
   {
     id: 8,
@@ -138,8 +152,9 @@ const mockData: Operation[] = [
     startDate: "15 de marzo 2024",
     offerAmount: "10.000.000",
     totalAmount: "12.300.000",
-    closeDate: "15 de marzo 2024",
+    closeDate: "03 de octubre - 29 de octubre 2025",
     seriesNumber: "No de Series 7",
+    currency: "PEN",
   },
   {
     id: 9,
@@ -151,8 +166,9 @@ const mockData: Operation[] = [
     startDate: "15 de marzo 2024",
     offerAmount: "1.250.000",
     totalAmount: "75.000.000",
-    closeDate: "15 de marzo 2024",
+    closeDate: "03 de octubre - 30 de octubre 2025",
     seriesNumber: "No de Series 7",
+    currency: "USD",
   },
   {
     id: 10,
@@ -164,8 +180,9 @@ const mockData: Operation[] = [
     startDate: "15 de marzo 2024",
     offerAmount: "450.000",
     totalAmount: "1.250.000",
-    closeDate: "15 de marzo 2024",
+    closeDate: "03 de octubre - 31 de octubre 2025",
     seriesNumber: "No de Series 7",
+    currency: "PEN",
   },
 ];
 
@@ -192,10 +209,38 @@ const getStatusChip = (status: Operation["status"]) => {
   );
 };
 
-export function OperationsTable() {
+export function OperationsTable({
+  searchEmisor = "",
+  filterDate = "",
+  filterStatus = "",
+}: OperationsTableProps) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [viewMode, setViewMode] = React.useState<"table" | "cards">("table");
+
+  // Filtrar datos
+  const filteredData = React.useMemo(() => {
+    return mockData.filter((item) => {
+      // Filtro por emisor (búsqueda case-insensitive)
+      const matchesEmisor =
+        searchEmisor === "" ||
+        item.issuer.toLowerCase().includes(searchEmisor.toLowerCase());
+
+      // Filtro por fecha (comparar con startDate)
+      const matchesDate =
+        filterDate === "" || item.closeDate.includes(filterDate);
+
+      // Filtro por estado
+      const matchesStatus = filterStatus === "" || item.status === filterStatus;
+
+      return matchesEmisor && matchesDate && matchesStatus;
+    });
+  }, [searchEmisor, filterDate, filterStatus]);
+
+  // Reset page cuando cambian los filtros
+  React.useEffect(() => {
+    setPage(0);
+  }, [searchEmisor, filterDate, filterStatus]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -279,6 +324,9 @@ export function OperationsTable() {
                       fontWeight: 500,
                       fontSize: "14px",
                       color: "rgba(0,0,0,0.87)",
+                      width: "132px",
+                      minWidth: "132px",
+                      maxWidth: "132px",
                     }}
                   >
                     Detalles
@@ -319,15 +367,7 @@ export function OperationsTable() {
                   >
                     Nemotécnico
                   </TableCell>
-                  <TableCell
-                    sx={{
-                      fontWeight: 500,
-                      fontSize: "14px",
-                      color: "rgba(0,0,0,0.87)",
-                    }}
-                  >
-                    Fecha de Inicio ...
-                  </TableCell>
+
                   <TableCell
                     sx={{
                       fontWeight: 500,
@@ -353,12 +393,21 @@ export function OperationsTable() {
                       color: "rgba(0,0,0,0.87)",
                     }}
                   >
+                    Moneda de la Oferta
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: "14px",
+                      color: "rgba(0,0,0,0.87)",
+                    }}
+                  >
                     Fecha de Cierre Ingreso de Aceptaciones/Cesiones
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {mockData
+                {filteredData
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <TableRow
@@ -370,7 +419,14 @@ export function OperationsTable() {
                         },
                       }}
                     >
-                      <TableCell sx={{ padding: 0 }}>
+                      <TableCell
+                        sx={{
+                          padding: 0,
+                          width: "132px",
+                          minWidth: "132px",
+                          maxWidth: "132px",
+                        }}
+                      >
                         <Link
                           href="#"
                           sx={{
@@ -417,7 +473,6 @@ export function OperationsTable() {
                               style={{ objectFit: "contain" }}
                             />
                           </Box>
-                          <span style={{ fontSize: "14px" }}>{row.issuer}</span>
                         </Box>
                       </TableCell>
                       <TableCell
@@ -430,11 +485,7 @@ export function OperationsTable() {
                       >
                         {row.nemotechnical}
                       </TableCell>
-                      <TableCell
-                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
-                      >
-                        {row.startDate}
-                      </TableCell>
+
                       <TableCell
                         sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
                       >
@@ -444,6 +495,11 @@ export function OperationsTable() {
                         sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
                       >
                         {row.totalAmount}
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
+                      >
+                        {row.currency}
                       </TableCell>
                       <TableCell
                         sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
@@ -459,7 +515,7 @@ export function OperationsTable() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={mockData.length}
+            count={filteredData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -478,7 +534,7 @@ export function OperationsTable() {
           />
         </>
       ) : (
-        <OperationsCards dataCard={mockData} />
+        <OperationsCards dataCard={filteredData} />
       )}
     </Box>
   );

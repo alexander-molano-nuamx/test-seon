@@ -11,13 +11,13 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  SelectChangeEvent,
 } from "@mui/material";
 import {
   Search as SearchIcon,
   CalendarToday as CalendarTodayIcon,
   Description as DescriptionIcon,
 } from "@mui/icons-material";
-
 import { RestrictedDevice } from "@/components/RestrictedDevice";
 import { AppHeader } from "@/components/AppHeader";
 import { AppSidebar } from "@/components/AppSidebar";
@@ -28,8 +28,17 @@ const drawerWidth = 240;
 export default function PageGestAcepCes() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+  // Estados para los filtros
+  const [searchEmisor, setSearchEmisor] = useState("");
+  const [filterDate, setFilterDate] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
+
   // Detecta si está en tablet o mobile (<= 1024px)
   const isMobileOrTablet = useMediaQuery("(max-width:1024px)");
+
+  const handleStatusChange = (event: SelectChangeEvent) => {
+    setFilterStatus(event.target.value);
+  };
 
   // Si es dispositivo móvil o tablet, mostrar RestrictedDevice centrado
   if (isMobileOrTablet) {
@@ -65,17 +74,15 @@ export default function PageGestAcepCes() {
           flexGrow: 1,
           p: 3,
           mt: "56px",
-          ml: sidebarOpen ? 0 : `-${drawerWidth}px`,
-          transition: "margin 0.3s",
-          backgroundColor: "#f5f5f5",
           minHeight: "calc(100vh - 56px)",
+          width: "100%",
         }}
       >
         {/* Breadcrumb */}
         <Typography
           sx={{
             color: "var(--color-orangered)",
-            fontFamily: "Roboto",
+            fontFamily: "var(--font-family)",
             fontSize: "14px",
             fontStyle: "normal",
             fontWeight: 500,
@@ -117,8 +124,10 @@ export default function PageGestAcepCes() {
         >
           {/* Buscador */}
           <TextField
-            placeholder="Buscar Promotor"
+            placeholder="Buscar Emisor"
             variant="outlined"
+            value={searchEmisor}
+            onChange={(e) => setSearchEmisor(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -138,9 +147,11 @@ export default function PageGestAcepCes() {
 
           {/* Selector de Fechas */}
           <TextField
-            label="Fechas de Final de Recepción de Aceptaci..."
+            label="Fechas de inicio de Aceptación"
             variant="outlined"
             type="date"
+            value={filterDate}
+            onChange={(e) => setFilterDate(e.target.value)}
             inputRef={(input) => {
               // Guardamos la referencia del input para poder activarlo desde el icono
               if (input) {
@@ -159,7 +170,6 @@ export default function PageGestAcepCes() {
                       cursor: "pointer",
                     }}
                     onClick={(e) => {
-                      // Buscamos el input de fecha y activamos el picker
                       const input = (e.target as HTMLElement)
                         .closest(".MuiInputBase-root")
                         ?.querySelector(
@@ -214,15 +224,17 @@ export default function PageGestAcepCes() {
             <InputLabel>Estado</InputLabel>
             <Select
               label="Estado"
-              defaultValue=""
+              value={filterStatus}
+              onChange={handleStatusChange}
               sx={{
                 borderRadius: "4px",
               }}
             >
               <MenuItem value="">Todos</MenuItem>
-              <MenuItem value="pendiente">Pendiente</MenuItem>
-              <MenuItem value="aprobado">Aprobado</MenuItem>
-              <MenuItem value="rechazado">Rechazado</MenuItem>
+              <MenuItem value="adjudicada">Adjudicada</MenuItem>
+              <MenuItem value="cerrada">Cerrada</MenuItem>
+              <MenuItem value="finalizada">Finalizada</MenuItem>
+              <MenuItem value="vigente">Vigente</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -278,7 +290,11 @@ export default function PageGestAcepCes() {
         </Box>
 
         {/* Tabla de Operaciones */}
-        <OperationsTable />
+        <OperationsTable
+          searchEmisor={searchEmisor}
+          filterDate={filterDate}
+          filterStatus={filterStatus}
+        />
       </Box>
     </Box>
   );

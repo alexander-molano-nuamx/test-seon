@@ -77,6 +77,7 @@ export function OperationsCards({ dataCard: data }: OperationsCardsProps) {
                 boxShadow: "0 1px 3px rgba(0,0,0,0.12)",
                 transition: "box-shadow 0.3s",
                 "&:hover": {
+                  backgroundColor: "rgba(0,0,0,0.05)",
                   boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                 },
               }}
@@ -87,7 +88,7 @@ export function OperationsCards({ dataCard: data }: OperationsCardsProps) {
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    alignItems: "flex-start",
+                    alignItems: "center",
                     mb: 2,
                   }}
                 >
