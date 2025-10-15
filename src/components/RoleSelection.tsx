@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { LoginForm } from "@/components/LoginForm";
 import styles from "@/styles/index.module.css";
+import RoleSelector from "./RoleSelector";
 
-export function MainForm() {
+export function RoleSelectorView() {
   return (
     <>
       <div className={styles.idKcHeader}>
@@ -24,12 +24,7 @@ export function MainForm() {
         </div>
       </div>
       <div className={styles.cardPf}>
-        <div className={styles.cardBackground}>
-          <div className={styles.headerCard3}>
-            <h1 className={styles.h1}>Inicia sesión en tu cuenta</h1>
-            <LoginForm />
-          </div>
-        </div>
+        <RoleSelector />
       </div>
     </>
   );

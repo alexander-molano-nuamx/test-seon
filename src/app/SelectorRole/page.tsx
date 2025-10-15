@@ -2,11 +2,13 @@
 
 import type { NextPage } from "next";
 import styles from "@/styles/index.module.css";
-import { useMediaQuery, useTheme } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import { RestrictedDevice } from "@/components/RestrictedDevice";
 import { MainForm } from "@/components/MainLogin";
+import { RoleSelectorView } from "@/components/RoleSelection";
+import RoleSelector from "@/components/RoleSelector";
 
-const Login: NextPage = () => {
+const RoleSelectPage: NextPage = () => {
   // Detecta si está en tablet o mobile (<= md en MUI son 960px)
   const isMobileOrTablet = useMediaQuery("(max-width:1024px)");
   return (
@@ -15,11 +17,11 @@ const Login: NextPage = () => {
         <RestrictedDevice />
       ) : (
         <>
-          <MainForm />
+          <RoleSelectorView />
         </>
       )}
     </div>
   );
 };
 
-export default Login;
+export default RoleSelectPage;

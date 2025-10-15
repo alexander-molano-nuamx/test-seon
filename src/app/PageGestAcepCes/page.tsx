@@ -15,9 +15,12 @@ import {
 } from "@mui/material";
 import {
   Search as SearchIcon,
-  CalendarToday as CalendarTodayIcon,
   Description as DescriptionIcon,
 } from "@mui/icons-material";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { es } from "date-fns/locale";
 import { RestrictedDevice } from "@/components/RestrictedDevice";
 import { AppHeader } from "@/components/AppHeader";
 import { AppSidebar } from "@/components/AppSidebar";
@@ -30,7 +33,8 @@ export default function PageGestAcepCes() {
 
   // Estados para los filtros
   const [searchEmisor, setSearchEmisor] = useState("");
-  const [filterDate, setFilterDate] = useState("");
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [filterStatus, setFilterStatus] = useState("");
 
   // Detecta si está en tablet o mobile (<= 1024px)
@@ -145,73 +149,53 @@ export default function PageGestAcepCes() {
             }}
           />
 
-          {/* Selector de Fechas */}
-          <TextField
-            label="Fechas de inicio de Aceptación"
-            variant="outlined"
-            type="date"
-            value={filterDate}
-            onChange={(e) => setFilterDate(e.target.value)}
-            inputRef={(input) => {
-              // Guardamos la referencia del input para poder activarlo desde el icono
-              if (input) {
-                input.dateInput = input;
-              }
-            }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <CalendarTodayIcon
-                    sx={{
-                      color: "rgba(0,0,0,0.54)",
-                      cursor: "pointer",
-                    }}
-                    onClick={(e) => {
-                      const input = (e.target as HTMLElement)
-                        .closest(".MuiInputBase-root")
-                        ?.querySelector(
-                          'input[type="date"]'
-                        ) as HTMLInputElement;
-                      if (input) {
-                        input.showPicker?.();
-                      }
-                    }}
-                  />
-                </InputAdornment>
-              ),
-            }}
-            onClick={(e) => {
-              // Al hacer click en cualquier parte del input, abrir el picker
-              const input = e.currentTarget.querySelector(
-                'input[type="date"]'
-              ) as HTMLInputElement;
-              if (input) {
-                input.showPicker?.();
-              }
-            }}
-            sx={{
-              flex: "1 1 300px",
-              minWidth: "250px",
-              backgroundColor: "#fff",
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "4px",
-                cursor: "pointer",
-              },
-              "& input[type='date']": {
-                cursor: "pointer",
-              },
-              // Ocultar el icono de calendario por defecto del input date
-              "& input[type='date']::-webkit-calendar-picker-indicator": {
-                display: "none",
-              },
-              "& input[type='date']::-webkit-inner-spin-button": {
-                display: "none",
-              },
-            }}
-          />
+          {/* Selector de Rango de Fechas */}
+          <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                flex: "1 1 auto",
+                flexWrap: "wrap",
+              }}
+            >
+              <DatePicker
+                label="Fecha Inicio"
+                value={startDate}
+                onChange={(newValue) => setStartDate(newValue)}
+                slotProps={{
+                  textField: {
+                    sx: {
+                      flex: "1 1 250px",
+                      minWidth: "200px",
+                      backgroundColor: "#fff",
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "4px",
+                      },
+                    },
+                  },
+                }}
+              />
+              <DatePicker
+                label="Fecha Fin"
+                value={endDate}
+                onChange={(newValue) => setEndDate(newValue)}
+                minDate={startDate || undefined}
+                slotProps={{
+                  textField: {
+                    sx: {
+                      flex: "1 1 250px",
+                      minWidth: "200px",
+                      backgroundColor: "#fff",
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "4px",
+                      },
+                    },
+                  },
+                }}
+              />
+            </Box>
+          </LocalizationProvider>
 
           {/* Desplegable Estado */}
           <FormControl
@@ -262,7 +246,6 @@ export default function PageGestAcepCes() {
               gap: 2,
             }}
           >
-            <CalendarTodayIcon sx={{ fontSize: 24, color: "#3D3D3D" }} />
             <Typography variant="body1" sx={{ color: "#3D3D3D" }}>
               Fecha final de gestión de aceptaciones: 5 de Octubre 2025
             </Typography>
@@ -292,7 +275,8 @@ export default function PageGestAcepCes() {
         {/* Tabla de Operaciones */}
         <OperationsTable
           searchEmisor={searchEmisor}
-          filterDate={filterDate}
+          startDate={startDate}
+          endDate={endDate}
           filterStatus={filterStatus}
         />
       </Box>

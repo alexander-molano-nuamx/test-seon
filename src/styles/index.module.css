@@ -47,8 +47,9 @@
 }
 
 .sistemaDeEmisiones {
-    font-size: 3rem;
-    line-height: 116.7%;
+    font-size: var(--fs-34);
+    line-height: 123.5%;
+    letter-spacing: 0.25px;
     color: var(--color-white);
     font-family: var(--font-roboto);
 }

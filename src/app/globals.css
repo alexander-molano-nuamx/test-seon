@@ -27,6 +27,7 @@ body {
 
   --fs-12: 12px;
   --fs-16: 16px;
+  --fs-34: 34px;
 
   --height-24: 24px;
   --width-24: 24px;
@@ -39,6 +40,7 @@ body {
   --color-gray-200: rgba(0, 0, 0, 0.38);
   --color-gray-300: rgba(0, 0, 0, 0.87);
   --color-orangered: #ff4201;
+  --primary-hover: rgba(255, 66, 1, 0.08);
   --color-silver: #b8b8b8;
   --color-white: #fff;
   --Body-Text-color: #3D3D3D;

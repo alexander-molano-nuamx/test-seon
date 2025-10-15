@@ -84,7 +84,8 @@ export function LoginForm() {
       if (userExists) {
         console.log("✅ Login exitoso:", data.email);
         // Redirigir a PageGestAcepCes
-        router.push("/PageGestAcepCes");
+        // router.push("/PageGestAcepCes");
+        router.push("/SelectorRole");
       } else {
         // Mostrar error si las credenciales no son válidas
         setError("email", {

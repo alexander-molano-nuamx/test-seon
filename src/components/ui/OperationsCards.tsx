@@ -20,6 +20,7 @@ interface Operation {
   totalAmount: string;
   closeDate: string;
   seriesNumber: string;
+  currency?: string;
 }
 
 interface OperationsCardsProps {
@@ -94,8 +95,8 @@ export function OperationsCards({ dataCard: data }: OperationsCardsProps) {
                 >
                   <Box
                     sx={{
-                      width: 60,
-                      height: 60,
+                      width: 104,
+                      height: 40,
                       position: "relative",
                       display: "flex",
                       alignItems: "center",
@@ -105,7 +106,7 @@ export function OperationsCards({ dataCard: data }: OperationsCardsProps) {
                     <Image
                       src={operation.issuerLogo || "/assets/default.png"}
                       alt={operation.issuer}
-                      width={60}
+                      width={80}
                       height={60}
                       style={{ objectFit: "contain" }}
                     />
@@ -159,7 +160,7 @@ export function OperationsCards({ dataCard: data }: OperationsCardsProps) {
                       color: "#3D3D3D",
                     }}
                   >
-                    {operation.totalAmount}
+                    {operation.totalAmount} {operation.currency}
                   </Typography>
                 </Box>
 
