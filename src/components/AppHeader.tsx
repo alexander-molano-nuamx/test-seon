@@ -209,7 +209,7 @@ export function AppHeader({ sidebarOpen, setSidebarOpen }: AppHeaderProps) {
               >
                 <Avatar
                   sx={{ width: 24, height: 24 }}
-                  src="/api/placeholder/24/24"
+                  src="/assets/kallpa-avatar.png"
                 />
               </Badge>
             </IconButton>

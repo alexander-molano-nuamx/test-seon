@@ -7,9 +7,11 @@ import {
   Chip,
   Pagination,
   Grid,
+  CardActionArea,
 } from "@mui/material";
 
 import Image from "next/image";
+import Link from "next/link";
 
 interface Operation {
   id: number;
@@ -83,109 +85,115 @@ export function OperationsCards({ dataCard: data }: OperationsCardsProps) {
                 },
               }}
             >
-              <CardContent sx={{ flexGrow: 1, p: 2 }}>
-                {/* Logo y estado */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    mb: 2,
-                  }}
-                >
+              <CardActionArea
+                component={Link}
+                href="/PageIngresoAcep"
+                sx={{ height: "100%" }}
+              >
+                <CardContent sx={{ flexGrow: 1, p: 2 }}>
+                  {/* Logo y estado */}
                   <Box
                     sx={{
-                      width: 104,
-                      height: 40,
-                      position: "relative",
                       display: "flex",
+                      justifyContent: "space-between",
                       alignItems: "center",
-                      justifyContent: "center",
+                      mb: 2,
                     }}
                   >
-                    <Image
-                      src={operation.issuerLogo || "/assets/default.png"}
-                      alt={operation.issuer}
-                      width={80}
-                      height={60}
-                      style={{ objectFit: "contain" }}
-                    />
+                    <Box
+                      sx={{
+                        width: 104,
+                        height: 40,
+                        position: "relative",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Image
+                        src={operation.issuerLogo || "/assets/default.png"}
+                        alt={operation.issuer}
+                        width={80}
+                        height={60}
+                        style={{ objectFit: "contain" }}
+                      />
+                    </Box>
+                    {getStatusChip(operation.status)}
                   </Box>
-                  {getStatusChip(operation.status)}
-                </Box>
 
-                {/* Tipo de operación */}
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontSize: "16px",
-                    fontWeight: 500,
-                    color: "#3D3D3D",
-                    mb: 1,
-                    minHeight: "48px",
-                  }}
-                >
-                  {operation.operationType}
-                </Typography>
-
-                {/* Series */}
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontSize: "14px",
-                    color: "rgba(0,0,0,0.6)",
-                    mb: 2,
-                  }}
-                >
-                  {operation.seriesNumber}
-                </Typography>
-
-                {/* Monto */}
-                <Box sx={{ mb: 2 }}>
+                  {/* Tipo de operación */}
                   <Typography
-                    variant="caption"
-                    sx={{
-                      fontSize: "12px",
-                      color: "#FF4201",
-                      fontWeight: 500,
-                    }}
-                  >
-                    Monto total ofertado
-                  </Typography>
-                  <Typography
-                    variant="body1"
+                    variant="h6"
                     sx={{
                       fontSize: "16px",
                       fontWeight: 500,
                       color: "#3D3D3D",
+                      mb: 1,
+                      minHeight: "48px",
                     }}
                   >
-                    {operation.totalAmount} {operation.currency}
+                    {operation.operationType}
                   </Typography>
-                </Box>
 
-                {/* Fecha de aceptaciones */}
-                <Box>
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      fontSize: "12px",
-                      color: "rgba(0,0,0,0.6)",
-                    }}
-                  >
-                    Fecha de Aceptaciones
-                  </Typography>
+                  {/* Series */}
                   <Typography
                     variant="body2"
                     sx={{
                       fontSize: "14px",
-                      color: "#3D3D3D",
+                      color: "rgba(0,0,0,0.6)",
+                      mb: 2,
                     }}
                   >
-                    {operation.closeDate}
+                    {operation.seriesNumber}
                   </Typography>
-                </Box>
-              </CardContent>
+
+                  {/* Monto */}
+                  <Box sx={{ mb: 2 }}>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        fontSize: "12px",
+                        color: "#FF4201",
+                        fontWeight: 500,
+                      }}
+                    >
+                      Monto total ofertado
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontSize: "16px",
+                        fontWeight: 500,
+                        color: "#3D3D3D",
+                      }}
+                    >
+                      {operation.totalAmount} {operation.currency}
+                    </Typography>
+                  </Box>
+
+                  {/* Fecha de aceptaciones */}
+                  <Box>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        fontSize: "12px",
+                        color: "rgba(0,0,0,0.6)",
+                      }}
+                    >
+                      Fecha de Aceptaciones
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontSize: "14px",
+                        color: "#3D3D3D",
+                      }}
+                    >
+                      {operation.closeDate}
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </CardActionArea>
             </Card>
           </Grid>
         ))}

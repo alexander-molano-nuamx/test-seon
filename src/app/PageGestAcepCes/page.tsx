@@ -155,50 +155,47 @@ export default function PageGestAcepCes() {
           }}
         >
           {/* Buscador */}
-          <TextField
-            placeholder="Buscar Emisor"
-            variant="outlined"
-            value={searchEmisor}
-            onChange={(e) => setSearchEmisor(e.target.value)}
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon sx={{ color: "rgba(0,0,0,0.54)" }} />
-                  </InputAdornment>
-                ),
-                endAdornment: searchEmisor && (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={handleClear}
-                      edge="end"
-                      sx={{ color: "rgba(0,0,0,0.54)" }}
-                    >
-                      <ClearIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-            sx={{
-              flex: "1 1 300px",
-              minWidth: "250px",
-              backgroundColor: "#fff",
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "4px",
-              },
-            }}
-          />
+          <Box sx={{ flex: "1 1 0", minWidth: "250px" }}>
+            <TextField
+              placeholder="Buscar Emisor"
+              variant="outlined"
+              value={searchEmisor}
+              onChange={(e) => setSearchEmisor(e.target.value)}
+              fullWidth // Importante: que ocupe todo el ancho del Box padre
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon sx={{ color: "rgba(0,0,0,0.54)" }} />
+                    </InputAdornment>
+                  ),
+                  endAdornment: searchEmisor && (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleClear}
+                        edge="end"
+                        sx={{ color: "rgba(0,0,0,0.54)" }}
+                      >
+                        <ClearIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
+              sx={{
+                backgroundColor: "#fff",
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "4px",
+                },
+              }}
+            />
+          </Box>
 
           {/* Selector de Fecha */}
-          <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2,
-                flex: "1 1 auto",
-                flexWrap: "wrap",
-              }}
+          <Box sx={{ flex: "1 1 0", minWidth: "250px" }}>
+            <LocalizationProvider
+              dateAdapter={AdapterDateFns}
+              adapterLocale={es}
             >
               <DatePicker
                 label="Fecha Inicio"
@@ -206,9 +203,8 @@ export default function PageGestAcepCes() {
                 onChange={handleDateChange}
                 slotProps={{
                   textField: {
+                    fullWidth: true, // Importante
                     sx: {
-                      flex: "1 1 250px",
-                      minWidth: "200px",
                       backgroundColor: "#fff",
                       "& .MuiOutlinedInput-root": {
                         borderRadius: "4px",
@@ -220,29 +216,30 @@ export default function PageGestAcepCes() {
                   },
                 }}
               />
-            </Box>
-          </LocalizationProvider>
+            </LocalizationProvider>
+          </Box>
 
           {/* Desplegable Estado */}
-          <Autocomplete
-            options={statusOptions}
-            label="Estado"
-            labelKey="name"
-            valueKey="id"
-            searchKeys={["name"]}
-            value={selectedStatus?.id}
-            onChange={handleStatusChange}
-            textFieldProps={{
-              sx: {
-                flex: "1 1 250px",
-                minWidth: "200px",
-                backgroundColor: "#fff",
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "4px",
+          <Box sx={{ flex: "1 1 0", minWidth: "250px" }}>
+            <Autocomplete
+              options={statusOptions}
+              label="Estado"
+              labelKey="name"
+              valueKey="id"
+              searchKeys={["name"]}
+              value={selectedStatus?.id}
+              onChange={handleStatusChange}
+              textFieldProps={{
+                fullWidth: true, // Importante
+                sx: {
+                  backgroundColor: "#fff",
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "4px",
+                  },
                 },
-              },
-            }}
-          />
+              }}
+            />
+          </Box>
         </Box>
 
         {/* Tarjetas de información */}
