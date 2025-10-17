@@ -1,5 +1,5 @@
 "use client";
 
-import { DatePicker } from "@nuam/common-fe-lib-components";
+import { DatePicker } from "../components/DatePicker";
 
 export default DatePicker;

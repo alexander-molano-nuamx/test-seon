@@ -1,7 +1,7 @@
 "use client";
 
 import { ThemeProvider, CssBaseline } from "@mui/material";
-import { theme } from "@/theme/theme";
+import { nuamTheme, theme } from "@/theme/theme";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -11,3 +11,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
     </ThemeProvider>
   );
 }
+
+export const NuamThemeWrapper = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => (
+  <ThemeProvider theme={nuamTheme} defaultMode="light">
+    {children}
+  </ThemeProvider>
+);

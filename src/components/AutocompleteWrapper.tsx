@@ -1,5 +1,5 @@
 "use client";
 
-import { Autocomplete } from "@nuam/common-fe-lib-components";
+import { Autocomplete } from "../components/Autocomplete";
 
 export default Autocomplete;
