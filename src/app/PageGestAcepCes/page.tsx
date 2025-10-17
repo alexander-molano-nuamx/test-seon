@@ -23,13 +23,17 @@ import { AppHeader } from "@/components/AppHeader";
 import { AppSidebar } from "@/components/AppSidebar";
 import { OperationsTable } from "@/components/OperationsTable";
 
-const Autocomplete = dynamic(() => import("@/components/AutocompleteWrapper"), {
-  ssr: false,
-});
+// Importar dinámicamente sin SSR
+const Autocomplete = dynamic(
+  () =>
+    import("@nuam/common-fe-lib-components").then((mod) => mod.Autocomplete),
+  { ssr: false }
+);
 
-const DatePicker = dynamic(() => import("@/components/DatePickerWrapper"), {
-  ssr: false,
-});
+const DatePicker = dynamic(
+  () => import("@nuam/common-fe-lib-components").then((mod) => mod.DatePicker),
+  { ssr: false }
+);
 
 const drawerWidth = 240;
 
