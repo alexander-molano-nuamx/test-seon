@@ -20,7 +20,7 @@ import {
   ViewModule as ViewModuleIcon,
 } from "@mui/icons-material";
 import Image from "next/image";
-import { OperationsCards } from "@/components/ui/OperationsCards";
+import { OperationsCards } from "@/components/OperationsCards";
 
 interface OperationsTableProps {
   searchEmisor?: string;

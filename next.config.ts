@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  turbopack: {
+    root: process.cwd(), // Establece el directorio raíz correcto
+  },
+  // Otras configuraciones si las necesitas
 };
 
 export default nextConfig;

@@ -7,7 +7,6 @@ import { MainContent } from "./MainContent";
 export function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const sidebarWidth = 240;
-  const open = true;
 
   return (
     <Box sx={{ display: "flex", width: "100%", height: "100vh" }}>

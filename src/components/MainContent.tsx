@@ -16,7 +16,6 @@ import {
   InputLabel,
   InputAdornment,
   Button,
-  Chip,
 } from "@mui/material";
 import {
   Search,
@@ -32,13 +31,12 @@ interface MainContentProps {
   sidebarWidth: number;
 }
 
-export function MainContent({ sidebarWidth }: MainContentProps) {
+export function MainContent({}: MainContentProps) {
   return (
     <Box
       component="main"
       sx={{
         flexGrow: 1,
-        // ml: `${sidebarWidth}px`,
         mt: "56px",
         transition: "margin-left 0.3s",
         backgroundColor: "#ffffff",

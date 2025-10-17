@@ -2,12 +2,11 @@
 
 import type { NextPage } from "next";
 import styles from "@/styles/index.module.css";
-import { useMediaQuery, useTheme } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import { RestrictedDevice } from "@/components/RestrictedDevice";
 import { MainForm } from "@/components/MainLogin";
 
 const Login: NextPage = () => {
-  // Detecta si está en tablet o mobile (<= md en MUI son 960px)
   const isMobileOrTablet = useMediaQuery("(max-width:1024px)");
   return (
     <div className={styles.login}>

@@ -20,14 +20,13 @@ import {
   ViewModule as ViewModuleIcon,
 } from "@mui/icons-material";
 import Image from "next/image";
-import { OperationsCards } from "@/components/ui/OperationsCards";
+import { OperationsCards } from "./OperationsCards";
 
 interface OperationsTableProps {
   searchEmisor?: string;
   filterDate?: string;
   filterStatus?: string;
   startDate?: Date | null;
-  endDate?: Date | null;
 }
 
 interface Operation {
@@ -53,7 +52,7 @@ const mockData: Operation[] = [
     issuerLogo: "/assets/alicorp.png",
     operationType: "OPP RF",
     nemotechnical: "ALICORP",
-    startDate: "15 de marzo 2024",
+    startDate: "03 de octubre 2025",
     offerAmount: "No aplica",
     totalAmount: "$50.000.000",
     closeDate: "03 de octubre 2025 - 03 de octubre 2025",
@@ -67,7 +66,7 @@ const mockData: Operation[] = [
     issuerLogo: "/assets/syrus.png",
     operationType: "OPP RF",
     nemotechnical: "SYRUS1CP1C",
-    startDate: "22 de marzo 2024",
+    startDate: "03 de octubre 2025",
     offerAmount: "No aplica",
     totalAmount: "500.000",
     closeDate: "03 de octubre 2025 - 03 de octubre 2025",
@@ -81,10 +80,10 @@ const mockData: Operation[] = [
     issuerLogo: "/assets/bbva.png",
     operationType: "OPA",
     nemotechnical: "BBVAEJEMPLO",
-    startDate: "15 de marzo 2024",
+    startDate: "03 de octubre 2025",
     offerAmount: "1.000.000",
     totalAmount: "No aplica",
-    closeDate: "03 de octubre 2025 - 16 de octubre 2025",
+    closeDate: "03 de octubre 2025 - 03 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "PEN",
   },
@@ -95,10 +94,10 @@ const mockData: Operation[] = [
     issuerLogo: "/assets/credicorp-capital.png",
     operationType: "OPA",
     nemotechnical: "CREDIECXAMPLE",
-    startDate: "15 de marzo 2024",
+    startDate: "04 de octubre 2025",
     offerAmount: "4.870.000",
     totalAmount: "No aplica",
-    closeDate: "03 de octubre 2025 - 03 de octubre 2025",
+    closeDate: "04 de octubre 2025 - 04 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "USD",
   },
@@ -109,10 +108,10 @@ const mockData: Operation[] = [
     issuerLogo: "/assets/nutresa.png",
     operationType: "OPA",
     nemotechnical: "NUTRESA",
-    startDate: "15 de marzo 2024",
+    startDate: "04 de octubre 2025",
     offerAmount: "500.000",
     totalAmount: "No aplica",
-    closeDate: "03 de octubre 2025 - 03 de octubre 2025",
+    closeDate: "04 de octubre 2025 - 04 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "PEN",
   },
@@ -123,10 +122,10 @@ const mockData: Operation[] = [
     issuerLogo: "/assets/bg-pactual.png",
     operationType: "OPC",
     nemotechnical: "BGTBEISPIEL",
-    startDate: "15 de marzo 2024",
+    startDate: "06 de octubre 2025",
     offerAmount: "500.000",
     totalAmount: "No aplica",
-    closeDate: "03 de octubre 2025 - 03 de octubre 2025",
+    closeDate: "06 de octubre 2025 - 06 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "PEN",
   },
@@ -137,10 +136,10 @@ const mockData: Operation[] = [
     issuerLogo: "/assets/btg.png",
     operationType: "OPC",
     nemotechnical: "INTELEXEMPLE",
-    startDate: "15 de marzo 2024",
+    startDate: "08 de octubre 2025",
     offerAmount: "70.000",
     totalAmount: "No aplica",
-    closeDate: "03 de octubre 2025 - 16 de octubre 2025",
+    closeDate: "08 de octubre 2025 - 08 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "PEN",
   },
@@ -151,10 +150,10 @@ const mockData: Operation[] = [
     issuerLogo: "/assets/diviso.png",
     operationType: "OPC",
     nemotechnical: "DIVISOLIZI",
-    startDate: "15 de marzo 2024",
+    startDate: "10 de octubre 2025",
     offerAmount: "2.500.000",
     totalAmount: "No aplica",
-    closeDate: "03 de octubre 2025 - 16 de octubre 2025",
+    closeDate: "10 de octubre 2025 - 10 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "PEN",
   },
@@ -165,10 +164,10 @@ const mockData: Operation[] = [
     issuerLogo: "/assets/scotiabank.png",
     operationType: "OPV",
     nemotechnical: "SCOTIAREI",
-    startDate: "15 de marzo 2024",
+    startDate: "14 de octubre 2025",
     offerAmount: "348.454.870",
     totalAmount: "No aplica",
-    closeDate: "03 de octubre 2025 - 16 de octubre 2025",
+    closeDate: "14 de octubre 2025 - 14 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "USD",
   },
@@ -179,10 +178,10 @@ const mockData: Operation[] = [
     issuerLogo: "/assets/fdn.png",
     operationType: "OPV",
     nemotechnical: "NEXUSAMPLE",
-    startDate: "15 de marzo 2024",
+    startDate: "16 de octubre 2025",
     offerAmount: "10.000.000",
     totalAmount: "No aplica",
-    closeDate: "03 de octubre 2025 - 16 de octubre 2025",
+    closeDate: "16 de octubre 2025 - 16 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "PEN",
   },
@@ -211,11 +210,43 @@ const getStatusChip = (status: Operation["status"]) => {
   );
 };
 
+// Función para convertir "15 de marzo 2024" a Date
+const parseSpanishDate = (dateString: string): Date | null => {
+  try {
+    const months: { [key: string]: number } = {
+      enero: 0,
+      febrero: 1,
+      marzo: 2,
+      abril: 3,
+      mayo: 4,
+      junio: 5,
+      julio: 6,
+      agosto: 7,
+      septiembre: 8,
+      octubre: 9,
+      noviembre: 10,
+      diciembre: 11,
+    };
+
+    const parts = dateString.toLowerCase().split(" ");
+    if (parts.length >= 4) {
+      const day = parseInt(parts[0]);
+      const month = months[parts[2]];
+      const year = parseInt(parts[3]);
+
+      if (!isNaN(day) && month !== undefined && !isNaN(year)) {
+        return new Date(year, month, day);
+      }
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};
+
 export function OperationsTable({
   searchEmisor = "",
   startDate = null,
-  endDate = null,
-  filterDate = "",
   filterStatus = "",
 }: OperationsTableProps) {
   const [page, setPage] = React.useState(0);
@@ -230,21 +261,47 @@ export function OperationsTable({
         searchEmisor === "" ||
         item.issuer.toLowerCase().includes(searchEmisor.toLowerCase());
 
-      // Filtro por fecha (comparar con startDate)
-      const matchesDate =
-        filterDate === "" || item.closeDate.includes(filterDate);
+      // Filtro por fecha de inicio
+      let matchesDate = true;
+      if (startDate) {
+        // Convertir startDate a Date si no lo es
+        const selectedDate =
+          startDate instanceof Date ? startDate : new Date(startDate);
+
+        // Verificar que sea una fecha válida
+        if (!isNaN(selectedDate.getTime())) {
+          const itemDate = parseSpanishDate(item.startDate);
+          if (itemDate) {
+            // Comparar solo año, mes y día (ignorar hora)
+            const startDateOnly = new Date(
+              selectedDate.getFullYear(),
+              selectedDate.getMonth(),
+              selectedDate.getDate()
+            );
+            const itemDateOnly = new Date(
+              itemDate.getFullYear(),
+              itemDate.getMonth(),
+              itemDate.getDate()
+            );
+            matchesDate = itemDateOnly >= startDateOnly;
+          }
+        }
+      }
 
       // Filtro por estado
-      const matchesStatus = filterStatus === "" || item.status === filterStatus;
+      const matchesStatus =
+        filterStatus === "" ||
+        filterStatus === "todos" ||
+        item.status === filterStatus;
 
       return matchesEmisor && matchesDate && matchesStatus;
     });
-  }, [searchEmisor, filterDate, filterStatus]);
+  }, [searchEmisor, startDate, filterStatus]);
 
   // Reset page cuando cambian los filtros
   React.useEffect(() => {
     setPage(0);
-  }, [searchEmisor, filterDate, filterStatus]);
+  }, [searchEmisor, startDate, filterStatus]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -365,7 +422,7 @@ export function OperationsTable({
                       color: "rgba(0,0,0,0.87)",
                     }}
                   >
-                    Tipo de Operación
+                    Tipo de operación
                   </TableCell>
                   <TableCell
                     sx={{
@@ -384,7 +441,7 @@ export function OperationsTable({
                       color: "rgba(0,0,0,0.87)",
                     }}
                   >
-                    Cantidad de la Oferta
+                    Cantidad de la oferta
                   </TableCell>
                   <TableCell
                     sx={{
@@ -393,7 +450,7 @@ export function OperationsTable({
                       color: "rgba(0,0,0,0.87)",
                     }}
                   >
-                    Monto de la Oferta
+                    Monto de la oferta
                   </TableCell>
                   <TableCell
                     sx={{
@@ -402,7 +459,7 @@ export function OperationsTable({
                       color: "rgba(0,0,0,0.87)",
                     }}
                   >
-                    Moneda de la Oferta
+                    Moneda de la oferta
                   </TableCell>
                   <TableCell
                     sx={{
@@ -411,7 +468,7 @@ export function OperationsTable({
                       color: "rgba(0,0,0,0.87)",
                     }}
                   >
-                    Fecha de Cierre Ingreso de Aceptaciones/Cesiones
+                    Fecha de ingreso de aceptaciones
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -514,7 +571,7 @@ export function OperationsTable({
                       <TableCell
                         sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
                       >
-                        {row.closeDate}
+                        {row.startDate}
                       </TableCell>
                     </TableRow>
                   ))}

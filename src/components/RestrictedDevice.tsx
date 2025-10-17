@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Typography, Card, CardContent } from "@mui/material";
+import { Box, Card, CardContent } from "@mui/material";
 import Image from "next/image";
 import styles from "@/styles/index.module.css";
 

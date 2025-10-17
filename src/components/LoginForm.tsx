@@ -64,8 +64,6 @@ export function LoginForm() {
     setCaptchaToken(token);
   };
 
-  const handleTogglePassword = () => setShowPassword((prev) => !prev);
-
   const onSubmit = async (data: LoginData) => {
     if (!captchaToken) {
       alert("Por favor completa el reCAPTCHA");
@@ -83,8 +81,7 @@ export function LoginForm() {
 
       if (userExists) {
         console.log("✅ Login exitoso:", data.email);
-        // Redirigir a PageGestAcepCes
-        // router.push("/PageGestAcepCes");
+
         router.push("/SelectorRole");
       } else {
         // Mostrar error si las credenciales no son válidas

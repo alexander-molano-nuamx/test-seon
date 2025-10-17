@@ -1,24 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import {
   Box,
   Typography,
   useMediaQuery,
   TextField,
   InputAdornment,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  SelectChangeEvent,
+  IconButton,
 } from "@mui/material";
 import {
   Search as SearchIcon,
   Description as DescriptionIcon,
 } from "@mui/icons-material";
+import ClearIcon from "@mui/icons-material/Clear";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { es } from "date-fns/locale";
 import { RestrictedDevice } from "@/components/RestrictedDevice";
@@ -26,22 +23,53 @@ import { AppHeader } from "@/components/AppHeader";
 import { AppSidebar } from "@/components/AppSidebar";
 import { OperationsTable } from "@/components/OperationsTable";
 
+const Autocomplete = dynamic(() => import("@/components/AutocompleteWrapper"), {
+  ssr: false,
+});
+
+const DatePicker = dynamic(() => import("@/components/DatePickerWrapper"), {
+  ssr: false,
+});
+
 const drawerWidth = 240;
+
+const statusOptions = [
+  { id: "todos", name: "Todos" },
+  { id: "adjudicada", name: "Adjudicada" },
+  { id: "cerrada", name: "Cerrada" },
+  { id: "finalizada", name: "Finalizada" },
+  { id: "vigente", name: "Vigente" },
+];
 
 export default function PageGestAcepCes() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+  const handleClear = () => {
+    setSearchEmisor("");
+  };
+
+  const [selectedStatus, setSelectedStatus] = useState<{
+    id: string;
+    name: string;
+  }>({ id: "todos", name: "Todos" });
+
   // Estados para los filtros
   const [searchEmisor, setSearchEmisor] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
   const [filterStatus, setFilterStatus] = useState("");
 
   // Detecta si está en tablet o mobile (<= 1024px)
   const isMobileOrTablet = useMediaQuery("(max-width:1024px)");
 
-  const handleStatusChange = (event: SelectChangeEvent) => {
-    setFilterStatus(event.target.value);
+  const handleStatusChange = (value: unknown) => {
+    const typedValue = value as { id: string; name: string } | null;
+    setSelectedStatus(typedValue || { id: "todos", name: "Todos" });
+    setFilterStatus(typedValue?.id || "todos");
+  };
+
+  const handleDateChange = (newValue: unknown) => {
+    const typedValue = newValue as Date | null;
+    setStartDate(typedValue);
   };
 
   // Si es dispositivo móvil o tablet, mostrar RestrictedDevice centrado
@@ -132,12 +160,25 @@ export default function PageGestAcepCes() {
             variant="outlined"
             value={searchEmisor}
             onChange={(e) => setSearchEmisor(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon sx={{ color: "rgba(0,0,0,0.54)" }} />
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon sx={{ color: "rgba(0,0,0,0.54)" }} />
+                  </InputAdornment>
+                ),
+                endAdornment: searchEmisor && (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClear}
+                      edge="end"
+                      sx={{ color: "rgba(0,0,0,0.54)" }}
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
             }}
             sx={{
               flex: "1 1 300px",
@@ -149,7 +190,7 @@ export default function PageGestAcepCes() {
             }}
           />
 
-          {/* Selector de Rango de Fechas */}
+          {/* Selector de Fecha */}
           <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
             <Box
               sx={{
@@ -162,7 +203,7 @@ export default function PageGestAcepCes() {
               <DatePicker
                 label="Fecha Inicio"
                 value={startDate}
-                onChange={(newValue) => setStartDate(newValue)}
+                onChange={handleDateChange}
                 slotProps={{
                   textField: {
                     sx: {
@@ -174,23 +215,8 @@ export default function PageGestAcepCes() {
                       },
                     },
                   },
-                }}
-              />
-              <DatePicker
-                label="Fecha Fin"
-                value={endDate}
-                onChange={(newValue) => setEndDate(newValue)}
-                minDate={startDate || undefined}
-                slotProps={{
-                  textField: {
-                    sx: {
-                      flex: "1 1 250px",
-                      minWidth: "200px",
-                      backgroundColor: "#fff",
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "4px",
-                      },
-                    },
+                  actionBar: {
+                    actions: ["clear", "accept"],
                   },
                 }}
               />
@@ -198,29 +224,25 @@ export default function PageGestAcepCes() {
           </LocalizationProvider>
 
           {/* Desplegable Estado */}
-          <FormControl
-            sx={{
-              flex: "1 1 250px",
-              minWidth: "200px",
-              backgroundColor: "#fff",
+          <Autocomplete
+            options={statusOptions}
+            label="Estado"
+            labelKey="name"
+            valueKey="id"
+            searchKeys={["name"]}
+            value={selectedStatus?.id}
+            onChange={handleStatusChange}
+            textFieldProps={{
+              sx: {
+                flex: "1 1 250px",
+                minWidth: "200px",
+                backgroundColor: "#fff",
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "4px",
+                },
+              },
             }}
-          >
-            <InputLabel>Estado</InputLabel>
-            <Select
-              label="Estado"
-              value={filterStatus}
-              onChange={handleStatusChange}
-              sx={{
-                borderRadius: "4px",
-              }}
-            >
-              <MenuItem value="">Todos</MenuItem>
-              <MenuItem value="adjudicada">Adjudicada</MenuItem>
-              <MenuItem value="cerrada">Cerrada</MenuItem>
-              <MenuItem value="finalizada">Finalizada</MenuItem>
-              <MenuItem value="vigente">Vigente</MenuItem>
-            </Select>
-          </FormControl>
+          />
         </Box>
 
         {/* Tarjetas de información */}
@@ -276,7 +298,6 @@ export default function PageGestAcepCes() {
         <OperationsTable
           searchEmisor={searchEmisor}
           startDate={startDate}
-          endDate={endDate}
           filterStatus={filterStatus}
         />
       </Box>
