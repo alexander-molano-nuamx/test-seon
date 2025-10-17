@@ -81,7 +81,6 @@ export const nuamTheme = createTheme({
 
 export const theme = createTheme({
   typography: {
-    // fontFamily: "var(--font-roboto)", // usa la variable de `next/font`
     fontFamily: "Roboto, sans-serif",
   },
   palette: {
