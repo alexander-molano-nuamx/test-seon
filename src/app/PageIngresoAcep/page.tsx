@@ -9,8 +9,6 @@ import {
   Chip,
   Tabs,
   Tab,
-  Select,
-  MenuItem,
   FormControl,
   Table,
   TableBody,
@@ -26,7 +24,7 @@ import {
   Paper,
   useMediaQuery,
 } from "@mui/material";
-import { ExpandMore, ExpandLess, Schedule } from "@mui/icons-material";
+import { ExpandMore, ExpandLess } from "@mui/icons-material";
 import Image from "next/image";
 import { AppHeader } from "@/components/AppHeader";
 import { AppSidebar } from "@/components/AppSidebar";
@@ -34,12 +32,10 @@ import { Breadcrumbs } from "../../components/Breadcrumbs";
 import { Autocomplete } from "@/components/Autocomplete";
 import { RestrictedDevice } from "@/components/RestrictedDevice";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@/components/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { es } from "date-fns/locale";
-import { DateTimePicker } from "@/components/DateTimePicker";
-import { TimePicker } from "@/components/TimePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
+import { StackedBarChart } from "@/components/StackedBarChart";
 
 const drawerWidth = 240;
 
@@ -58,9 +54,170 @@ export default function PageIngresoAcep() {
   const [filterStatus, setFilterStatus] = useState("");
 
   const customLinks = [
-    { name: "Gestión de Aceptaciones y Cesiones", path: "/PageGestAcepCes" },
-    { name: "Ingreso de aceptaciones", path: "/PageIngresoAcep" },
+    { name: "Operaciones especiales", path: "/PageGestAcepCes" },
+    { name: "ALICORP", path: "/PageIngresoAcep" },
   ];
+
+  const seriesData = [
+    {
+      id: "serie01",
+      name: "Serie A",
+      shortName: "Serie A18",
+      duration: "A18 -18 meses en ",
+      type: "Tasa Fija E.A.",
+      color: "#B22A09",
+    },
+    {
+      id: "serie02",
+      name: "Serie B",
+      shortName: "Serie B24",
+      duration: "B24 - 24 meses en ",
+      type: "Tasa Fija E.A.",
+      color: "#FF411C",
+    },
+    {
+      id: "serie03",
+      name: "Serie B",
+      shortName: "Serie B72",
+      duration: "B72 - 72 meses en ",
+      type: "IBR + Margen N.M.V.",
+      color: "#FFA47F",
+    },
+    {
+      id: "serie04",
+      name: "Serie B",
+      shortName: "Serie B96",
+      duration: "B96 - 96 meses en ",
+      type: "Tasa Fija E.A.",
+      color: "#FF8F00",
+    },
+    {
+      id: "serie05",
+      name: "Serie C",
+      shortName: "Serie C24",
+      duration: "C24 - 24 meses en ",
+      type: "Tasa Fija E.A.",
+      color: "#3D3D3D",
+    },
+    {
+      id: "serie06",
+      name: "Serie C",
+      shortName: "Serie C32",
+      duration: "B32 - 32 meses en ",
+      type: "IPC + Margen E.A.",
+      color: "#8F8F8F",
+    },
+    {
+      id: "serie07",
+      name: "Serie C",
+      shortName: "Serie C48",
+      duration: "A48 - 48 meses en ",
+      type: "Tasa Fija E.A.",
+      color: "#E0E0E0",
+    },
+  ];
+
+  const seriesColumns = [
+    { id: "serie01", name: "Serie A18", color: "#B22A09" },
+    { id: "serie02", name: "Serie B24", color: "#FF411C" },
+    { id: "serie03", name: "Serie B72", color: "#FFA47F" },
+    { id: "serie04", name: "Serie B96", color: "#FF8F00" },
+    { id: "serie05", name: "Serie C24", color: "#3D3D3D" },
+    { id: "serie06", name: "Serie C32", color: "#8F8F8F" },
+    { id: "serie07", name: "Serie C48", color: "#E0E0E0" },
+  ];
+
+  const entitiesData = [
+    {
+      id: 1,
+      entity: "Diviso SAB",
+      acceptances: 20,
+      series: {
+        serie01: 700000,
+        serie02: 800000,
+        serie03: 600000,
+        serie04: 3500000,
+        serie05: 700000,
+        serie06: 600000,
+        serie07: 2500000,
+      },
+      total: 10500000,
+    },
+    {
+      id: 2,
+      entity: "Credicorp capital",
+      acceptances: 30,
+      series: {
+        serie01: 700000,
+        serie02: 800000,
+        serie03: 700000,
+        serie04: 3500000,
+        serie05: 700000,
+        serie06: 700000,
+        serie07: 2500000,
+      },
+      total: 8500000,
+    },
+    {
+      id: 3,
+      entity: "Inteligo",
+      acceptances: 50,
+      series: {
+        serie01: 4000000,
+        serie02: 5000000,
+        serie03: 3000000,
+        serie04: 3000000,
+        serie05: 3000000,
+        serie06: 3000000,
+        serie07: 3000000,
+      },
+      total: 12000000,
+    },
+    {
+      id: 4,
+      entity: "BNB",
+      acceptances: 50,
+      series: {
+        serie01: 2600000,
+        serie02: 9600000,
+        serie03: 3300000,
+        serie04: 3300000,
+        serie05: 3300000,
+        serie06: 3300000,
+        serie07: 3300000,
+      },
+      total: 15300000,
+    },
+  ];
+
+  // Calcular totales
+  const totals = {
+    acceptances: entitiesData.reduce((sum, row) => sum + row.acceptances, 0),
+    series: seriesColumns.reduce((acc, serie) => {
+      // Asegurar que 'serie.id' es una clave válida de 'row.series'
+      const key = serie.id as keyof (typeof entitiesData)[number]["series"];
+      acc[serie.id] = entitiesData.reduce(
+        (sum, row) => sum + row.series[key],
+        0
+      );
+      return acc;
+    }, {} as Record<string, number>),
+    total: entitiesData.reduce((sum, row) => sum + row.total, 0),
+  };
+
+  // Calcular número de aceptaciones por serie
+  const acceptancesBySeries = seriesColumns.reduce((acc, serie) => {
+    const key = serie.id as keyof (typeof entitiesData)[number]["series"];
+    acc[serie.id] =
+      entitiesData.filter((row) => row.series[key] > 0).length * 10; // Ajusta según tu lógica
+    return acc;
+  }, {} as Record<string, number>);
+
+  // Función helper para formatear montos
+  const formatCurrency = (value?: number) => {
+    if (typeof value !== "number" || isNaN(value)) return "$0";
+    return value === 0 ? "$0" : `$${value.toLocaleString("es-PE")}`;
+  };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -278,47 +435,91 @@ export default function PageIngresoAcep() {
         </Card>
 
         {/* Series */}
-        <Card sx={{ mb: 3, border: "1px solid rgba(0,0,0,0.12)" }}>
-          <CardContent>
-            <Stack
-              direction="row"
-              spacing={3}
-              divider={<Divider orientation="vertical" flexItem />}
-              alignItems="center"
+        <Box sx={{ mb: 3 }}>
+          {/* Header Card */}
+
+          {/* Series Cards */}
+          <Accordion sx={{ mb: 3, border: "1px solid rgba(0,0,0,0.12)" }}>
+            <AccordionSummary
+              expandIcon={<ExpandMore />}
+              sx={{
+                backgroundColor: "#fafafa",
+                "&:hover": {
+                  backgroundColor: "#f5f5f5",
+                },
+              }}
             >
-              <Typography sx={{ fontSize: "16px" }}>
-                Series Total Ofertadas 3
-              </Typography>
               <Typography
                 sx={{
-                  fontSize: "14px",
+                  fontSize: "16px",
                   fontWeight: 600,
-                  color: "rgba(0,0,0,0.6)",
+                  color: "var(--color-orangered)",
                 }}
               >
-                SerieA • 72 meses en Renta Fija E.A.
+                Series Total Ofertadas: {seriesData.length}
               </Typography>
-              <Typography
+            </AccordionSummary>
+
+            <AccordionDetails>
+              <Box
                 sx={{
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  color: "rgba(0,0,0,0.6)",
+                  display: "flex",
+                  gap: 2,
+                  flexWrap: "wrap",
                 }}
               >
-                SerieB • 96 meses en Renta Fija E.A.
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  color: "rgba(0,0,0,0.6)",
-                }}
-              >
-                SerieC • 24 meses en IBR + Margen N.M.V.
-              </Typography>
-            </Stack>
-          </CardContent>
-        </Card>
+                {seriesData.map((serie) => (
+                  <Card
+                    key={serie.id}
+                    sx={{
+                      flex: "1 1 calc(33.333% - 16px)",
+                      minWidth: "250px",
+                      maxWidth: "440px",
+                      minHeight: "40px",
+                      border: "1px solid rgba(0,0,0,0.12)",
+                      borderLeft: `4px solid ${serie.color}`,
+                      transition: "all 0.3s",
+                      "&:hover": {
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                        transform: "translateY(-2px)",
+                      },
+                    }}
+                  >
+                    <CardContent
+                      sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: "16px",
+                          fontWeight: 600,
+                          color: "#3D3D3D",
+                        }}
+                      >
+                        {serie.name}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: "14px",
+                          color: "rgba(0,0,0,0.6)",
+                        }}
+                      >
+                        {serie.duration}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: "14px",
+                          color: "rgba(0,0,0,0.6)",
+                        }}
+                      >
+                        {serie.type}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                ))}
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+        </Box>
 
         {/* Tabs */}
         <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
@@ -402,65 +603,12 @@ export default function PageIngresoAcep() {
             {/* Chart and Cards */}
             <Stack direction="row" spacing={3} sx={{ mb: 3 }}>
               {/* Chart Placeholder */}
-              <Card
-                sx={{ flex: 1, p: 2, border: "1px solid rgba(0,0,0,0.12)" }}
-              >
-                <Box
-                  sx={{
-                    height: 332,
-                    display: "flex",
-                    alignItems: "flex-end",
-                    gap: 1,
-                    px: 2,
-                  }}
-                >
-                  {[100, 122, 182, 182, 145, 163, 182, 198, 174].map(
-                    (height, idx) => (
-                      <Box
-                        key={idx}
-                        sx={{
-                          flex: 1,
-                          height: `${height}px`,
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "flex-end",
-                        }}
-                      >
-                        <Box sx={{ bgcolor: "#B22A09", height: "15%" }} />
-                        <Box sx={{ bgcolor: "#FF3700", height: "70%" }} />
-                        <Box sx={{ bgcolor: "#FFA47F", height: "15%" }} />
-                      </Box>
-                    )
-                  )}
-                </Box>
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  sx={{ mt: 1, justifyContent: "space-around" }}
-                >
-                  {[
-                    "8:00",
-                    "9:00",
-                    "10:00",
-                    "11:00",
-                    "12:00",
-                    "13:00",
-                    "14:00",
-                    "15:00",
-                    "16:00",
-                  ].map((time) => (
-                    <Typography
-                      key={time}
-                      sx={{ fontSize: "12px", fontWeight: 700 }}
-                    >
-                      {time}
-                    </Typography>
-                  ))}
-                </Stack>
-              </Card>
+              <Box sx={{ flex: "0 0 80%" }}>
+                <StackedBarChart />
+              </Box>
 
               {/* Stats Cards */}
-              <Stack spacing={2} sx={{ width: 270 }}>
+              <Stack spacing={2} sx={{ flex: "0 0 calc(20% - 24px)" }}>
                 <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
                   <CardContent>
                     <Stack
@@ -536,98 +684,75 @@ export default function PageIngresoAcep() {
                     <TableCell sx={{ fontWeight: 500 }}>
                       N° Aceptaciones por Entidad
                     </TableCell>
-                    <TableCell sx={{ fontWeight: 500 }}>
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <span>SerieA 72</span>
-                        <Box
-                          sx={{
-                            width: 24,
-                            height: 8,
-                            bgcolor: "#ffa47f",
-                            borderRadius: 0.5,
-                          }}
-                        />
-                      </Stack>
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: 500 }}>
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <span>SerieB 76</span>
-                        <Box
-                          sx={{
-                            width: 24,
-                            height: 8,
-                            bgcolor: "#ff3700",
-                            borderRadius: 0.5,
-                          }}
-                        />
-                      </Stack>
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: 500 }}>
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <span>SerieC 24</span>
-                        <Box
-                          sx={{
-                            width: 24,
-                            height: 8,
-                            bgcolor: "#b22a09",
-                            borderRadius: 0.5,
-                          }}
-                        />
-                      </Stack>
-                    </TableCell>
+                    {seriesColumns.map((serie) => (
+                      <TableCell key={serie.id} sx={{ fontWeight: 500 }}>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <span>{serie.name}</span>
+                          <Box
+                            sx={{
+                              width: 24,
+                              height: 8,
+                              bgcolor: serie.color,
+                              borderRadius: 0.5,
+                            }}
+                          />
+                        </Stack>
+                      </TableCell>
+                    ))}
                     <TableCell sx={{ fontWeight: 500 }}>
                       Total Ofertada
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow>
-                    <TableCell>Diviso SAB</TableCell>
-                    <TableCell>20</TableCell>
-                    <TableCell>0</TableCell>
-                    <TableCell>$8.000.000</TableCell>
-                    <TableCell>$2.500.000</TableCell>
-                    <TableCell>$10.500.000</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Credicorp capital</TableCell>
-                    <TableCell>30</TableCell>
-                    <TableCell>$1.000.000</TableCell>
-                    <TableCell>$6.000.000</TableCell>
-                    <TableCell>$1.500.000</TableCell>
-                    <TableCell>$8.500.000</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Inteligo</TableCell>
-                    <TableCell>50</TableCell>
-                    <TableCell>$4.000.000</TableCell>
-                    <TableCell>$5.000.000</TableCell>
-                    <TableCell>$3.000.000</TableCell>
-                    <TableCell>$12.000.000</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>BNB</TableCell>
-                    <TableCell>50</TableCell>
-                    <TableCell>$2.600.000</TableCell>
-                    <TableCell>$9.600.000</TableCell>
-                    <TableCell>$3.300.000</TableCell>
-                    <TableCell>$15.300.000</TableCell>
-                  </TableRow>
+                  {/* Filas de datos */}
+                  {entitiesData.map((row) => (
+                    <TableRow key={row.id}>
+                      <TableCell>{row.entity}</TableCell>
+                      <TableCell>{row.acceptances}</TableCell>
+                      {seriesColumns.map((serie) => (
+                        <TableCell key={serie.id}>
+                          {formatCurrency(
+                            row.series[serie.id as keyof typeof row.series]
+                          )}
+                        </TableCell>
+                      ))}
+                      <TableCell>{formatCurrency(row.total)}</TableCell>
+                    </TableRow>
+                  ))}
+
+                  {/* Fila de Total General */}
                   <TableRow sx={{ bgcolor: "#f4f4f4" }}>
-                    <TableCell>Total General</TableCell>
-                    <TableCell>150</TableCell>
-                    <TableCell>$7.600.000</TableCell>
-                    <TableCell>$28.600.000</TableCell>
-                    <TableCell>$10.300.000</TableCell>
-                    <TableCell>$47.000.000</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>
+                      Total General
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>
+                      {totals.acceptances}
+                    </TableCell>
+                    {seriesColumns.map((serie) => (
+                      <TableCell key={serie.id} sx={{ fontWeight: 600 }}>
+                        {formatCurrency(totals.series[serie.id])}
+                      </TableCell>
+                    ))}
+                    <TableCell sx={{ fontWeight: 600 }}>
+                      {formatCurrency(totals.total)}
+                    </TableCell>
                   </TableRow>
+
+                  {/* Fila de N° Total de Aceptaciones por Serie */}
                   <TableRow sx={{ bgcolor: "#f4f4f4" }}>
-                    <TableCell>N° Total de Aceptaciones por Serie</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>
+                      N° Total de Aceptaciones por Serie
+                    </TableCell>
                     <TableCell></TableCell>
-                    <TableCell>40</TableCell>
-                    <TableCell>50</TableCell>
-                    <TableCell>60</TableCell>
-                    <TableCell>150</TableCell>
+                    {seriesColumns.map((serie) => (
+                      <TableCell key={serie.id} sx={{ fontWeight: 600 }}>
+                        {acceptancesBySeries[serie.id]}
+                      </TableCell>
+                    ))}
+                    <TableCell sx={{ fontWeight: 600 }}>
+                      {totals.acceptances}
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>

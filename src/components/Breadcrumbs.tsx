@@ -69,6 +69,7 @@ export const Breadcrumbs = ({ links }: IBreadcrumbsProps) => {
                 key={breadcrumb.path}
                 sx={{
                   color: "var(--mui-palette-primary-main)",
+                  fontWeight: 600,
                   borderBottom: "1px solid red",
                 }}
               >

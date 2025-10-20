@@ -20,6 +20,7 @@ interface Operation {
   issuerLogo?: string;
   operationType: string;
   totalAmount: string;
+  offerAmount: string;
   closeDate: string;
   seriesNumber: string;
   currency?: string;
@@ -128,7 +129,7 @@ export function OperationsCards({ dataCard: data }: OperationsCardsProps) {
                       fontSize: "16px",
                       fontWeight: 500,
                       color: "#3D3D3D",
-                      mb: 1,
+                      mb: 0,
                       minHeight: "48px",
                     }}
                   >
@@ -141,19 +142,41 @@ export function OperationsCards({ dataCard: data }: OperationsCardsProps) {
                     sx={{
                       fontSize: "14px",
                       color: "rgba(0,0,0,0.6)",
-                      mb: 2,
+                      mb: 1,
                     }}
                   >
                     {operation.seriesNumber}
                   </Typography>
 
                   {/* Monto */}
-                  <Box sx={{ mb: 2 }}>
+                  <Box sx={{ mb: 1 }}>
                     <Typography
                       variant="caption"
                       sx={{
                         fontSize: "12px",
-                        color: "#FF4201",
+                        color: "rgba(0,0,0,0.6)",
+                        fontWeight: 500,
+                      }}
+                    >
+                      Cantidad de la oferta
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontSize: "16px",
+                        fontWeight: 500,
+                        color: "#3D3D3D",
+                      }}
+                    >
+                      {operation.offerAmount}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ mb: 1 }}>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        fontSize: "12px",
+                        color: "rgba(0,0,0,0.6)",
                         fontWeight: 500,
                       }}
                     >
@@ -167,7 +190,9 @@ export function OperationsCards({ dataCard: data }: OperationsCardsProps) {
                         color: "#3D3D3D",
                       }}
                     >
-                      {operation.totalAmount} {operation.currency}
+                      {operation.totalAmount}{" "}
+                      {operation.totalAmount !== "No disponible" &&
+                        ` ${operation.currency}`}
                     </Typography>
                   </Box>
 

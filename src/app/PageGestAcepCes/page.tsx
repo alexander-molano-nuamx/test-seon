@@ -13,6 +13,7 @@ import {
 import {
   Search as SearchIcon,
   Description as DescriptionIcon,
+  CalendarMonthRounded,
 } from "@mui/icons-material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -22,6 +23,7 @@ import { RestrictedDevice } from "@/components/RestrictedDevice";
 import { AppHeader } from "@/components/AppHeader";
 import { AppSidebar } from "@/components/AppSidebar";
 import { OperationsTable } from "@/components/OperationsTable";
+import { Breadcrumbs } from "../../components/Breadcrumbs";
 
 const Autocomplete = dynamic(() => import("@/components/AutocompleteWrapper"), {
   ssr: false,
@@ -43,6 +45,10 @@ const statusOptions = [
 
 export default function PageGestAcepCes() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  const customLinks = [
+    { name: "Operaciones especiales", path: "/PageGestAcepCes" },
+  ];
 
   const handleClear = () => {
     setSearchEmisor("");
@@ -110,27 +116,39 @@ export default function PageGestAcepCes() {
           width: "100%",
         }}
       >
-        {/* Breadcrumb */}
-        <Typography
+        {/* Breadcrumbs */}
+        <Box
           sx={{
-            color: "var(--color-orangered)",
-            fontFamily: "var(--font-family)",
-            fontSize: "14px",
-            fontStyle: "normal",
-            fontWeight: 500,
-            lineHeight: "157%",
-            letterSpacing: "0.1px",
-            textDecorationLine: "underline",
-            textDecorationStyle: "solid",
-            textDecorationSkipInk: "none",
-            textDecorationThickness: "auto",
-            textUnderlineOffset: "auto",
-            textUnderlinePosition: "from-font",
             mb: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 2,
           }}
         >
-          Gestión de Aceptaciones y Cesiones
-        </Typography>
+          {/* Breadcrumb a la izquierda */}
+          <Box>
+            <Breadcrumbs links={customLinks} />
+          </Box>
+
+          {/* Datos de sesión a la derecha */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+            }}
+          >
+            <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
+              Último Inicio de Sesión:{" "}
+              <strong>Martes, 13 de mayo 2:00pm</strong>
+            </Typography>
+            <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
+              IP: <strong>171.112.111</strong>
+            </Typography>
+          </Box>
+        </Box>
 
         <Typography
           variant="h4"
@@ -265,6 +283,7 @@ export default function PageGestAcepCes() {
               gap: 2,
             }}
           >
+            <CalendarMonthRounded sx={{ fontSize: 24, color: "#3D3D3D" }} />
             <Typography variant="body1" sx={{ color: "#3D3D3D" }}>
               Fecha final de gestión de aceptaciones: 5 de Octubre 2025
             </Typography>
