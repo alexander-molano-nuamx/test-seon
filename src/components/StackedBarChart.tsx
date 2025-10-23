@@ -32,21 +32,21 @@ const seriesData = [
     name: "Serie A",
     duration: "A18 - 18 meses en ",
     type: "Tasa Fija E.A.",
-    color: "#B22A09",
+    color: "#b22a09",
   },
   {
     id: "serieB1",
     name: "Serie B",
     duration: "B24 - 24 meses en ",
     type: "Tasa Fija E.A.",
-    color: "#FF411C",
+    color: "#ff411c",
   },
   {
     id: "serieB2",
     name: "Serie B",
     duration: "B72 - 72 meses en ",
     type: "IBR + Margen N.M.V.",
-    color: "#FFA47F",
+    color: "#ffa47f",
   },
   {
     id: "serieB3",
@@ -74,7 +74,7 @@ const seriesData = [
     name: "Serie C",
     duration: "A48 - 48 meses en ",
     type: "Tasa Fija E.A.",
-    color: "#E0E0E0",
+    color: "#4dd0e1",
   },
 ];
 
@@ -133,7 +133,7 @@ export function StackedBarChart() {
             tooltipEl.style.transition = "all .1s ease";
             tooltipEl.style.padding = "20px";
             tooltipEl.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
-            tooltipEl.style.minWidth = "600px";
+            tooltipEl.style.minWidth = "350px";
             tooltipEl.style.zIndex = "1000";
             document.body.appendChild(tooltipEl);
           }
@@ -146,11 +146,12 @@ export function StackedBarChart() {
           }
 
           // Construir contenido
+          // Construir contenido
           if (tooltipModel.body) {
             const bodyLines = tooltipModel.dataPoints;
 
             let innerHtml =
-              '<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">';
+              '<div style="display: flex; flex-direction: column; gap: 12px;">';
 
             bodyLines.forEach((dataPoint, i) => {
               const serie = seriesData[dataPoint.datasetIndex];
@@ -158,37 +159,31 @@ export function StackedBarChart() {
               const millions = (value! / 1000000).toFixed(3);
 
               innerHtml += `
-                <div style="
-                  padding-bottom: ${i < bodyLines.length - 1 ? "16px" : "0"};
-                  border-bottom: ${
-                    i < bodyLines.length - 1 ? "1px solid #eee" : "none"
-                  };
-                ">
-                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                    <span style="
-                      display: inline-block;
-                      width: 40px;
-                      height: 8px;
-                      background: ${serie.color};
-                      border-radius: 2px;
-                    "></span>
-                    <span style="font-size: 14px; color: #000; font-weight: 500; font-family: 'Roboto', sans-serif;">
-                      ${dataPoint.datasetIndex + 1}. ${serie.name} ${
-                serie.duration
-              }${serie.type}
-                    </span>
-                  </div>
-                  <div style="font-size: 14px; color: #666; padding-left: 48px; font-family: 'Roboto', sans-serif;">
-                    Cantidad Total Ofertado ${millions}
-                  </div>
-                </div>
-              `;
+      <div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <span style="
+            display: inline-block;
+            width: 40px;
+            height: 8px;
+            background: ${serie.color};
+            border-radius: 2px;
+          "></span>
+          <span style="font-size: 14px; color: #000; font-weight: 500; font-family: 'Roboto', sans-serif;">
+            ${dataPoint.datasetIndex + 1}. ${serie.name} ${serie.duration}${
+                serie.type
+              }
+          </span>
+        </div>
+        <div style="font-size: 14px; color: #666; padding-left: 48px; font-family: 'Roboto', sans-serif;">
+          Cantidad Total Ofertado ${millions}
+        </div>
+      </div>
+    `;
             });
 
             innerHtml += "</div>";
             tooltipEl.innerHTML = innerHtml;
           }
-
           const position = context.chart.canvas.getBoundingClientRect();
 
           // Calcular posición inicial
@@ -311,8 +306,8 @@ export function StackedBarChart() {
       },
     },
     interaction: {
-      mode: "index",
-      intersect: false,
+      mode: "point",
+      intersect: true,
     },
   };
 

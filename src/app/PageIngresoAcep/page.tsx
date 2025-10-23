@@ -36,6 +36,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { es } from "date-fns/locale";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import { StackedBarChart } from "@/components/StackedBarChart";
+import { RegistroAceptaciones } from "@/components/RegistroAceptaciones";
 
 const drawerWidth = 240;
 
@@ -58,73 +59,74 @@ export default function PageIngresoAcep() {
     { name: "ALICORP", path: "/PageIngresoAcep" },
   ];
 
-  const seriesData = [
+  interface SerieItem {
+    id: number;
+    color: string;
+    name: string;
+    description: string;
+    additionalInfo?: string[];
+  }
+
+  const seriesData: SerieItem[] = [
     {
-      id: "serie01",
-      name: "Serie A",
-      shortName: "Serie A18",
-      duration: "A18 -18 meses en ",
-      type: "Tasa Fija E.A.",
-      color: "#B22A09",
+      id: 1,
+      color: "#b22a09",
+      name: "SerieA",
+      description: "A18 -18 meses en Tasa Fija",
+      additionalInfo: ["E.A."],
     },
     {
-      id: "serie02",
-      name: "Serie B",
-      shortName: "Serie B24",
-      duration: "B24 - 24 meses en ",
-      type: "Tasa Fija E.A.",
-      color: "#FF411C",
+      id: 2,
+      color: "#ff411c",
+      name: "SerieB",
+      description: "B24 - 24 meses en Tasa Fija",
+      additionalInfo: ["E.A."],
     },
     {
-      id: "serie03",
-      name: "Serie B",
-      shortName: "Serie B72",
-      duration: "B72 - 72 meses en ",
-      type: "IBR + Margen N.M.V.",
-      color: "#FFA47F",
+      id: 3,
+      color: "#ffa47f",
+      name: "SerieB",
+      description: "B72 - 72 meses en IBR",
+      additionalInfo: ["+", "Margen N.M.V."],
     },
     {
-      id: "serie04",
-      name: "Serie B",
-      shortName: "Serie B96",
-      duration: "B96 - 96 meses en ",
-      type: "Tasa Fija E.A.",
-      color: "#FF8F00",
+      id: 4,
+      color: "#ff8f00",
+      name: "SerieA",
+      description: "A18 -18 meses en Tasa Fija",
+      additionalInfo: ["E.A."],
     },
     {
-      id: "serie05",
-      name: "Serie C",
-      shortName: "Serie C24",
-      duration: "C24 - 24 meses en ",
-      type: "Tasa Fija E.A.",
-      color: "#3D3D3D",
+      id: 5,
+      color: "#3d3d3d",
+      name: "SerieA",
+      description: "A18 -18 meses en Tasa Fija",
+      additionalInfo: ["E.A."],
     },
     {
-      id: "serie06",
-      name: "Serie C",
-      shortName: "Serie C32",
-      duration: "B32 - 32 meses en ",
-      type: "IPC + Margen E.A.",
-      color: "#8F8F8F",
+      id: 6,
+      color: "#8f8f8f",
+      name: "SerieB",
+      description: "B24 - 24 meses en Tasa Fija",
+      additionalInfo: ["E.A."],
     },
     {
-      id: "serie07",
-      name: "Serie C",
-      shortName: "Serie C48",
-      duration: "A48 - 48 meses en ",
-      type: "Tasa Fija E.A.",
-      color: "#E0E0E0",
+      id: 7,
+      color: "#4dd0e1",
+      name: "SerieB",
+      description: "B72 - 72 meses en IBR",
+      additionalInfo: ["+", "Margen N.M.V."],
     },
   ];
 
   const seriesColumns = [
-    { id: "serie01", name: "Serie A18", color: "#B22A09" },
-    { id: "serie02", name: "Serie B24", color: "#FF411C" },
-    { id: "serie03", name: "Serie B72", color: "#FFA47F" },
+    { id: "serie01", name: "Serie A18", color: "#b22a09" },
+    { id: "serie02", name: "Serie B24", color: "#ff411c" },
+    { id: "serie03", name: "Serie B72", color: "#ffa47f" },
     { id: "serie04", name: "Serie B96", color: "#FF8F00" },
     { id: "serie05", name: "Serie C24", color: "#3D3D3D" },
     { id: "serie06", name: "Serie C32", color: "#8F8F8F" },
-    { id: "serie07", name: "Serie C48", color: "#E0E0E0" },
+    { id: "serie07", name: "Serie C48", color: "#4dd0e1" },
   ];
 
   const entitiesData = [
@@ -310,22 +312,21 @@ export default function PageIngresoAcep() {
           </Box>
         </Box>
         {/* Tipo de Valor */}
-        <Card sx={{ mb: 2, border: "1px solid rgba(0,0,0,0.12)" }}>
-          <CardContent>
-            <Typography
-              sx={{
-                fontSize: "16px",
-                fontWeight: 600,
-                color: "rgba(0,0,0,0.6)",
-              }}
-            >
-              Tipo de Valor{" "}
-              <span style={{ fontWeight: 600 }}>
-                Bono con Deposito de Corto plazo Papel Comercial
-              </span>
-            </Typography>
-          </CardContent>
-        </Card>
+
+        <Typography
+          sx={{
+            fontSize: "16px",
+            fontWeight: 600,
+            color: "rgba(0,0,0,0.6)",
+            mt: 1,
+            mb: 2,
+          }}
+        >
+          Tipo de Valor{" "}
+          <span style={{ fontWeight: 600 }}>
+            Bono con Deposito de Corto plazo Papel Comercial
+          </span>
+        </Typography>
 
         {/* Card Info */}
         <Card sx={{ mb: 2, border: "1px solid rgba(0,0,0,0.12)" }}>
@@ -439,13 +440,16 @@ export default function PageIngresoAcep() {
           {/* Header Card */}
 
           {/* Series Cards */}
-          <Accordion sx={{ mb: 3, border: "1px solid rgba(0,0,0,0.12)" }}>
+          <Accordion
+            defaultExpanded={true}
+            sx={{ mb: 3, border: "1px solid rgba(0,0,0,0.12)" }}
+          >
             <AccordionSummary
               expandIcon={<ExpandMore />}
               sx={{
-                backgroundColor: "#fafafa",
+                backgroundColor: "#fff",
                 "&:hover": {
-                  backgroundColor: "#f5f5f5",
+                  backgroundColor: "rgba(239, 108, 0, 0.04)",
                 },
               }}
             >
@@ -464,57 +468,81 @@ export default function PageIngresoAcep() {
               <Box
                 sx={{
                   display: "flex",
-                  gap: 2,
                   flexWrap: "wrap",
+                  gap: 1,
+                  py: 1,
                 }}
               >
                 {seriesData.map((serie) => (
-                  <Card
+                  <Box
                     key={serie.id}
                     sx={{
-                      flex: "1 1 calc(33.333% - 16px)",
-                      minWidth: "250px",
-                      maxWidth: "440px",
-                      minHeight: "40px",
-                      border: "1px solid rgba(0,0,0,0.12)",
-                      borderLeft: `4px solid ${serie.color}`,
-                      transition: "all 0.3s",
-                      "&:hover": {
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                        transform: "translateY(-2px)",
-                      },
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
                     }}
                   >
-                    <CardContent
-                      sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                    <Box
+                      sx={{
+                        width: 18,
+                        height: 8,
+                        backgroundColor: serie.color,
+                        borderRadius: "2px",
+                        flexShrink: 0,
+                      }}
+                    />
+                    <Typography
+                      component="span"
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: "14px",
+                        color: "rgba(0,0,0,0.6)",
+                        letterSpacing: "0.1px",
+                        lineHeight: 1.57,
+                      }}
                     >
+                      {serie.id}. {serie.name}
+                    </Typography>
+                    <Typography
+                      component="span"
+                      sx={{
+                        fontWeight: 500,
+                        fontSize: "14px",
+                        color: "rgba(0,0,0,0.6)",
+                        letterSpacing: "0.1px",
+                        lineHeight: 1.57,
+                      }}
+                    >
+                      •
+                    </Typography>
+                    <Typography
+                      component="span"
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: "14px",
+                        color: "rgba(0,0,0,0.6)",
+                        letterSpacing: "0.1px",
+                        lineHeight: 1.57,
+                      }}
+                    >
+                      {serie.description}
+                    </Typography>
+                    {serie.additionalInfo?.map((info, idx) => (
                       <Typography
+                        key={idx}
+                        component="span"
                         sx={{
-                          fontSize: "16px",
                           fontWeight: 600,
-                          color: "#3D3D3D",
-                        }}
-                      >
-                        {serie.name}
-                      </Typography>
-                      <Typography
-                        sx={{
                           fontSize: "14px",
                           color: "rgba(0,0,0,0.6)",
+                          letterSpacing: "0.1px",
+                          lineHeight: 1.57,
                         }}
                       >
-                        {serie.duration}
+                        {info}
                       </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: "14px",
-                          color: "rgba(0,0,0,0.6)",
-                        }}
-                      >
-                        {serie.type}
-                      </Typography>
-                    </CardContent>
-                  </Card>
+                    ))}
+                  </Box>
                 ))}
               </Box>
             </AccordionDetails>
@@ -768,7 +796,7 @@ export default function PageIngresoAcep() {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>Contenido del registro de aceptaciones...</Typography>
+            <RegistroAceptaciones />
           </AccordionDetails>
         </Accordion>
       </Box>

@@ -31,7 +31,7 @@ interface OperationsTableProps {
 
 interface Operation {
   id: number;
-  status: "vigente" | "cerrada" | "finalizada" | "adjudicada";
+  status: "inscrita" | "vigente" | "cerrada" | "finalizada" | "adjudicada";
   issuer: string;
   issuerLogo?: string;
   operationType: string;
@@ -47,13 +47,13 @@ interface Operation {
 const mockData: Operation[] = [
   {
     id: 1,
-    status: "vigente",
+    status: "inscrita",
     issuer: "ALICORP",
     issuerLogo: "/assets/alicorp.png",
     operationType: "OPP RF",
     nemotechnical: "ALICORP",
     startDate: "03 de octubre 2025",
-    offerAmount: "No disponible",
+    offerAmount: "",
     totalAmount: "$50.000.000",
     closeDate: "03 de octubre 2025 - 03 de octubre 2025",
     seriesNumber: "No de Series 7",
@@ -67,7 +67,7 @@ const mockData: Operation[] = [
     operationType: "OPP RF",
     nemotechnical: "SYRUS1CP1C",
     startDate: "03 de octubre 2025",
-    offerAmount: "450.000",
+    offerAmount: "",
     totalAmount: "$500.000",
     closeDate: "03 de octubre 2025 - 03 de octubre 2025",
     seriesNumber: "No de Series 7",
@@ -75,14 +75,14 @@ const mockData: Operation[] = [
   },
   {
     id: 3,
-    status: "cerrada",
+    status: "vigente",
     issuer: "Bam",
     issuerLogo: "/assets/Bam.png",
     operationType: "OPA",
     nemotechnical: "Bam",
     startDate: "03 de octubre 2025",
     offerAmount: "1.000.000",
-    totalAmount: "No disponible",
+    totalAmount: "",
     closeDate: "03 de octubre 2025 - 03 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -91,12 +91,12 @@ const mockData: Operation[] = [
     id: 4,
     status: "cerrada",
     issuer: "CREDICORP",
-    issuerLogo: "/assets/credicorp-capital.png",
+    issuerLogo: "/assets/volcan.png",
     operationType: "OPA",
-    nemotechnical: "CREDIECXAMPLE",
+    nemotechnical: "VOLCAN",
     startDate: "04 de octubre 2025",
     offerAmount: "4.870.000",
-    totalAmount: "No disponible",
+    totalAmount: "",
     closeDate: "04 de octubre 2025 - 04 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -110,7 +110,7 @@ const mockData: Operation[] = [
     nemotechnical: "INCIMMET",
     startDate: "04 de octubre 2025",
     offerAmount: "50.000.000",
-    totalAmount: "No disponible",
+    totalAmount: "",
     closeDate: "04 de octubre 2025 - 04 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -124,7 +124,7 @@ const mockData: Operation[] = [
     nemotechnical: "AJAIMEROJAS",
     startDate: "06 de octubre 2025",
     offerAmount: "500.000",
-    totalAmount: "$400.000",
+    totalAmount: "",
     closeDate: "06 de octubre 2025 - 06 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -138,7 +138,7 @@ const mockData: Operation[] = [
     nemotechnical: "CAJAHUANCAYO",
     startDate: "08 de octubre 2025",
     offerAmount: "70.000",
-    totalAmount: "No disponible",
+    totalAmount: "",
     closeDate: "08 de octubre 2025 - 08 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -152,7 +152,7 @@ const mockData: Operation[] = [
     nemotechnical: "ECOSAC",
     startDate: "10 de octubre 2025",
     offerAmount: "2.500.000",
-    totalAmount: "No disponible",
+    totalAmount: "",
     closeDate: "10 de octubre 2025 - 10 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -166,7 +166,7 @@ const mockData: Operation[] = [
     nemotechnical: "SCOTIAREI",
     startDate: "14 de octubre 2025",
     offerAmount: "348.454.870",
-    totalAmount: "No disponible",
+    totalAmount: "",
     closeDate: "14 de octubre 2025 - 14 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -180,7 +180,7 @@ const mockData: Operation[] = [
     nemotechnical: "CHAVIN",
     startDate: "16 de octubre 2025",
     offerAmount: "10.000.000",
-    totalAmount: "No disponible",
+    totalAmount: "",
     closeDate: "16 de octubre 2025 - 16 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -193,6 +193,7 @@ const getStatusChip = (status: Operation["status"]) => {
     cerrada: { label: "Cerrada", bg: "rgba(0,0,0,0.08)" },
     finalizada: { label: "Finalizada", bg: "rgba(0,0,0,0.08)" },
     adjudicada: { label: "Adjudicada", bg: "#f8e2da" },
+    inscrita: { label: "Inscrita", bg: "#FFF59D" },
   };
 
   const config = statusConfig[status];

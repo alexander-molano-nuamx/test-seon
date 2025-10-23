@@ -15,7 +15,7 @@ import Link from "next/link";
 
 interface Operation {
   id: number;
-  status: "vigente" | "cerrada" | "finalizada" | "adjudicada";
+  status: "inscrita" | "vigente" | "cerrada" | "finalizada" | "adjudicada";
   issuer: string;
   issuerLogo?: string;
   operationType: string;
@@ -36,6 +36,7 @@ const getStatusChip = (status: Operation["status"]) => {
     cerrada: { label: "Cerrada", bg: "rgba(0,0,0,0.08)" },
     finalizada: { label: "Finalizada", bg: "rgba(0,0,0,0.08)" },
     adjudicada: { label: "Adjudicada", bg: "#f8e2da" },
+    inscrita: { label: "Inscrita", bg: "#FFF59D" },
   };
 
   const config = statusConfig[status];
@@ -80,8 +81,9 @@ export function OperationsCards({ dataCard: data }: OperationsCardsProps) {
                 borderRadius: 2,
                 boxShadow: "0 1px 3px rgba(0,0,0,0.12)",
                 transition: "box-shadow 0.3s",
+                backgroundColor: "#fff",
                 "&:hover": {
-                  backgroundColor: "rgba(0,0,0,0.05)",
+                  backgroundColor: "rgba(239, 108, 0, 0.04)",
                   boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                 },
               }}
@@ -148,53 +150,58 @@ export function OperationsCards({ dataCard: data }: OperationsCardsProps) {
                     {operation.seriesNumber}
                   </Typography>
 
-                  {/* Monto */}
-                  <Box sx={{ mb: 1 }}>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        fontSize: "12px",
-                        color: "rgba(0,0,0,0.6)",
-                        fontWeight: 500,
-                      }}
-                    >
-                      Cantidad de la oferta
-                    </Typography>
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        fontSize: "16px",
-                        fontWeight: 500,
-                        color: "#3D3D3D",
-                      }}
-                    >
-                      {operation.offerAmount}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ mb: 1 }}>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        fontSize: "12px",
-                        color: "rgba(0,0,0,0.6)",
-                        fontWeight: 500,
-                      }}
-                    >
-                      Monto total ofertado
-                    </Typography>
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        fontSize: "16px",
-                        fontWeight: 500,
-                        color: "#3D3D3D",
-                      }}
-                    >
-                      {operation.totalAmount}{" "}
-                      {operation.totalAmount !== "No disponible" &&
-                        ` ${operation.currency}`}
-                    </Typography>
-                  </Box>
+                  {/* Mostrar offerAmount si existe, sino mostrar totalAmount */}
+                  {operation.offerAmount !== "" &&
+                  operation.offerAmount !== "No aplica" ? (
+                    <Box sx={{ mb: 1 }}>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          fontSize: "12px",
+                          color: "rgba(0,0,0,0.6)",
+                          fontWeight: 500,
+                        }}
+                      >
+                        Cantidad de la oferta
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontSize: "16px",
+                          fontWeight: 500,
+                          color: "#3D3D3D",
+                        }}
+                      >
+                        {operation.offerAmount} {operation.currency}
+                      </Typography>
+                    </Box>
+                  ) : (
+                    operation.totalAmount !== "" &&
+                    operation.totalAmount !== "No aplica" && (
+                      <Box sx={{ mb: 1 }}>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            fontSize: "12px",
+                            color: "rgba(0,0,0,0.6)",
+                            fontWeight: 500,
+                          }}
+                        >
+                          Monto total ofertado
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            fontSize: "16px",
+                            fontWeight: 500,
+                            color: "#3D3D3D",
+                          }}
+                        >
+                          {operation.totalAmount} {operation.currency}
+                        </Typography>
+                      </Box>
+                    )
+                  )}
 
                   {/* Fecha de aceptaciones */}
                   <Box>

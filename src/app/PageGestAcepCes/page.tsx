@@ -285,7 +285,7 @@ export default function PageGestAcepCes() {
           >
             <CalendarMonthRounded sx={{ fontSize: 24, color: "#3D3D3D" }} />
             <Typography variant="body1" sx={{ color: "#3D3D3D" }}>
-              Fecha final de gestión de aceptaciones: 5 de Octubre 2025
+              Próxima fecha inicio ingreso de aceptaciones 02 de Oct 2025
             </Typography>
           </Box>
 
