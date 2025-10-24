@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import {
   Box,
@@ -9,6 +10,7 @@ import {
   TextField,
   InputAdornment,
   IconButton,
+  Skeleton,
 } from "@mui/material";
 import {
   Search as SearchIcon,
@@ -47,6 +49,37 @@ const statusOptions = [
 
 export default function PageGestAcepCes() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { data: session, status } = useSession();
+  const [lastLogin, setLastLogin] = useState<string>("");
+  const [ipAddress, setIpAddress] = useState<string>("");
+
+  useEffect(() => {
+    // Obtener fecha/hora actual del navegador
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    };
+    const formattedDate = now.toLocaleDateString("es-ES", options);
+    setLastLogin(formattedDate);
+
+    // Obtener IP del cliente (requiere API externa o backend)
+    fetch("https://api.ipify.org?format=json")
+      .then((response) => response.json())
+      .then((data) => setIpAddress(data.ip))
+      .catch(() => setIpAddress("No disponible"));
+  }, []);
+
+  // Formatear la fecha de forma más legible
+  const formatLastLogin = () => {
+    if (!lastLogin) return "Cargando...";
+    // Capitalizar primera letra del día
+    return lastLogin.charAt(0).toUpperCase() + lastLogin.slice(1);
+  };
 
   const customLinks = [
     { name: "Operaciones especiales", path: "/PageGestAcepCes" },
@@ -151,13 +184,22 @@ export default function PageGestAcepCes() {
                   alignItems: "flex-end",
                 }}
               >
-                <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
-                  Último Inicio de Sesión:{" "}
-                  <strong>Martes, 13 de mayo 2:00pm</strong>
-                </Typography>
-                <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
-                  IP: <strong>171.112.111</strong>
-                </Typography>
+                {status === "loading" ? (
+                  <Box sx={{ display: "flex", gap: 2 }}>
+                    <Skeleton width={250} height={20} />
+                    <Skeleton width={150} height={20} />
+                  </Box>
+                ) : (
+                  <>
+                    <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
+                      Último Inicio de Sesión:{" "}
+                      <strong>{formatLastLogin()}</strong>
+                    </Typography>
+                    <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
+                      IP: <strong>{ipAddress}</strong>
+                    </Typography>
+                  </>
+                )}
               </Box>
             </Box>
 
