@@ -1,6 +1,7 @@
 "use client";
 
 import { ThemeProvider, CssBaseline } from "@mui/material";
+import { SessionProvider } from "next-auth/react";
 import { theme } from "@/theme/theme";
 import "./globals.css";
 import Script from "next/script";
@@ -18,10 +19,12 @@ export default function RootLayout({
   return (
     <html lang="es" className={theme.typography.fontFamily}>
       <body className={`antialiased bg-transparent`}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          {children}
-        </ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            {children}
+          </ThemeProvider>
+        </SessionProvider>
         {/* ✅ Hotjar Tracking Code */}
         <Script id="hotjar" strategy="afterInteractive">
           {`

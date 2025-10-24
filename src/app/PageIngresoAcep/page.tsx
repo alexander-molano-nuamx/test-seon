@@ -37,6 +37,8 @@ import { es } from "date-fns/locale";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import { StackedBarChart } from "@/components/StackedBarChart";
 import { RegistroAceptaciones } from "@/components/RegistroAceptaciones";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { RoleProtectedRoute } from "@/components/components/RoleProtectedRoute";
 
 const drawerWidth = 240;
 
@@ -246,560 +248,585 @@ export default function PageIngresoAcep() {
 
   if (isMobileOrTablet) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "100vh",
-          backgroundColor: "#000",
-          padding: 2,
-        }}
-      >
-        <RestrictedDevice />
-      </Box>
-    );
-  }
-  return (
-    <Box sx={{ bgcolor: "white", display: "flex", minHeight: "100vh", p: 3 }}>
-      {/* Header */}
-      <AppHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
-      {/* Sidebar */}
-      <AppSidebar open={sidebarOpen} width={drawerWidth} />
-
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          mt: "56px",
-          minHeight: "calc(100vh - 56px)",
-          width: "100%",
-        }}
-      >
-        {/* Breadcrumbs */}
-        <Box
-          sx={{
-            mb: 2,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: 2,
-          }}
-        >
-          {/* Breadcrumb a la izquierda */}
-          <Box>
-            <Breadcrumbs links={customLinks} />
-          </Box>
-
-          {/* Datos de sesión a la derecha */}
+      <RoleProtectedRoute allowedRoles={["operator"]}>
+        <ProtectedRoute>
           <Box
             sx={{
               display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "100vh",
+              backgroundColor: "#000",
+              padding: 2,
             }}
           >
-            <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
-              Último Inicio de Sesión:{" "}
-              <strong>Martes, 13 de mayo 2:00pm</strong>
-            </Typography>
-            <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
-              IP: <strong>171.112.111</strong>
-            </Typography>
+            <RestrictedDevice />
           </Box>
-        </Box>
-        {/* Tipo de Valor */}
-
-        <Typography
-          sx={{
-            fontSize: "16px",
-            fontWeight: 600,
-            color: "rgba(0,0,0,0.6)",
-            mt: 1,
-            mb: 2,
-          }}
+        </ProtectedRoute>
+      </RoleProtectedRoute>
+    );
+  }
+  return (
+    <RoleProtectedRoute allowedRoles={["operator"]}>
+      <ProtectedRoute>
+        <Box
+          sx={{ bgcolor: "white", display: "flex", minHeight: "100vh", p: 3 }}
         >
-          Tipo de Valor{" "}
-          <span style={{ fontWeight: 600 }}>
-            Bono con Deposito de Corto plazo Papel Comercial
-          </span>
-        </Typography>
+          {/* Header */}
+          <AppHeader
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
+          />
 
-        {/* Card Info */}
-        <Card sx={{ mb: 2, border: "1px solid rgba(0,0,0,0.12)" }}>
-          <CardContent>
-            <Stack
-              direction="row"
-              spacing={3}
-              divider={<Divider orientation="vertical" flexItem />}
-              alignItems="center"
-            >
-              {/* Logo */}
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <Box
-                  sx={{
-                    width: 70,
-                    height: 70,
-                    borderRadius: "50%",
-                    bgcolor: "white",
-                    boxShadow: "0px 2px 4px rgba(0,0,0,0.2)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Image
-                    src={"/assets/alicorp-logo.png"}
-                    alt="Logo"
-                    width={100}
-                    height={100}
-                  />
-                </Box>
-                <Typography sx={{ fontSize: "16px" }}>
-                  ALICORP - OPP RF
-                </Typography>
-              </Box>
+          {/* Sidebar */}
+          <AppSidebar open={sidebarOpen} width={drawerWidth} />
 
-              {/* Monto Total */}
-              <Box sx={{ textAlign: "center" }}>
-                <Typography sx={{ fontSize: "16px" }}>
-                  Monto total ofertado
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "16px",
-                    fontWeight: 600,
-                    color: "rgba(0,0,0,0.6)",
-                  }}
-                >
-                  $50.000.000 - PEN
-                </Typography>
-              </Box>
-
-              {/* Fecha y Hora */}
-              <Box sx={{ textAlign: "center" }}>
-                <Typography sx={{ fontSize: "16px" }}>
-                  Fecha y Hora de Recepción Aceptaciones
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "14px",
-                    fontWeight: 600,
-                    color: "rgba(0,0,0,0.6)",
-                  }}
-                >
-                  03 Oct 2025 a 03 Oct 2025 • 8:00 a 16:00 • Perú
-                </Typography>
-              </Box>
-
-              {/* Tiempo */}
-              <Box sx={{ textAlign: "center" }}>
-                <Typography sx={{ fontSize: "16px" }}>
-                  Tiempo para Cierre de Aceptaciones
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "14px",
-                    fontWeight: 600,
-                    color: "rgba(0,0,0,0.6)",
-                  }}
-                >
-                  2 horas y 16 minutos
-                </Typography>
-              </Box>
-
-              {/* Estado */}
-              <Box sx={{ textAlign: "center" }}>
-                <Typography
-                  sx={{
-                    fontSize: "14px",
-                    fontWeight: 600,
-                    color: "rgba(0,0,0,0.6)",
-                    mb: 1,
-                  }}
-                >
-                  Estado
-                </Typography>
-                <Chip
-                  label="Vigente"
-                  sx={{
-                    bgcolor: "rgba(46,125,50,0.3)",
-                    color: "rgba(0,0,0,0.87)",
-                  }}
-                />
-              </Box>
-            </Stack>
-          </CardContent>
-        </Card>
-
-        {/* Series */}
-        <Box sx={{ mb: 3 }}>
-          {/* Header Card */}
-
-          {/* Series Cards */}
-          <Accordion
-            defaultExpanded={true}
-            sx={{ mb: 3, border: "1px solid rgba(0,0,0,0.12)" }}
+          <Box
+            component="main"
+            sx={{
+              flexGrow: 1,
+              p: 3,
+              mt: "56px",
+              minHeight: "calc(100vh - 56px)",
+              width: "100%",
+            }}
           >
-            <AccordionSummary
-              expandIcon={<ExpandMore />}
+            {/* Breadcrumbs */}
+            <Box
               sx={{
-                backgroundColor: "#fff",
-                "&:hover": {
-                  backgroundColor: "rgba(239, 108, 0, 0.04)",
-                },
+                mb: 2,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: 2,
               }}
             >
-              <Typography
-                sx={{
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  color: "var(--color-orangered)",
-                }}
-              >
-                Series Total Ofertadas: {seriesData.length}
-              </Typography>
-            </AccordionSummary>
+              {/* Breadcrumb a la izquierda */}
+              <Box>
+                <Breadcrumbs links={customLinks} />
+              </Box>
 
-            <AccordionDetails>
+              {/* Datos de sesión a la derecha */}
               <Box
                 sx={{
                   display: "flex",
-                  flexWrap: "wrap",
-                  gap: 1,
-                  py: 1,
+                  flexDirection: "column",
+                  alignItems: "flex-end",
                 }}
               >
-                {seriesData.map((serie) => (
-                  <Box
-                    key={serie.id}
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1,
-                    }}
-                  >
+                <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
+                  Último Inicio de Sesión:{" "}
+                  <strong>Martes, 13 de mayo 2:00pm</strong>
+                </Typography>
+                <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
+                  IP: <strong>171.112.111</strong>
+                </Typography>
+              </Box>
+            </Box>
+            {/* Tipo de Valor */}
+
+            <Typography
+              sx={{
+                fontSize: "16px",
+                fontWeight: 600,
+                color: "rgba(0,0,0,0.6)",
+                mt: 1,
+                mb: 2,
+              }}
+            >
+              Tipo de Valor{" "}
+              <span style={{ fontWeight: 600 }}>
+                Bono con Deposito de Corto plazo Papel Comercial
+              </span>
+            </Typography>
+
+            {/* Card Info */}
+            <Card sx={{ mb: 2, border: "1px solid rgba(0,0,0,0.12)" }}>
+              <CardContent>
+                <Stack
+                  direction="row"
+                  spacing={3}
+                  divider={<Divider orientation="vertical" flexItem />}
+                  alignItems="center"
+                >
+                  {/* Logo */}
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                     <Box
                       sx={{
-                        width: 18,
-                        height: 8,
-                        backgroundColor: serie.color,
-                        borderRadius: "2px",
-                        flexShrink: 0,
+                        width: 70,
+                        height: 70,
+                        borderRadius: "50%",
+                        bgcolor: "white",
+                        boxShadow: "0px 2px 4px rgba(0,0,0,0.2)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Image
+                        src={"/assets/alicorp-logo.png"}
+                        alt="Logo"
+                        width={100}
+                        height={100}
+                      />
+                    </Box>
+                    <Typography sx={{ fontSize: "16px" }}>
+                      ALICORP - OPP RF
+                    </Typography>
+                  </Box>
+
+                  {/* Monto Total */}
+                  <Box sx={{ textAlign: "center" }}>
+                    <Typography sx={{ fontSize: "16px" }}>
+                      Monto total ofertado
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "16px",
+                        fontWeight: 600,
+                        color: "rgba(0,0,0,0.6)",
+                      }}
+                    >
+                      $50.000.000 - PEN
+                    </Typography>
+                  </Box>
+
+                  {/* Fecha y Hora */}
+                  <Box sx={{ textAlign: "center" }}>
+                    <Typography sx={{ fontSize: "16px" }}>
+                      Fecha y Hora de Recepción Aceptaciones
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "14px",
+                        fontWeight: 600,
+                        color: "rgba(0,0,0,0.6)",
+                      }}
+                    >
+                      03 Oct 2025 a 03 Oct 2025 • 8:00 a 16:00 • Perú
+                    </Typography>
+                  </Box>
+
+                  {/* Tiempo */}
+                  <Box sx={{ textAlign: "center" }}>
+                    <Typography sx={{ fontSize: "16px" }}>
+                      Tiempo para Cierre de Aceptaciones
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "14px",
+                        fontWeight: 600,
+                        color: "rgba(0,0,0,0.6)",
+                      }}
+                    >
+                      2 horas y 16 minutos
+                    </Typography>
+                  </Box>
+
+                  {/* Estado */}
+                  <Box sx={{ textAlign: "center" }}>
+                    <Typography
+                      sx={{
+                        fontSize: "14px",
+                        fontWeight: 600,
+                        color: "rgba(0,0,0,0.6)",
+                        mb: 1,
+                      }}
+                    >
+                      Estado
+                    </Typography>
+                    <Chip
+                      label="Vigente"
+                      sx={{
+                        bgcolor: "rgba(46,125,50,0.3)",
+                        color: "rgba(0,0,0,0.87)",
                       }}
                     />
-                    <Typography
-                      component="span"
-                      sx={{
-                        fontWeight: 600,
-                        fontSize: "14px",
-                        color: "rgba(0,0,0,0.6)",
-                        letterSpacing: "0.1px",
-                        lineHeight: 1.57,
-                      }}
-                    >
-                      {serie.id}. {serie.name}
-                    </Typography>
-                    <Typography
-                      component="span"
-                      sx={{
-                        fontWeight: 500,
-                        fontSize: "14px",
-                        color: "rgba(0,0,0,0.6)",
-                        letterSpacing: "0.1px",
-                        lineHeight: 1.57,
-                      }}
-                    >
-                      •
-                    </Typography>
-                    <Typography
-                      component="span"
-                      sx={{
-                        fontWeight: 600,
-                        fontSize: "14px",
-                        color: "rgba(0,0,0,0.6)",
-                        letterSpacing: "0.1px",
-                        lineHeight: 1.57,
-                      }}
-                    >
-                      {serie.description}
-                    </Typography>
-                    {serie.additionalInfo?.map((info, idx) => (
-                      <Typography
-                        key={idx}
-                        component="span"
-                        sx={{
-                          fontWeight: 600,
-                          fontSize: "14px",
-                          color: "rgba(0,0,0,0.6)",
-                          letterSpacing: "0.1px",
-                          lineHeight: 1.57,
-                        }}
-                      >
-                        {info}
-                      </Typography>
-                    ))}
                   </Box>
-                ))}
-              </Box>
-            </AccordionDetails>
-          </Accordion>
-        </Box>
+                </Stack>
+              </CardContent>
+            </Card>
 
-        {/* Tabs */}
-        <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
-          <Tabs value={tabValue} onChange={handleTabChange}>
-            <Tab
-              label="INFORMACIÓN GENERAL"
-              sx={{
-                color: tabValue === 0 ? "#ff4201" : "rgba(0,0,0,0.6)",
-                fontWeight: 500,
-                fontSize: "14px",
-              }}
-            />
-            <Tab
-              label="INGRESO DE ACEPTACIONES"
-              sx={{ fontWeight: 500, fontSize: "14px" }}
-            />
-            <Tab
-              label="REPORTES Y BOLETINES"
-              sx={{ fontWeight: 500, fontSize: "14px" }}
-            />
-            <Tab
-              label="INFORMACIÓN DEL EMISOR"
-              sx={{ fontWeight: 500, fontSize: "14px" }}
-            />
-            <Tab
-              label="INFORMACIÓN DE LA OPERACIÓN"
-              sx={{ fontWeight: 500, fontSize: "14px" }}
-            />
-          </Tabs>
-        </Box>
+            {/* Series */}
+            <Box sx={{ mb: 3 }}>
+              {/* Header Card */}
 
-        {/* Accordion - Evolución de la Operación */}
-        <Accordion
-          expanded={expanded}
-          onChange={() => setExpanded(!expanded)}
-          sx={{ mb: 2 }}
-        >
-          <AccordionSummary
-            expandIcon={expanded ? <ExpandLess /> : <ExpandMore />}
-          >
-            <Typography sx={{ fontSize: "20px", fontWeight: 500 }}>
-              Evolución de la Operación
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            {/* Filters */}
-            <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
-              {/* Desplegable Estado */}
-              <FormControl fullWidth>
-                <Autocomplete
-                  options={statusOptions}
-                  label="Estado"
-                  labelKey="name"
-                  valueKey="id"
-                  searchKeys={["name"]}
-                  value={selectedStatus?.id}
-                  onChange={handleStatusChange}
-                  textFieldProps={{
-                    fullWidth: true, // Importante
-                    sx: {
-                      backgroundColor: "#fff",
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "4px",
-                      },
+              {/* Series Cards */}
+              <Accordion
+                defaultExpanded={true}
+                sx={{ mb: 3, border: "1px solid rgba(0,0,0,0.12)" }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMore />}
+                  sx={{
+                    backgroundColor: "#fff",
+                    "&:hover": {
+                      backgroundColor: "rgba(239, 108, 0, 0.04)",
                     },
                   }}
-                />
-              </FormControl>
-
-              {/* Selector de Hora */}
-              <FormControl fullWidth>
-                <LocalizationProvider
-                  dateAdapter={AdapterDateFns}
-                  adapterLocale={es}
                 >
-                  <MobileTimePicker />
-                </LocalizationProvider>
-              </FormControl>
-            </Stack>
+                  <Typography
+                    sx={{
+                      fontSize: "16px",
+                      fontWeight: 600,
+                      color: "var(--color-orangered)",
+                    }}
+                  >
+                    Series Total Ofertadas: {seriesData.length}
+                  </Typography>
+                </AccordionSummary>
 
-            {/* Chart and Cards */}
-            <Stack direction="row" spacing={3} sx={{ mb: 3 }}>
-              {/* Chart Placeholder */}
-              <Box sx={{ flex: "0 0 80%" }}>
-                <StackedBarChart />
-              </Box>
-
-              {/* Stats Cards */}
-              <Stack spacing={2} sx={{ flex: "0 0 calc(20% - 24px)" }}>
-                <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
-                  <CardContent>
-                    <Stack
-                      direction="row"
-                      spacing={1}
-                      alignItems="center"
-                      sx={{ mb: 1 }}
-                    >
-                      <Box sx={{ width: 18, height: 5, bgcolor: "#0e9753" }} />
-                      <Typography
-                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.6)" }}
+                <AccordionDetails>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 1,
+                      py: 1,
+                    }}
+                  >
+                    {seriesData.map((serie) => (
+                      <Box
+                        key={serie.id}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                        }}
                       >
-                        Máximo Total Ofertado
-                      </Typography>
-                    </Stack>
-                    <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
-                      Monto <strong>$60.000.000</strong>
-                    </Typography>
-                    <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
-                      Bid to Cover <strong>78,33 %</strong>
-                    </Typography>
-                  </CardContent>
-                </Card>
-
-                <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
-                  <CardContent>
-                    <Stack
-                      direction="row"
-                      spacing={1}
-                      alignItems="center"
-                      sx={{ mb: 1 }}
-                    >
-                      <Box sx={{ width: 18, height: 5, bgcolor: "#ffa47f" }} />
-                      <Typography
-                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.6)" }}
-                      >
-                        Total Ofertado
-                      </Typography>
-                    </Stack>
-                    <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
-                      Monto <strong>$50.000.000</strong>
-                    </Typography>
-                    <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
-                      Bid to Cover <strong>94,00 %</strong>
-                    </Typography>
-                  </CardContent>
-                </Card>
-
-                <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
-                  <CardContent>
-                    <Typography
-                      sx={{ fontSize: "14px", color: "rgba(0,0,0,0.6)", mb: 1 }}
-                    >
-                      Monto Total en Aceptaciones
-                    </Typography>
-                    <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
-                      $47.000.000
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Stack>
-            </Stack>
-
-            {/* Table */}
-            <TableContainer
-              component={Paper}
-              sx={{ border: "1px solid rgba(0,0,0,0.12)", borderRadius: 2 }}
-            >
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 500 }}>Entidad</TableCell>
-                    <TableCell sx={{ fontWeight: 500 }}>
-                      N° Aceptaciones por Entidad
-                    </TableCell>
-                    {seriesColumns.map((serie) => (
-                      <TableCell key={serie.id} sx={{ fontWeight: 500 }}>
-                        <Stack direction="row" spacing={1} alignItems="center">
-                          <span>{serie.name}</span>
-                          <Box
+                        <Box
+                          sx={{
+                            width: 18,
+                            height: 8,
+                            backgroundColor: serie.color,
+                            borderRadius: "2px",
+                            flexShrink: 0,
+                          }}
+                        />
+                        <Typography
+                          component="span"
+                          sx={{
+                            fontWeight: 600,
+                            fontSize: "14px",
+                            color: "rgba(0,0,0,0.6)",
+                            letterSpacing: "0.1px",
+                            lineHeight: 1.57,
+                          }}
+                        >
+                          {serie.id}. {serie.name}
+                        </Typography>
+                        <Typography
+                          component="span"
+                          sx={{
+                            fontWeight: 500,
+                            fontSize: "14px",
+                            color: "rgba(0,0,0,0.6)",
+                            letterSpacing: "0.1px",
+                            lineHeight: 1.57,
+                          }}
+                        >
+                          •
+                        </Typography>
+                        <Typography
+                          component="span"
+                          sx={{
+                            fontWeight: 600,
+                            fontSize: "14px",
+                            color: "rgba(0,0,0,0.6)",
+                            letterSpacing: "0.1px",
+                            lineHeight: 1.57,
+                          }}
+                        >
+                          {serie.description}
+                        </Typography>
+                        {serie.additionalInfo?.map((info, idx) => (
+                          <Typography
+                            key={idx}
+                            component="span"
                             sx={{
-                              width: 24,
-                              height: 8,
-                              bgcolor: serie.color,
-                              borderRadius: 0.5,
+                              fontWeight: 600,
+                              fontSize: "14px",
+                              color: "rgba(0,0,0,0.6)",
+                              letterSpacing: "0.1px",
+                              lineHeight: 1.57,
                             }}
+                          >
+                            {info}
+                          </Typography>
+                        ))}
+                      </Box>
+                    ))}
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
+            </Box>
+
+            {/* Tabs */}
+            <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
+              <Tabs value={tabValue} onChange={handleTabChange}>
+                <Tab
+                  label="INFORMACIÓN GENERAL"
+                  sx={{
+                    color: tabValue === 0 ? "#ff4201" : "rgba(0,0,0,0.6)",
+                    fontWeight: 500,
+                    fontSize: "14px",
+                  }}
+                />
+                <Tab
+                  label="INGRESO DE ACEPTACIONES"
+                  sx={{ fontWeight: 500, fontSize: "14px" }}
+                />
+                <Tab
+                  label="REPORTES Y BOLETINES"
+                  sx={{ fontWeight: 500, fontSize: "14px" }}
+                />
+                <Tab
+                  label="INFORMACIÓN DEL EMISOR"
+                  sx={{ fontWeight: 500, fontSize: "14px" }}
+                />
+                <Tab
+                  label="INFORMACIÓN DE LA OPERACIÓN"
+                  sx={{ fontWeight: 500, fontSize: "14px" }}
+                />
+              </Tabs>
+            </Box>
+
+            {/* Accordion - Evolución de la Operación */}
+            <Accordion
+              expanded={expanded}
+              onChange={() => setExpanded(!expanded)}
+              sx={{ mb: 2 }}
+            >
+              <AccordionSummary
+                expandIcon={expanded ? <ExpandLess /> : <ExpandMore />}
+              >
+                <Typography sx={{ fontSize: "20px", fontWeight: 500 }}>
+                  Evolución de la Operación
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {/* Filters */}
+                <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
+                  {/* Desplegable Estado */}
+                  <FormControl fullWidth>
+                    <Autocomplete
+                      options={statusOptions}
+                      label="Estado"
+                      labelKey="name"
+                      valueKey="id"
+                      searchKeys={["name"]}
+                      value={selectedStatus?.id}
+                      onChange={handleStatusChange}
+                      textFieldProps={{
+                        fullWidth: true, // Importante
+                        sx: {
+                          backgroundColor: "#fff",
+                          "& .MuiOutlinedInput-root": {
+                            borderRadius: "4px",
+                          },
+                        },
+                      }}
+                    />
+                  </FormControl>
+
+                  {/* Selector de Hora */}
+                  <FormControl fullWidth>
+                    <LocalizationProvider
+                      dateAdapter={AdapterDateFns}
+                      adapterLocale={es}
+                    >
+                      <MobileTimePicker />
+                    </LocalizationProvider>
+                  </FormControl>
+                </Stack>
+
+                {/* Chart and Cards */}
+                <Stack direction="row" spacing={3} sx={{ mb: 3 }}>
+                  {/* Chart Placeholder */}
+                  <Box sx={{ flex: "0 0 80%" }}>
+                    <StackedBarChart />
+                  </Box>
+
+                  {/* Stats Cards */}
+                  <Stack spacing={2} sx={{ flex: "0 0 calc(20% - 24px)" }}>
+                    <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
+                      <CardContent>
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          alignItems="center"
+                          sx={{ mb: 1 }}
+                        >
+                          <Box
+                            sx={{ width: 18, height: 5, bgcolor: "#0e9753" }}
                           />
+                          <Typography
+                            sx={{ fontSize: "14px", color: "rgba(0,0,0,0.6)" }}
+                          >
+                            Máximo Total Ofertado
+                          </Typography>
                         </Stack>
-                      </TableCell>
-                    ))}
-                    <TableCell sx={{ fontWeight: 500 }}>
-                      Total Ofertada
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {/* Filas de datos */}
-                  {entitiesData.map((row) => (
-                    <TableRow key={row.id}>
-                      <TableCell>{row.entity}</TableCell>
-                      <TableCell>{row.acceptances}</TableCell>
-                      {seriesColumns.map((serie) => (
-                        <TableCell key={serie.id}>
-                          {formatCurrency(
-                            row.series[serie.id as keyof typeof row.series]
-                          )}
+                        <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
+                          Monto <strong>$60.000.000</strong>
+                        </Typography>
+                        <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
+                          Bid to Cover <strong>78,33 %</strong>
+                        </Typography>
+                      </CardContent>
+                    </Card>
+
+                    <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
+                      <CardContent>
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          alignItems="center"
+                          sx={{ mb: 1 }}
+                        >
+                          <Box
+                            sx={{ width: 18, height: 5, bgcolor: "#ffa47f" }}
+                          />
+                          <Typography
+                            sx={{ fontSize: "14px", color: "rgba(0,0,0,0.6)" }}
+                          >
+                            Total Ofertado
+                          </Typography>
+                        </Stack>
+                        <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
+                          Monto <strong>$50.000.000</strong>
+                        </Typography>
+                        <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
+                          Bid to Cover <strong>94,00 %</strong>
+                        </Typography>
+                      </CardContent>
+                    </Card>
+
+                    <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
+                      <CardContent>
+                        <Typography
+                          sx={{
+                            fontSize: "14px",
+                            color: "rgba(0,0,0,0.6)",
+                            mb: 1,
+                          }}
+                        >
+                          Monto Total en Aceptaciones
+                        </Typography>
+                        <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
+                          $47.000.000
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Stack>
+                </Stack>
+
+                {/* Table */}
+                <TableContainer
+                  component={Paper}
+                  sx={{ border: "1px solid rgba(0,0,0,0.12)", borderRadius: 2 }}
+                >
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell sx={{ fontWeight: 500 }}>Entidad</TableCell>
+                        <TableCell sx={{ fontWeight: 500 }}>
+                          N° Aceptaciones por Entidad
                         </TableCell>
+                        {seriesColumns.map((serie) => (
+                          <TableCell key={serie.id} sx={{ fontWeight: 500 }}>
+                            <Stack
+                              direction="row"
+                              spacing={1}
+                              alignItems="center"
+                            >
+                              <span>{serie.name}</span>
+                              <Box
+                                sx={{
+                                  width: 24,
+                                  height: 8,
+                                  bgcolor: serie.color,
+                                  borderRadius: 0.5,
+                                }}
+                              />
+                            </Stack>
+                          </TableCell>
+                        ))}
+                        <TableCell sx={{ fontWeight: 500 }}>
+                          Total Ofertada
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {/* Filas de datos */}
+                      {entitiesData.map((row) => (
+                        <TableRow key={row.id}>
+                          <TableCell>{row.entity}</TableCell>
+                          <TableCell>{row.acceptances}</TableCell>
+                          {seriesColumns.map((serie) => (
+                            <TableCell key={serie.id}>
+                              {formatCurrency(
+                                row.series[serie.id as keyof typeof row.series]
+                              )}
+                            </TableCell>
+                          ))}
+                          <TableCell>{formatCurrency(row.total)}</TableCell>
+                        </TableRow>
                       ))}
-                      <TableCell>{formatCurrency(row.total)}</TableCell>
-                    </TableRow>
-                  ))}
 
-                  {/* Fila de Total General */}
-                  <TableRow sx={{ bgcolor: "#f4f4f4" }}>
-                    <TableCell sx={{ fontWeight: 600 }}>
-                      Total General
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>
-                      {totals.acceptances}
-                    </TableCell>
-                    {seriesColumns.map((serie) => (
-                      <TableCell key={serie.id} sx={{ fontWeight: 600 }}>
-                        {formatCurrency(totals.series[serie.id])}
-                      </TableCell>
-                    ))}
-                    <TableCell sx={{ fontWeight: 600 }}>
-                      {formatCurrency(totals.total)}
-                    </TableCell>
-                  </TableRow>
+                      {/* Fila de Total General */}
+                      <TableRow sx={{ bgcolor: "#f4f4f4" }}>
+                        <TableCell sx={{ fontWeight: 600 }}>
+                          Total General
+                        </TableCell>
+                        <TableCell sx={{ fontWeight: 600 }}>
+                          {totals.acceptances}
+                        </TableCell>
+                        {seriesColumns.map((serie) => (
+                          <TableCell key={serie.id} sx={{ fontWeight: 600 }}>
+                            {formatCurrency(totals.series[serie.id])}
+                          </TableCell>
+                        ))}
+                        <TableCell sx={{ fontWeight: 600 }}>
+                          {formatCurrency(totals.total)}
+                        </TableCell>
+                      </TableRow>
 
-                  {/* Fila de N° Total de Aceptaciones por Serie */}
-                  <TableRow sx={{ bgcolor: "#f4f4f4" }}>
-                    <TableCell sx={{ fontWeight: 600 }}>
-                      N° Total de Aceptaciones por Serie
-                    </TableCell>
-                    <TableCell></TableCell>
-                    {seriesColumns.map((serie) => (
-                      <TableCell key={serie.id} sx={{ fontWeight: 600 }}>
-                        {acceptancesBySeries[serie.id]}
-                      </TableCell>
-                    ))}
-                    <TableCell sx={{ fontWeight: 600 }}>
-                      {totals.acceptances}
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </AccordionDetails>
-        </Accordion>
+                      {/* Fila de N° Total de Aceptaciones por Serie */}
+                      <TableRow sx={{ bgcolor: "#f4f4f4" }}>
+                        <TableCell sx={{ fontWeight: 600 }}>
+                          N° Total de Aceptaciones por Serie
+                        </TableCell>
+                        <TableCell></TableCell>
+                        {seriesColumns.map((serie) => (
+                          <TableCell key={serie.id} sx={{ fontWeight: 600 }}>
+                            {acceptancesBySeries[serie.id]}
+                          </TableCell>
+                        ))}
+                        <TableCell sx={{ fontWeight: 600 }}>
+                          {totals.acceptances}
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </AccordionDetails>
+            </Accordion>
 
-        {/* Accordion - Registro de Aceptaciones */}
-        <Accordion>
-          <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography sx={{ fontSize: "20px", fontWeight: 500 }}>
-              Registro de Aceptaciones
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <RegistroAceptaciones />
-          </AccordionDetails>
-        </Accordion>
-      </Box>
-    </Box>
+            {/* Accordion - Registro de Aceptaciones */}
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMore />}>
+                <Typography sx={{ fontSize: "20px", fontWeight: 500 }}>
+                  Registro de Aceptaciones
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <RegistroAceptaciones />
+              </AccordionDetails>
+            </Accordion>
+          </Box>
+        </Box>
+      </ProtectedRoute>
+    </RoleProtectedRoute>
   );
 }

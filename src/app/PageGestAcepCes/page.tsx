@@ -24,6 +24,8 @@ import { AppHeader } from "@/components/AppHeader";
 import { AppSidebar } from "@/components/AppSidebar";
 import { OperationsTable } from "@/components/OperationsTable";
 import { Breadcrumbs } from "../../components/Breadcrumbs";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { RoleProtectedRoute } from "@/components/components/RoleProtectedRoute";
 
 const Autocomplete = dynamic(() => import("@/components/AutocompleteWrapper"), {
   ssr: false,
@@ -81,146 +83,182 @@ export default function PageGestAcepCes() {
   // Si es dispositivo móvil o tablet, mostrar RestrictedDevice centrado
   if (isMobileOrTablet) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "100vh",
-          backgroundColor: "#000",
-          padding: 2,
-        }}
-      >
-        <RestrictedDevice />
-      </Box>
+      <RoleProtectedRoute allowedRoles={["operator"]}>
+        <ProtectedRoute>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "100vh",
+              backgroundColor: "#000",
+              padding: 2,
+            }}
+          >
+            <RestrictedDevice />
+          </Box>
+        </ProtectedRoute>
+      </RoleProtectedRoute>
     );
   }
 
   // Vista normal para desktop
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh" }}>
-      {/* Header */}
-      <AppHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+    <RoleProtectedRoute allowedRoles={["operator"]}>
+      <ProtectedRoute>
+        <Box sx={{ display: "flex", minHeight: "100vh" }}>
+          {/* Header */}
+          <AppHeader
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
+          />
 
-      {/* Sidebar */}
-      <AppSidebar open={sidebarOpen} width={drawerWidth} />
+          {/* Sidebar */}
+          <AppSidebar open={sidebarOpen} width={drawerWidth} />
 
-      {/* Main Content */}
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          mt: "56px",
-          minHeight: "calc(100vh - 56px)",
-          width: "100%",
-        }}
-      >
-        {/* Breadcrumbs */}
-        <Box
-          sx={{
-            mb: 2,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: 2,
-          }}
-        >
-          {/* Breadcrumb a la izquierda */}
-          <Box>
-            <Breadcrumbs links={customLinks} />
-          </Box>
-
-          {/* Datos de sesión a la derecha */}
+          {/* Main Content */}
           <Box
+            component="main"
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
+              flexGrow: 1,
+              p: 3,
+              mt: "56px",
+              minHeight: "calc(100vh - 56px)",
+              width: "100%",
             }}
           >
-            <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
-              Último Inicio de Sesión:{" "}
-              <strong>Martes, 13 de mayo 2:00pm</strong>
-            </Typography>
-            <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
-              IP: <strong>171.112.111</strong>
-            </Typography>
-          </Box>
-        </Box>
-
-        <Typography
-          variant="h4"
-          gutterBottom
-          sx={{
-            color: "#3D3D3D",
-            fontSize: "1.5rem",
-            fontWeight: 400,
-            mb: 3,
-          }}
-        >
-          Gestión de Aceptación de Cesiones
-        </Typography>
-
-        {/* Filtros */}
-        <Box
-          sx={{
-            display: "flex",
-            gap: 2,
-            mb: 3,
-            flexWrap: "wrap",
-          }}
-        >
-          {/* Buscador */}
-          <Box sx={{ flex: "1 1 0", minWidth: "250px" }}>
-            <TextField
-              placeholder="Buscar Emisor"
-              variant="outlined"
-              value={searchEmisor}
-              onChange={(e) => setSearchEmisor(e.target.value)}
-              fullWidth // Importante: que ocupe todo el ancho del Box padre
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon sx={{ color: "rgba(0,0,0,0.54)" }} />
-                    </InputAdornment>
-                  ),
-                  endAdornment: searchEmisor && (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={handleClear}
-                        edge="end"
-                        sx={{ color: "rgba(0,0,0,0.54)" }}
-                      >
-                        <ClearIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-              }}
+            {/* Breadcrumbs */}
+            <Box
               sx={{
-                backgroundColor: "#fff",
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "4px",
-                },
+                mb: 2,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: 2,
               }}
-            />
-          </Box>
-
-          {/* Selector de Fecha */}
-          <Box sx={{ flex: "1 1 0", minWidth: "250px" }}>
-            <LocalizationProvider
-              dateAdapter={AdapterDateFns}
-              adapterLocale={es}
             >
-              <DatePicker
-                label="Fecha Inicio"
-                value={startDate}
-                onChange={handleDateChange}
-                slotProps={{
-                  textField: {
+              {/* Breadcrumb a la izquierda */}
+              <Box>
+                <Breadcrumbs links={customLinks} />
+              </Box>
+
+              {/* Datos de sesión a la derecha */}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-end",
+                }}
+              >
+                <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
+                  Último Inicio de Sesión:{" "}
+                  <strong>Martes, 13 de mayo 2:00pm</strong>
+                </Typography>
+                <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
+                  IP: <strong>171.112.111</strong>
+                </Typography>
+              </Box>
+            </Box>
+
+            <Typography
+              variant="h4"
+              gutterBottom
+              sx={{
+                color: "#3D3D3D",
+                fontSize: "1.5rem",
+                fontWeight: 400,
+                mb: 3,
+              }}
+            >
+              Gestión de Aceptación de Cesiones
+            </Typography>
+
+            {/* Filtros */}
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                mb: 3,
+                flexWrap: "wrap",
+              }}
+            >
+              {/* Buscador */}
+              <Box sx={{ flex: "1 1 0", minWidth: "250px" }}>
+                <TextField
+                  placeholder="Buscar Emisor"
+                  variant="outlined"
+                  value={searchEmisor}
+                  onChange={(e) => setSearchEmisor(e.target.value)}
+                  fullWidth // Importante: que ocupe todo el ancho del Box padre
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon sx={{ color: "rgba(0,0,0,0.54)" }} />
+                        </InputAdornment>
+                      ),
+                      endAdornment: searchEmisor && (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={handleClear}
+                            edge="end"
+                            sx={{ color: "rgba(0,0,0,0.54)" }}
+                          >
+                            <ClearIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                  sx={{
+                    backgroundColor: "#fff",
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "4px",
+                    },
+                  }}
+                />
+              </Box>
+
+              {/* Selector de Fecha */}
+              <Box sx={{ flex: "1 1 0", minWidth: "250px" }}>
+                <LocalizationProvider
+                  dateAdapter={AdapterDateFns}
+                  adapterLocale={es}
+                >
+                  <DatePicker
+                    label="Fecha Inicio"
+                    value={startDate}
+                    onChange={handleDateChange}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true, // Importante
+                        sx: {
+                          backgroundColor: "#fff",
+                          "& .MuiOutlinedInput-root": {
+                            borderRadius: "4px",
+                          },
+                        },
+                      },
+                      actionBar: {
+                        actions: ["clear", "accept"],
+                      },
+                    }}
+                  />
+                </LocalizationProvider>
+              </Box>
+
+              {/* Desplegable Estado */}
+              <Box sx={{ flex: "1 1 0", minWidth: "250px" }}>
+                <Autocomplete
+                  options={statusOptions}
+                  label="Estado"
+                  labelKey="name"
+                  valueKey="id"
+                  searchKeys={["name"]}
+                  value={selectedStatus?.id}
+                  onChange={handleStatusChange}
+                  textFieldProps={{
                     fullWidth: true, // Importante
                     sx: {
                       backgroundColor: "#fff",
@@ -228,95 +266,70 @@ export default function PageGestAcepCes() {
                         borderRadius: "4px",
                       },
                     },
-                  },
-                  actionBar: {
-                    actions: ["clear", "accept"],
-                  },
-                }}
-              />
-            </LocalizationProvider>
-          </Box>
+                  }}
+                />
+              </Box>
+            </Box>
 
-          {/* Desplegable Estado */}
-          <Box sx={{ flex: "1 1 0", minWidth: "250px" }}>
-            <Autocomplete
-              options={statusOptions}
-              label="Estado"
-              labelKey="name"
-              valueKey="id"
-              searchKeys={["name"]}
-              value={selectedStatus?.id}
-              onChange={handleStatusChange}
-              textFieldProps={{
-                fullWidth: true, // Importante
-                sx: {
-                  backgroundColor: "#fff",
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "4px",
-                  },
-                },
+            {/* Tarjetas de información */}
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                mb: 3,
+                flexWrap: "wrap",
               }}
+            >
+              {/* Tarjeta 1 - Fecha final */}
+              <Box
+                sx={{
+                  flex: "1 1 calc(50% - 8px)",
+                  minWidth: "300px",
+                  backgroundColor: "#fff",
+                  p: 2,
+                  borderRadius: "8px",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
+                }}
+              >
+                <CalendarMonthRounded sx={{ fontSize: 24, color: "#3D3D3D" }} />
+                <Typography variant="body1" sx={{ color: "#3D3D3D" }}>
+                  Próxima fecha inicio ingreso de aceptaciones 02 de Oct 2025
+                </Typography>
+              </Box>
+
+              {/* Tarjeta 2 - Cantidad de operaciones */}
+              <Box
+                sx={{
+                  flex: "1 1 calc(50% - 8px)",
+                  minWidth: "300px",
+                  backgroundColor: "#fff",
+                  p: 2,
+                  borderRadius: "8px",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
+                }}
+              >
+                <DescriptionIcon sx={{ fontSize: 24, color: "#3D3D3D" }} />
+                <Typography variant="body1" sx={{ color: "#3D3D3D" }}>
+                  Cantidad de operaciones: 50
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* Tabla de Operaciones */}
+            <OperationsTable
+              searchEmisor={searchEmisor}
+              startDate={startDate}
+              filterStatus={filterStatus}
             />
           </Box>
         </Box>
-
-        {/* Tarjetas de información */}
-        <Box
-          sx={{
-            display: "flex",
-            gap: 2,
-            mb: 3,
-            flexWrap: "wrap",
-          }}
-        >
-          {/* Tarjeta 1 - Fecha final */}
-          <Box
-            sx={{
-              flex: "1 1 calc(50% - 8px)",
-              minWidth: "300px",
-              backgroundColor: "#fff",
-              p: 2,
-              borderRadius: "8px",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-              display: "flex",
-              alignItems: "center",
-              gap: 2,
-            }}
-          >
-            <CalendarMonthRounded sx={{ fontSize: 24, color: "#3D3D3D" }} />
-            <Typography variant="body1" sx={{ color: "#3D3D3D" }}>
-              Próxima fecha inicio ingreso de aceptaciones 02 de Oct 2025
-            </Typography>
-          </Box>
-
-          {/* Tarjeta 2 - Cantidad de operaciones */}
-          <Box
-            sx={{
-              flex: "1 1 calc(50% - 8px)",
-              minWidth: "300px",
-              backgroundColor: "#fff",
-              p: 2,
-              borderRadius: "8px",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-              display: "flex",
-              alignItems: "center",
-              gap: 2,
-            }}
-          >
-            <DescriptionIcon sx={{ fontSize: 24, color: "#3D3D3D" }} />
-            <Typography variant="body1" sx={{ color: "#3D3D3D" }}>
-              Cantidad de operaciones: 50
-            </Typography>
-          </Box>
-        </Box>
-
-        {/* Tabla de Operaciones */}
-        <OperationsTable
-          searchEmisor={searchEmisor}
-          startDate={startDate}
-          filterStatus={filterStatus}
-        />
-      </Box>
-    </Box>
+      </ProtectedRoute>
+    </RoleProtectedRoute>
   );
 }
