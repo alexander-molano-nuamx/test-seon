@@ -1,7 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-// Usuarios válidos del sistema
 const VALID_USERS = [
   {
     id: "1",
@@ -59,13 +58,12 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Contraseña incorrecta");
         }
 
-        // Obtener IP del request
+        // Obtener IP
         const forwarded = req?.headers?.["x-forwarded-for"];
         const ip = forwarded
           ? (forwarded as string).split(",")[0]
-          : req?.headers?.["x-real-ip"] || "No disponible";
+          : (req?.headers?.["x-real-ip"] as string) || "No disponible";
 
-        // Fecha actual
         const now = new Date().toISOString();
 
         return {
@@ -75,7 +73,7 @@ export const authOptions: NextAuthOptions = {
           role: user.role,
           company: user.company,
           lastLogin: now,
-          lastIp: ip as string,
+          lastIp: ip,
         };
       },
     }),

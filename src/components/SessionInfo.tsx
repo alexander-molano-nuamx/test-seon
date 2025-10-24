@@ -9,18 +9,22 @@ export function SessionInfo() {
   const formatLastLogin = (isoDate?: string) => {
     if (!isoDate) return "Primera sesión";
 
-    const date = new Date(isoDate);
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    };
+    try {
+      const date = new Date(isoDate);
+      const options: Intl.DateTimeFormatOptions = {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      };
 
-    const formatted = date.toLocaleDateString("es-ES", options);
-    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+      const formatted = date.toLocaleDateString("es-ES", options);
+      return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+    } catch {
+      return "Fecha no disponible";
+    }
   };
 
   if (status === "loading") {
@@ -32,7 +36,7 @@ export function SessionInfo() {
     );
   }
 
-  if (!session) {
+  if (!session?.user) {
     return null;
   }
 

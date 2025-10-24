@@ -354,24 +354,7 @@ export default function PageIngresoAcep() {
                   flexDirection: "column",
                   alignItems: "flex-end",
                 }}
-              >
-                {status === "loading" ? (
-                  <Box sx={{ display: "flex", gap: 2 }}>
-                    <Skeleton width={250} height={20} />
-                    <Skeleton width={150} height={20} />
-                  </Box>
-                ) : (
-                  <>
-                    <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
-                      Último Inicio de Sesión:{" "}
-                      <strong>{formatLastLogin()}</strong>
-                    </Typography>
-                    <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
-                      IP: <strong>{ipAddress}</strong>
-                    </Typography>
-                  </>
-                )}
-              </Box>
+              ></Box>
             </Box>
             {/* Tipo de Valor */}
 
