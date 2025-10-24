@@ -23,9 +23,6 @@ import {
   Checkbox,
   IconButton,
   Typography,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
 } from "@mui/material";
 import {
   Search,
@@ -39,7 +36,6 @@ import {
   AccessTime as Clock,
   ChevronLeft,
   ChevronRight,
-  ExpandMore,
 } from "@mui/icons-material";
 
 // Datos de ejemplo

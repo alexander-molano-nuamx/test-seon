@@ -38,7 +38,7 @@ import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import { StackedBarChart } from "@/components/StackedBarChart";
 import { RegistroAceptaciones } from "@/components/RegistroAceptaciones";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { RoleProtectedRoute } from "@/components/components/RoleProtectedRoute";
+import { RoleProtectedRoute } from "@/components/RoleProtectedRoute";
 
 const drawerWidth = 240;
 
@@ -349,6 +349,7 @@ export default function PageIngresoAcep() {
                   spacing={3}
                   divider={<Divider orientation="vertical" flexItem />}
                   alignItems="center"
+                  sx={{ justifyContent: "space-between", pl: 2, pr: 2 }}
                 >
                   {/* Logo */}
                   <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -590,240 +591,293 @@ export default function PageIngresoAcep() {
                   sx={{ fontWeight: 500, fontSize: "14px" }}
                 />
               </Tabs>
+
+              {/* Tab Content - INGRESO DE ACEPTACIONES */}
+              {tabValue === 0 && (
+                <Box>
+                  {/* Accordion - Evolución de la Operación */}
+                  <Accordion
+                    expanded={expanded}
+                    onChange={() => setExpanded(!expanded)}
+                    sx={{ mb: 2 }}
+                  >
+                    <AccordionSummary
+                      expandIcon={expanded ? <ExpandLess /> : <ExpandMore />}
+                    >
+                      <Typography sx={{ fontSize: "20px", fontWeight: 500 }}>
+                        Evolución de la Operación
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      {/* Filters */}
+                      <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
+                        {/* Desplegable Estado */}
+                        <FormControl fullWidth>
+                          <Autocomplete
+                            options={statusOptions}
+                            label="Estado"
+                            labelKey="name"
+                            valueKey="id"
+                            searchKeys={["name"]}
+                            value={selectedStatus?.id}
+                            onChange={handleStatusChange}
+                            textFieldProps={{
+                              fullWidth: true, // Importante
+                              sx: {
+                                backgroundColor: "#fff",
+                                "& .MuiOutlinedInput-root": {
+                                  borderRadius: "4px",
+                                },
+                              },
+                            }}
+                          />
+                        </FormControl>
+
+                        {/* Selector de Hora */}
+                        <FormControl fullWidth>
+                          <LocalizationProvider
+                            dateAdapter={AdapterDateFns}
+                            adapterLocale={es}
+                          >
+                            <MobileTimePicker />
+                          </LocalizationProvider>
+                        </FormControl>
+                      </Stack>
+
+                      {/* Chart and Cards */}
+                      <Stack direction="row" spacing={3} sx={{ mb: 3 }}>
+                        {/* Chart Placeholder */}
+                        <Box sx={{ flex: "0 0 80%" }}>
+                          <StackedBarChart />
+                        </Box>
+
+                        {/* Stats Cards */}
+                        <Stack
+                          spacing={2}
+                          sx={{ flex: "0 0 calc(20% - 24px)" }}
+                        >
+                          <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
+                            <CardContent>
+                              <Stack
+                                direction="row"
+                                spacing={1}
+                                alignItems="center"
+                                sx={{ mb: 1 }}
+                              >
+                                <Box
+                                  sx={{
+                                    width: 18,
+                                    height: 5,
+                                    bgcolor: "#0e9753",
+                                  }}
+                                />
+                                <Typography
+                                  sx={{
+                                    fontSize: "14px",
+                                    color: "rgba(0,0,0,0.6)",
+                                  }}
+                                >
+                                  Máximo Total Ofertado
+                                </Typography>
+                              </Stack>
+                              <Typography
+                                sx={{ fontSize: "16px", fontWeight: 700 }}
+                              >
+                                Monto <strong>$60.000.000</strong>
+                              </Typography>
+                              <Typography
+                                sx={{ fontSize: "16px", fontWeight: 700 }}
+                              >
+                                Bid to Cover <strong>78,33 %</strong>
+                              </Typography>
+                            </CardContent>
+                          </Card>
+
+                          <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
+                            <CardContent>
+                              <Stack
+                                direction="row"
+                                spacing={1}
+                                alignItems="center"
+                                sx={{ mb: 1 }}
+                              >
+                                <Box
+                                  sx={{
+                                    width: 18,
+                                    height: 5,
+                                    bgcolor: "#ffa47f",
+                                  }}
+                                />
+                                <Typography
+                                  sx={{
+                                    fontSize: "14px",
+                                    color: "rgba(0,0,0,0.6)",
+                                  }}
+                                >
+                                  Total Ofertado
+                                </Typography>
+                              </Stack>
+                              <Typography
+                                sx={{ fontSize: "16px", fontWeight: 700 }}
+                              >
+                                Monto <strong>$50.000.000</strong>
+                              </Typography>
+                              <Typography
+                                sx={{ fontSize: "16px", fontWeight: 700 }}
+                              >
+                                Bid to Cover <strong>94,00 %</strong>
+                              </Typography>
+                            </CardContent>
+                          </Card>
+
+                          <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
+                            <CardContent>
+                              <Typography
+                                sx={{
+                                  fontSize: "14px",
+                                  color: "rgba(0,0,0,0.6)",
+                                  mb: 1,
+                                }}
+                              >
+                                Monto Total en Aceptaciones
+                              </Typography>
+                              <Typography
+                                sx={{ fontSize: "16px", fontWeight: 700 }}
+                              >
+                                $47.000.000
+                              </Typography>
+                            </CardContent>
+                          </Card>
+                        </Stack>
+                      </Stack>
+
+                      {/* Table */}
+                      <TableContainer
+                        component={Paper}
+                        sx={{
+                          border: "1px solid rgba(0,0,0,0.12)",
+                          borderRadius: 2,
+                        }}
+                      >
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell sx={{ fontWeight: 500 }}>
+                                Entidad
+                              </TableCell>
+                              <TableCell sx={{ fontWeight: 500 }}>
+                                N° Aceptaciones por Entidad
+                              </TableCell>
+                              {seriesColumns.map((serie) => (
+                                <TableCell
+                                  key={serie.id}
+                                  sx={{ fontWeight: 500 }}
+                                >
+                                  <Stack
+                                    direction="row"
+                                    spacing={1}
+                                    alignItems="center"
+                                  >
+                                    <span>{serie.name}</span>
+                                    <Box
+                                      sx={{
+                                        width: 24,
+                                        height: 8,
+                                        bgcolor: serie.color,
+                                        borderRadius: 0.5,
+                                      }}
+                                    />
+                                  </Stack>
+                                </TableCell>
+                              ))}
+                              <TableCell sx={{ fontWeight: 500 }}>
+                                Total Ofertada
+                              </TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {/* Filas de datos */}
+                            {entitiesData.map((row) => (
+                              <TableRow key={row.id}>
+                                <TableCell>{row.entity}</TableCell>
+                                <TableCell>{row.acceptances}</TableCell>
+                                {seriesColumns.map((serie) => (
+                                  <TableCell key={serie.id}>
+                                    {formatCurrency(
+                                      row.series[
+                                        serie.id as keyof typeof row.series
+                                      ]
+                                    )}
+                                  </TableCell>
+                                ))}
+                                <TableCell>
+                                  {formatCurrency(row.total)}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+
+                            {/* Fila de Total General */}
+                            <TableRow sx={{ bgcolor: "#f4f4f4" }}>
+                              <TableCell sx={{ fontWeight: 600 }}>
+                                Total General
+                              </TableCell>
+                              <TableCell sx={{ fontWeight: 600 }}>
+                                {totals.acceptances}
+                              </TableCell>
+                              {seriesColumns.map((serie) => (
+                                <TableCell
+                                  key={serie.id}
+                                  sx={{ fontWeight: 600 }}
+                                >
+                                  {formatCurrency(totals.series[serie.id])}
+                                </TableCell>
+                              ))}
+                              <TableCell sx={{ fontWeight: 600 }}>
+                                {formatCurrency(totals.total)}
+                              </TableCell>
+                            </TableRow>
+
+                            {/* Fila de N° Total de Aceptaciones por Serie */}
+                            <TableRow sx={{ bgcolor: "#f4f4f4" }}>
+                              <TableCell sx={{ fontWeight: 600 }}>
+                                N° Total de Aceptaciones por Serie
+                              </TableCell>
+                              <TableCell></TableCell>
+                              {seriesColumns.map((serie) => (
+                                <TableCell
+                                  key={serie.id}
+                                  sx={{ fontWeight: 600 }}
+                                >
+                                  {acceptancesBySeries[serie.id]}
+                                </TableCell>
+                              ))}
+                              <TableCell sx={{ fontWeight: 600 }}>
+                                {totals.acceptances}
+                              </TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </AccordionDetails>
+                  </Accordion>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMore />}>
+                      <Typography sx={{ fontSize: "20px", fontWeight: 500 }}>
+                        Registro de Aceptaciones
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <RegistroAceptaciones />
+                    </AccordionDetails>
+                  </Accordion>
+                </Box>
+              )}
+              {/* Tab Content - REPORTES Y BOLETINES */}
+              {/* Tab Content - INFORMACIÓN DEL EMISOR */}
+              {/* Tab Content - INFORMACIÓN DE LA OPERACIÓN */}
             </Box>
 
-            {/* Accordion - Evolución de la Operación */}
-            <Accordion
-              expanded={expanded}
-              onChange={() => setExpanded(!expanded)}
-              sx={{ mb: 2 }}
-            >
-              <AccordionSummary
-                expandIcon={expanded ? <ExpandLess /> : <ExpandMore />}
-              >
-                <Typography sx={{ fontSize: "20px", fontWeight: 500 }}>
-                  Evolución de la Operación
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                {/* Filters */}
-                <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
-                  {/* Desplegable Estado */}
-                  <FormControl fullWidth>
-                    <Autocomplete
-                      options={statusOptions}
-                      label="Estado"
-                      labelKey="name"
-                      valueKey="id"
-                      searchKeys={["name"]}
-                      value={selectedStatus?.id}
-                      onChange={handleStatusChange}
-                      textFieldProps={{
-                        fullWidth: true, // Importante
-                        sx: {
-                          backgroundColor: "#fff",
-                          "& .MuiOutlinedInput-root": {
-                            borderRadius: "4px",
-                          },
-                        },
-                      }}
-                    />
-                  </FormControl>
-
-                  {/* Selector de Hora */}
-                  <FormControl fullWidth>
-                    <LocalizationProvider
-                      dateAdapter={AdapterDateFns}
-                      adapterLocale={es}
-                    >
-                      <MobileTimePicker />
-                    </LocalizationProvider>
-                  </FormControl>
-                </Stack>
-
-                {/* Chart and Cards */}
-                <Stack direction="row" spacing={3} sx={{ mb: 3 }}>
-                  {/* Chart Placeholder */}
-                  <Box sx={{ flex: "0 0 80%" }}>
-                    <StackedBarChart />
-                  </Box>
-
-                  {/* Stats Cards */}
-                  <Stack spacing={2} sx={{ flex: "0 0 calc(20% - 24px)" }}>
-                    <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
-                      <CardContent>
-                        <Stack
-                          direction="row"
-                          spacing={1}
-                          alignItems="center"
-                          sx={{ mb: 1 }}
-                        >
-                          <Box
-                            sx={{ width: 18, height: 5, bgcolor: "#0e9753" }}
-                          />
-                          <Typography
-                            sx={{ fontSize: "14px", color: "rgba(0,0,0,0.6)" }}
-                          >
-                            Máximo Total Ofertado
-                          </Typography>
-                        </Stack>
-                        <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
-                          Monto <strong>$60.000.000</strong>
-                        </Typography>
-                        <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
-                          Bid to Cover <strong>78,33 %</strong>
-                        </Typography>
-                      </CardContent>
-                    </Card>
-
-                    <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
-                      <CardContent>
-                        <Stack
-                          direction="row"
-                          spacing={1}
-                          alignItems="center"
-                          sx={{ mb: 1 }}
-                        >
-                          <Box
-                            sx={{ width: 18, height: 5, bgcolor: "#ffa47f" }}
-                          />
-                          <Typography
-                            sx={{ fontSize: "14px", color: "rgba(0,0,0,0.6)" }}
-                          >
-                            Total Ofertado
-                          </Typography>
-                        </Stack>
-                        <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
-                          Monto <strong>$50.000.000</strong>
-                        </Typography>
-                        <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
-                          Bid to Cover <strong>94,00 %</strong>
-                        </Typography>
-                      </CardContent>
-                    </Card>
-
-                    <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
-                      <CardContent>
-                        <Typography
-                          sx={{
-                            fontSize: "14px",
-                            color: "rgba(0,0,0,0.6)",
-                            mb: 1,
-                          }}
-                        >
-                          Monto Total en Aceptaciones
-                        </Typography>
-                        <Typography sx={{ fontSize: "16px", fontWeight: 700 }}>
-                          $47.000.000
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Stack>
-                </Stack>
-
-                {/* Table */}
-                <TableContainer
-                  component={Paper}
-                  sx={{ border: "1px solid rgba(0,0,0,0.12)", borderRadius: 2 }}
-                >
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell sx={{ fontWeight: 500 }}>Entidad</TableCell>
-                        <TableCell sx={{ fontWeight: 500 }}>
-                          N° Aceptaciones por Entidad
-                        </TableCell>
-                        {seriesColumns.map((serie) => (
-                          <TableCell key={serie.id} sx={{ fontWeight: 500 }}>
-                            <Stack
-                              direction="row"
-                              spacing={1}
-                              alignItems="center"
-                            >
-                              <span>{serie.name}</span>
-                              <Box
-                                sx={{
-                                  width: 24,
-                                  height: 8,
-                                  bgcolor: serie.color,
-                                  borderRadius: 0.5,
-                                }}
-                              />
-                            </Stack>
-                          </TableCell>
-                        ))}
-                        <TableCell sx={{ fontWeight: 500 }}>
-                          Total Ofertada
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {/* Filas de datos */}
-                      {entitiesData.map((row) => (
-                        <TableRow key={row.id}>
-                          <TableCell>{row.entity}</TableCell>
-                          <TableCell>{row.acceptances}</TableCell>
-                          {seriesColumns.map((serie) => (
-                            <TableCell key={serie.id}>
-                              {formatCurrency(
-                                row.series[serie.id as keyof typeof row.series]
-                              )}
-                            </TableCell>
-                          ))}
-                          <TableCell>{formatCurrency(row.total)}</TableCell>
-                        </TableRow>
-                      ))}
-
-                      {/* Fila de Total General */}
-                      <TableRow sx={{ bgcolor: "#f4f4f4" }}>
-                        <TableCell sx={{ fontWeight: 600 }}>
-                          Total General
-                        </TableCell>
-                        <TableCell sx={{ fontWeight: 600 }}>
-                          {totals.acceptances}
-                        </TableCell>
-                        {seriesColumns.map((serie) => (
-                          <TableCell key={serie.id} sx={{ fontWeight: 600 }}>
-                            {formatCurrency(totals.series[serie.id])}
-                          </TableCell>
-                        ))}
-                        <TableCell sx={{ fontWeight: 600 }}>
-                          {formatCurrency(totals.total)}
-                        </TableCell>
-                      </TableRow>
-
-                      {/* Fila de N° Total de Aceptaciones por Serie */}
-                      <TableRow sx={{ bgcolor: "#f4f4f4" }}>
-                        <TableCell sx={{ fontWeight: 600 }}>
-                          N° Total de Aceptaciones por Serie
-                        </TableCell>
-                        <TableCell></TableCell>
-                        {seriesColumns.map((serie) => (
-                          <TableCell key={serie.id} sx={{ fontWeight: 600 }}>
-                            {acceptancesBySeries[serie.id]}
-                          </TableCell>
-                        ))}
-                        <TableCell sx={{ fontWeight: 600 }}>
-                          {totals.acceptances}
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </AccordionDetails>
-            </Accordion>
-
             {/* Accordion - Registro de Aceptaciones */}
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMore />}>
-                <Typography sx={{ fontSize: "20px", fontWeight: 500 }}>
-                  Registro de Aceptaciones
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <RegistroAceptaciones />
-              </AccordionDetails>
-            </Accordion>
           </Box>
         </Box>
       </ProtectedRoute>

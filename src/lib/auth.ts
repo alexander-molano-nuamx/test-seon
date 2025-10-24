@@ -16,7 +16,7 @@ const VALID_USERS = [
     email: "usuario1@kallpa.com",
     password: "Kallpa2024",
     name: "Usuario Kallpa",
-    role: "operator",
+    role: "manager",
     company: "Kallpa",
   },
   {
@@ -24,8 +24,8 @@ const VALID_USERS = [
     email: "gestor@operaciones.com",
     password: "Gestor456",
     name: "Gestor de Operaciones",
-    role: "manager",
-    company: "Operaciones",
+    role: "operator",
+    company: "Kallpa",
   },
 ];
 

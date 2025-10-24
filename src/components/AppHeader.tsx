@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import {
   AppBar,
@@ -12,6 +14,7 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  Skeleton,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
@@ -23,6 +26,7 @@ import {
   Person,
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 
 interface AppHeaderProps {
   sidebarOpen: boolean;
@@ -33,6 +37,7 @@ export function AppHeader({ sidebarOpen, setSidebarOpen }: AppHeaderProps) {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
+  const { data: session, status } = useSession();
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -43,11 +48,16 @@ export function AppHeader({ sidebarOpen, setSidebarOpen }: AppHeaderProps) {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
-    console.log("🔓 Cerrando sesión...");
+  const handleLogout = async () => {
+    console.log("🔒 Cerrando sesión...");
     handleClose();
-    // Redirigir al login
-    router.push("/");
+    await signOut({ redirect: true, callbackUrl: "/" });
+  };
+
+  const handleProfile = () => {
+    handleClose();
+    // Redirigir a perfil o mostrar modal
+    console.log("Ver perfil de:", session?.user?.name);
   };
 
   useEffect(() => {
@@ -56,7 +66,6 @@ export function AppHeader({ sidebarOpen, setSidebarOpen }: AppHeaderProps) {
       setCurrentTime(new Date());
     }, 1000);
 
-    // Limpiar el intervalo cuando el componente se desmonte
     return () => clearInterval(timer);
   }, []);
 
@@ -74,9 +83,32 @@ export function AppHeader({ sidebarOpen, setSidebarOpen }: AppHeaderProps) {
     const minutes = String(date.getMinutes()).padStart(2, "0");
     const ampm = hours >= 12 ? "pm" : "am";
     hours = hours % 12;
-    hours = hours ? hours : 12; // la hora '0' debe ser '12'
+    hours = hours ? hours : 12;
     const hoursStr = String(hours).padStart(2, "0");
     return `${hoursStr}:${minutes} ${ampm}`;
+  };
+
+  // Obtener iniciales del usuario para el avatar
+  const getUserInitials = (name?: string | null) => {
+    if (!name) return "U";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  // Determinar avatar según la empresa
+  const getAvatarSrc = (company?: string) => {
+    switch (company?.toLowerCase()) {
+      case "kallpa":
+        return "/assets/kallpa-avatar.png";
+      case "chavin":
+        return "/assets/Chavin.png";
+      default:
+        return null;
+    }
   };
 
   return (
@@ -136,13 +168,13 @@ export function AppHeader({ sidebarOpen, setSidebarOpen }: AppHeaderProps) {
           </Box>
         </Box>
 
-        {/* Center Section */}
+        {/* Center Section - Muestra la empresa del usuario */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Typography
             variant="h6"
             sx={{ fontWeight: "bold", color: "#3D3D3D" }}
           >
-            SEOn
+            seon
           </Typography>
           <Box
             sx={{
@@ -152,17 +184,21 @@ export function AppHeader({ sidebarOpen, setSidebarOpen }: AppHeaderProps) {
               borderRadius: "50%",
             }}
           />
-          <Typography
-            variant="h6"
-            sx={{ fontWeight: "bold", color: "#3D3D3D" }}
-          >
-            Kallpa
-          </Typography>
+          {status === "loading" ? (
+            <Skeleton width={80} height={28} />
+          ) : (
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: "bold", color: "#3D3D3D" }}
+            >
+              {session?.user?.company || "Usuario"}
+            </Typography>
+          )}
         </Box>
 
         {/* Right Section */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-          {/* Date - Actualizada en tiempo real */}
+          {/* Date */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
             <CalendarToday sx={{ fontSize: 16, color: "#3D3D3D" }} />
             <Typography variant="caption" sx={{ color: "#3D3D3D" }}>
@@ -170,7 +206,7 @@ export function AppHeader({ sidebarOpen, setSidebarOpen }: AppHeaderProps) {
             </Typography>
           </Box>
 
-          {/* Time - Actualizada en tiempo real */}
+          {/* Time */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
             <AccessTime sx={{ fontSize: 16, color: "#3D3D3D" }} />
             <Typography variant="caption" sx={{ color: "#3D3D3D" }}>
@@ -186,33 +222,46 @@ export function AppHeader({ sidebarOpen, setSidebarOpen }: AppHeaderProps) {
             <IconButton size="small">
               <Language sx={{ fontSize: 20, color: "#3D3D3D" }} />
             </IconButton>
-            <IconButton
-              onClick={handleClick}
-              size="small"
-              aria-controls={open ? "account-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-            >
-              <Badge
-                badgeContent=""
-                color="success"
-                variant="dot"
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                sx={{
-                  "& .MuiBadge-badge": {
-                    backgroundColor: "#2e7d32",
-                    width: 8,
-                    height: 8,
-                    borderRadius: "50%",
-                  },
-                }}
+
+            {/* Avatar con información del usuario */}
+            {status === "loading" ? (
+              <Skeleton variant="circular" width={24} height={24} />
+            ) : (
+              <IconButton
+                onClick={handleClick}
+                size="small"
+                aria-controls={open ? "account-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
               >
-                <Avatar
-                  sx={{ width: 24, height: 24 }}
-                  src="/assets/kallpa-avatar.png"
-                />
-              </Badge>
-            </IconButton>
+                <Badge
+                  badgeContent=""
+                  color="success"
+                  variant="dot"
+                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      backgroundColor: "#2e7d32",
+                      width: 8,
+                      height: 8,
+                      borderRadius: "50%",
+                    },
+                  }}
+                >
+                  <Avatar
+                    sx={{
+                      width: 24,
+                      height: 24,
+                      bgcolor: "#FF4201",
+                      fontSize: "12px",
+                    }}
+                    src={getAvatarSrc(session?.user?.company) || undefined}
+                  >
+                    {getUserInitials(session?.user?.name)}
+                  </Avatar>
+                </Badge>
+              </IconButton>
+            )}
           </Box>
         </Box>
       </Toolbar>
@@ -230,7 +279,7 @@ export function AppHeader({ sidebarOpen, setSidebarOpen }: AppHeaderProps) {
             overflow: "visible",
             filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.12))",
             mt: 1.5,
-            minWidth: 200,
+            minWidth: 240,
             "& .MuiAvatar-root": {
               width: 32,
               height: 32,
@@ -254,7 +303,51 @@ export function AppHeader({ sidebarOpen, setSidebarOpen }: AppHeaderProps) {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleClose}>
+        {/* Información del usuario */}
+        <Box sx={{ px: 2, py: 1.5, borderBottom: "1px solid #e0e0e0" }}>
+          <Typography variant="body2" sx={{ fontWeight: 600 }}>
+            {session?.user?.name || "Usuario"}
+          </Typography>
+          <Typography variant="caption" sx={{ color: "rgba(0,0,0,0.6)" }}>
+            {session?.user?.email}
+          </Typography>
+          <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
+            <Box
+              sx={{
+                px: 1,
+                py: 0.25,
+                bgcolor: "#FF420110",
+                borderRadius: 0.5,
+                border: "1px solid #FF420130",
+              }}
+            >
+              <Typography
+                variant="caption"
+                sx={{ color: "#FF4201", fontSize: "11px" }}
+              >
+                {session?.user?.role || "N/A"}
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                px: 1,
+                py: 0.25,
+                bgcolor: "rgba(0,0,0,0.05)",
+                borderRadius: 0.5,
+                border: "1px solid rgba(0,0,0,0.1)",
+              }}
+            >
+              <Typography
+                variant="caption"
+                sx={{ color: "rgba(0,0,0,0.7)", fontSize: "11px" }}
+              >
+                {session?.user?.company || "N/A"}
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+
+        <MenuItem onClick={handleProfile}>
           <ListItemIcon>
             <Person fontSize="small" />
           </ListItemIcon>

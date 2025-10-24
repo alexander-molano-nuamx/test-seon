@@ -25,7 +25,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { OperationsTable } from "@/components/OperationsTable";
 import { Breadcrumbs } from "../../components/Breadcrumbs";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { RoleProtectedRoute } from "@/components/components/RoleProtectedRoute";
+import { RoleProtectedRoute } from "@/components/RoleProtectedRoute";
 
 const Autocomplete = dynamic(() => import("@/components/AutocompleteWrapper"), {
   ssr: false,
