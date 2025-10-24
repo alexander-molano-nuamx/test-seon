@@ -39,6 +39,7 @@ import { StackedBarChart } from "@/components/StackedBarChart";
 import { RegistroAceptaciones } from "@/components/RegistroAceptaciones";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { RoleProtectedRoute } from "@/components/RoleProtectedRoute";
+import { IngresoAceptaciones } from "@/components/IngresoAceptaciones";
 
 const drawerWidth = 240;
 
@@ -55,7 +56,15 @@ export default function PageIngresoAcep() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [filterStatus, setFilterStatus] = useState("");
+  const [selectedSerie, setSelectedSerie] = useState<SerieItem | null>(null);
 
+  const handleSerieChange = (
+    event: React.SyntheticEvent,
+    newValue: SerieItem | null
+  ) => {
+    setSelectedSerie(newValue);
+    console.log("Serie seleccionada:", newValue);
+  };
   const customLinks = [
     { name: "Operaciones especiales", path: "/PageGestAcepCes" },
     { name: "ALICORP", path: "/PageIngresoAcep" },
@@ -614,21 +623,61 @@ export default function PageIngresoAcep() {
                         {/* Desplegable Estado */}
                         <FormControl fullWidth>
                           <Autocomplete
-                            options={statusOptions}
-                            label="Estado"
-                            labelKey="name"
+                            options={seriesData}
+                            label="Filtrar por serie"
+                            labelKey="description"
                             valueKey="id"
-                            searchKeys={["name"]}
+                            searchKeys={["description", "name"]}
                             value={selectedStatus?.id}
                             onChange={handleStatusChange}
                             textFieldProps={{
-                              fullWidth: true, // Importante
+                              fullWidth: true,
                               sx: {
                                 backgroundColor: "#fff",
                                 "& .MuiOutlinedInput-root": {
                                   borderRadius: "4px",
                                 },
                               },
+                            }}
+                            // Renderizar cada opción con más detalle
+                            renderOption={(props, option) => {
+                              const opt = option as SerieItem;
+                              return (
+                                <Box
+                                  component="li"
+                                  {...props}
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 1.5,
+                                  }}
+                                >
+                                  {/* Indicador de color */}
+                                  <Box
+                                    sx={{
+                                      width: 24,
+                                      height: 8,
+                                      bgcolor: opt.color,
+                                      borderRadius: 0.5,
+                                    }}
+                                  />
+                                  {/* Nombre y descripción */}
+                                  <Box>
+                                    <Typography
+                                      variant="body2"
+                                      sx={{ fontWeight: 500 }}
+                                    >
+                                      {opt.name}
+                                    </Typography>
+                                    <Typography
+                                      variant="caption"
+                                      sx={{ color: "rgba(0,0,0,0.6)" }}
+                                    >
+                                      {opt.description}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                              );
                             }}
                           />
                         </FormControl>
@@ -656,7 +705,12 @@ export default function PageIngresoAcep() {
                           spacing={2}
                           sx={{ flex: "0 0 calc(20% - 24px)" }}
                         >
-                          <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
+                          <Card
+                            sx={{
+                              border: "1px solid rgba(0,0,0,0.12)",
+                              flex: 1,
+                            }}
+                          >
                             <CardContent>
                               <Stack
                                 direction="row"
@@ -693,7 +747,12 @@ export default function PageIngresoAcep() {
                             </CardContent>
                           </Card>
 
-                          <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
+                          <Card
+                            sx={{
+                              border: "1px solid rgba(0,0,0,0.12)",
+                              flex: 1,
+                            }}
+                          >
                             <CardContent>
                               <Stack
                                 direction="row"
@@ -730,7 +789,12 @@ export default function PageIngresoAcep() {
                             </CardContent>
                           </Card>
 
-                          <Card sx={{ border: "1px solid rgba(0,0,0,0.12)" }}>
+                          <Card
+                            sx={{
+                              border: "1px solid rgba(0,0,0,0.12)",
+                              flex: 1,
+                            }}
+                          >
                             <CardContent>
                               <Typography
                                 sx={{
@@ -872,12 +936,48 @@ export default function PageIngresoAcep() {
                   </Accordion>
                 </Box>
               )}
+              {/* Tab Content - INGRESO DE ACEPTACIONES */}
+              {tabValue === 1 && (
+                <Box sx={{ p: 4 }}>
+                  <Typography color="text.secondary">
+                    <IngresoAceptaciones />
+                  </Typography>
+                </Box>
+              )}
               {/* Tab Content - REPORTES Y BOLETINES */}
+              {tabValue === 2 && (
+                <Box sx={{ p: 4, textAlign: "center" }}>
+                  <Typography color="text.secondary">
+                    Contenido de REPORTES Y BOLETINES...
+                  </Typography>
+                </Box>
+              )}
               {/* Tab Content - INFORMACIÓN DEL EMISOR */}
+              {tabValue === 3 && (
+                <Box sx={{ p: 4, textAlign: "center" }}>
+                  <Typography color="text.secondary">
+                    Contenido de INFORMACIÓN DEL EMISOR...
+                  </Typography>
+                </Box>
+              )}
               {/* Tab Content - INFORMACIÓN DE LA OPERACIÓN */}
+              {tabValue === 4 && (
+                <Box sx={{ p: 4, textAlign: "center" }}>
+                  <Typography color="text.secondary">
+                    Contenido de INFORMACIÓN DE LA OPERACIÓN...
+                  </Typography>
+                </Box>
+              )}
             </Box>
 
             {/* Accordion - Registro de Aceptaciones */}
+            {tabValue === 5 && (
+              <Box sx={{ p: 4, textAlign: "center" }}>
+                <Typography color="text.secondary">
+                  Contenido de REGISTRO DE ACEPTACIONES...
+                </Typography>
+              </Box>
+            )}
           </Box>
         </Box>
       </ProtectedRoute>
