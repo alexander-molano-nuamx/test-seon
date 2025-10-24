@@ -29,7 +29,13 @@ export function SessionInfo() {
 
   if (status === "loading") {
     return (
-      <Box sx={{ display: "flex", gap: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+        }}
+      >
         <Skeleton width={250} height={20} />
         <Skeleton width={150} height={20} />
       </Box>
@@ -41,7 +47,13 @@ export function SessionInfo() {
   }
 
   return (
-    <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-end",
+      }}
+    >
       <Typography sx={{ fontSize: "14px", color: "#3d3d3d" }}>
         Último Inicio de Sesión:{" "}
         <strong>{formatLastLogin(session.user.lastLogin)}</strong>
