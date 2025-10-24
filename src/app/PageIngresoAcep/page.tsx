@@ -41,6 +41,7 @@ import { RegistroAceptaciones } from "@/components/RegistroAceptaciones";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { RoleProtectedRoute } from "@/components/RoleProtectedRoute";
 import { IngresoAceptaciones } from "@/components/IngresoAceptaciones";
+import { SessionInfo } from "@/components/SessionInfo";
 
 const drawerWidth = 240;
 
@@ -354,7 +355,9 @@ export default function PageIngresoAcep() {
                   flexDirection: "column",
                   alignItems: "flex-end",
                 }}
-              ></Box>
+              >
+                <SessionInfo />
+              </Box>
             </Box>
             {/* Tipo de Valor */}
 
