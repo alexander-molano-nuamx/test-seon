@@ -23,7 +23,6 @@ import {
   Stack,
   Paper,
   useMediaQuery,
-  Skeleton,
 } from "@mui/material";
 import { ExpandMore, ExpandLess } from "@mui/icons-material";
 import Image from "next/image";
@@ -42,14 +41,23 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { RoleProtectedRoute } from "@/components/RoleProtectedRoute";
 import { IngresoAceptaciones } from "@/components/IngresoAceptaciones";
 import { SessionInfo } from "@/components/SessionInfo";
+import { seriesData, SerieItem } from "@/components/StackedBarChart";
 
 const drawerWidth = 240;
 
-const statusOptions = [
-  { id: "todos", name: "Filtrar por series" },
-  { id: "adjudicada", name: "serieA" },
-  { id: "cerrada", name: "serieB" },
-  { id: "finalizada", name: "serieC" },
+const seriesOptions = [
+  {
+    id: 0,
+    name: "Todos",
+    duration: "",
+    type: "",
+    color: "transparent",
+    label: "Todos",
+  },
+  ...seriesData.map((serie) => ({
+    ...serie,
+    label: `${serie.name} - ${serie.duration}${serie.type}`,
+  })),
 ];
 
 export default function PageIngresoAcep() {
@@ -57,10 +65,26 @@ export default function PageIngresoAcep() {
   const [expanded, setExpanded] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [startDate, setStartDate] = useState<Date | null>(null);
-  const [filterStatus, setFilterStatus] = useState("");
+  const [startTime, setStartTime] = useState<Date | null>(
+    new Date(2024, 0, 1, 8, 0)
+  );
+  const [endTime, setEndTime] = useState<Date | null>(
+    new Date(2024, 0, 1, 16, 0)
+  );
   const [selectedSerie, setSelectedSerie] = useState<SerieItem | null>(null);
   const [lastLogin, setLastLogin] = useState<string>("");
   const [ipAddress, setIpAddress] = useState<string>("");
+  const [selectedSerieId, setSelectedSerieId] = useState<number | null>(0);
+
+  const handleStartTimeChange = (newValue: Date | null) => {
+    setStartTime(newValue);
+    console.log("Hora inicio:", newValue?.getHours());
+  };
+
+  const handleEndTimeChange = (newValue: Date | null) => {
+    setEndTime(newValue);
+    console.log("Hora fin:", newValue?.getHours());
+  };
 
   useEffect(() => {
     // Obtener fecha/hora actual del navegador
@@ -83,83 +107,9 @@ export default function PageIngresoAcep() {
       .catch(() => setIpAddress("No disponible"));
   }, []);
 
-  // Formatear la fecha de forma más legible
-  const formatLastLogin = () => {
-    if (!lastLogin) return "Cargando...";
-    // Capitalizar primera letra del día
-    return lastLogin.charAt(0).toUpperCase() + lastLogin.slice(1);
-  };
-
-  const handleSerieChange = (
-    event: React.SyntheticEvent,
-    newValue: SerieItem | null
-  ) => {
-    setSelectedSerie(newValue);
-    console.log("Serie seleccionada:", newValue);
-  };
   const customLinks = [
     { name: "Operaciones especiales", path: "/PageGestAcepCes" },
     { name: "ALICORP", path: "/PageIngresoAcep" },
-  ];
-
-  interface SerieItem {
-    id: number;
-    color: string;
-    name: string;
-    description: string;
-    additionalInfo?: string[];
-  }
-
-  const seriesData: SerieItem[] = [
-    {
-      id: 1,
-      color: "#b22a09",
-      name: "SerieA",
-      description: "A18 -18 meses en Tasa Fija",
-      additionalInfo: ["E.A."],
-    },
-    {
-      id: 2,
-      color: "#ff411c",
-      name: "SerieB",
-      description: "B24 - 24 meses en Tasa Fija",
-      additionalInfo: ["E.A."],
-    },
-    {
-      id: 3,
-      color: "#ffa47f",
-      name: "SerieB",
-      description: "B72 - 72 meses en IBR",
-      additionalInfo: ["+", "Margen N.M.V."],
-    },
-    {
-      id: 4,
-      color: "#ff8f00",
-      name: "SerieA",
-      description: "A18 -18 meses en Tasa Fija",
-      additionalInfo: ["E.A."],
-    },
-    {
-      id: 5,
-      color: "#3d3d3d",
-      name: "SerieA",
-      description: "A18 -18 meses en Tasa Fija",
-      additionalInfo: ["E.A."],
-    },
-    {
-      id: 6,
-      color: "#8f8f8f",
-      name: "SerieB",
-      description: "B24 - 24 meses en Tasa Fija",
-      additionalInfo: ["E.A."],
-    },
-    {
-      id: 7,
-      color: "#4dd0e1",
-      name: "SerieB",
-      description: "B72 - 72 meses en IBR",
-      additionalInfo: ["+", "Margen N.M.V."],
-    },
   ];
 
   const seriesColumns = [
@@ -276,10 +226,10 @@ export default function PageIngresoAcep() {
   // Detecta si está en tablet o mobile (<= 1024px)
   const isMobileOrTablet = useMediaQuery("(max-width:1024px)");
 
-  const handleStatusChange = (value: unknown) => {
-    const typedValue = value as { id: string; name: string } | null;
-    setSelectedStatus(typedValue || { id: "todos", name: "Todos" });
-    setFilterStatus(typedValue?.id || "todos");
+  const handleStatusChange = (value: SerieItem | null) => {
+    setSelectedSerie(value);
+    setSelectedSerieId(value ? value.id : null);
+    console.log("Serie seleccionada:", value);
   };
 
   const handleDateChange = (newValue: unknown) => {
@@ -574,11 +524,26 @@ export default function PageIngresoAcep() {
                             lineHeight: 1.57,
                           }}
                         >
-                          {serie.description}
+                          {serie.duration}
                         </Typography>
-                        {serie.additionalInfo?.map((info, idx) => (
+                        {Array.isArray(serie.type) ? (
+                          serie.type.map((info, idx) => (
+                            <Typography
+                              key={idx}
+                              component="span"
+                              sx={{
+                                fontWeight: 600,
+                                fontSize: "14px",
+                                color: "rgba(0,0,0,0.6)",
+                                letterSpacing: "0.1px",
+                                lineHeight: 1.57,
+                              }}
+                            >
+                              {info}
+                            </Typography>
+                          ))
+                        ) : serie.type ? (
                           <Typography
-                            key={idx}
                             component="span"
                             sx={{
                               fontWeight: 600,
@@ -588,9 +553,9 @@ export default function PageIngresoAcep() {
                               lineHeight: 1.57,
                             }}
                           >
-                            {info}
+                            {serie.type}
                           </Typography>
-                        ))}
+                        ) : null}
                       </Box>
                     ))}
                   </Box>
@@ -645,85 +610,151 @@ export default function PageIngresoAcep() {
                     </AccordionSummary>
                     <AccordionDetails>
                       {/* Filters */}
-                      <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 2,
+                          mb: 3,
+                          "& > *": {
+                            flex: 1,
+                          },
+                        }}
+                      >
                         {/* Desplegable Estado */}
-                        <FormControl fullWidth>
-                          <Autocomplete
-                            options={seriesData}
-                            label="Filtrar por serie"
-                            labelKey="description"
-                            valueKey="id"
-                            searchKeys={["description", "name"]}
-                            value={selectedStatus?.id}
-                            onChange={handleStatusChange}
-                            textFieldProps={{
-                              fullWidth: true,
-                              sx: {
-                                backgroundColor: "#fff",
-                                "& .MuiOutlinedInput-root": {
-                                  borderRadius: "4px",
+
+                        <Autocomplete
+                          options={seriesData}
+                          label="Filtrar por serie"
+                          labelKey="duration"
+                          valueKey="id"
+                          searchKeys={["duration", "name", "type"]}
+                          value={selectedSerie}
+                          onChange={handleStatusChange}
+                          getOptionLabel={(option) => {
+                            const opt = option as SerieItem;
+                            return `${opt.name} - ${opt.duration}${opt.type}`;
+                          }}
+                          textFieldProps={{
+                            fullWidth: true,
+                            placeholder: "Todos",
+                            sx: {
+                              backgroundColor: "#fff",
+                              "& .MuiOutlinedInput-root": {
+                                borderRadius: "4px",
+                              },
+                            },
+                          }}
+                          // Renderizar cada opción con más detalle
+                          renderOption={(props, option) => {
+                            const opt = option as SerieItem & { label: string };
+                            return (
+                              <Box
+                                component="li"
+                                {...props}
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 1.5,
+                                }}
+                              >
+                                {/* Indicador de color */}
+                                <Box
+                                  sx={{
+                                    width: 24,
+                                    height: 8,
+                                    bgcolor: opt.color,
+                                    borderRadius: 0.5,
+                                  }}
+                                />
+                                {/* Nombre y descripción */}
+                                <Box>
+                                  <Typography
+                                    variant="body2"
+                                    sx={{ fontWeight: 500 }}
+                                  >
+                                    {opt.name}
+                                  </Typography>
+                                  <Typography
+                                    variant="caption"
+                                    sx={{ color: "rgba(0,0,0,0.6)" }}
+                                  >
+                                    {opt.duration}
+                                    {opt.type}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                            );
+                          }}
+                        />
+
+                        {/* Selector de Hora */}
+
+                        <LocalizationProvider
+                          dateAdapter={AdapterDateFns}
+                          adapterLocale={es}
+                        >
+                          <MobileTimePicker
+                            label="Hora Inicio"
+                            value={startTime}
+                            onChange={(newValue) =>
+                              handleStartTimeChange(
+                                newValue as unknown as Date | null
+                              )
+                            }
+                            slotProps={{
+                              textField: {
+                                fullWidth: true,
+                                placeholder: "8:00",
+                                sx: {
+                                  backgroundColor: "#fff",
+                                  "& .MuiOutlinedInput-root": {
+                                    borderRadius: "4px",
+                                  },
                                 },
                               },
                             }}
-                            // Renderizar cada opción con más detalle
-                            renderOption={(props, option) => {
-                              const opt = option as SerieItem;
-                              return (
-                                <Box
-                                  component="li"
-                                  {...props}
-                                  sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 1.5,
-                                  }}
-                                >
-                                  {/* Indicador de color */}
-                                  <Box
-                                    sx={{
-                                      width: 24,
-                                      height: 8,
-                                      bgcolor: opt.color,
-                                      borderRadius: 0.5,
-                                    }}
-                                  />
-                                  {/* Nombre y descripción */}
-                                  <Box>
-                                    <Typography
-                                      variant="body2"
-                                      sx={{ fontWeight: 500 }}
-                                    >
-                                      {opt.name}
-                                    </Typography>
-                                    <Typography
-                                      variant="caption"
-                                      sx={{ color: "rgba(0,0,0,0.6)" }}
-                                    >
-                                      {opt.description}
-                                    </Typography>
-                                  </Box>
-                                </Box>
-                              );
-                            }}
+                            ampm={false} // Formato 24 horas
                           />
-                        </FormControl>
-
-                        {/* Selector de Hora */}
-                        <FormControl fullWidth>
-                          <LocalizationProvider
-                            dateAdapter={AdapterDateFns}
-                            adapterLocale={es}
-                          >
-                            <MobileTimePicker />
-                          </LocalizationProvider>
-                        </FormControl>
-                      </Stack>
+                        </LocalizationProvider>
+                        {/* Filtro Hora Fin */}
+                        <LocalizationProvider
+                          dateAdapter={AdapterDateFns}
+                          adapterLocale={es}
+                        >
+                          <MobileTimePicker
+                            label="Hora Fin"
+                            value={endTime}
+                            onChange={(newValue) =>
+                              handleEndTimeChange(
+                                newValue as unknown as Date | null
+                              )
+                            }
+                            slotProps={{
+                              textField: {
+                                fullWidth: true,
+                                placeholder: "16:00",
+                                sx: {
+                                  backgroundColor: "#fff",
+                                  "& .MuiOutlinedInput-root": {
+                                    borderRadius: "4px",
+                                  },
+                                },
+                              },
+                            }}
+                            ampm={false} // Formato 24 horas
+                          />
+                        </LocalizationProvider>
+                      </Box>
 
                       {/* Chart and Cards */}
                       <Stack direction="row" spacing={3} sx={{ mb: 3 }}>
                         {/* Chart Placeholder */}
                         <Box sx={{ flex: "0 0 80%" }}>
-                          <StackedBarChart />
+                          <StackedBarChart
+                            selectedSerieId={selectedSerieId}
+                            startTime={startTime}
+                            endTime={endTime}
+                          />
                         </Box>
 
                         {/* Stats Cards */}
@@ -950,7 +981,7 @@ export default function PageIngresoAcep() {
                       </TableContainer>
                     </AccordionDetails>
                   </Accordion>
-                  <Accordion>
+                  <Accordion defaultExpanded={true}>
                     <AccordionSummary expandIcon={<ExpandMore />}>
                       <Typography sx={{ fontSize: "20px", fontWeight: 500 }}>
                         Registro de Aceptaciones
