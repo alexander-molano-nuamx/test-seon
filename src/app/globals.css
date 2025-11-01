@@ -32,7 +32,7 @@ body {
   --padding-4: 4px;
   --padding-8: 8px;
 
-  --font-roboto: Roboto;
+  --font-roboto: Roboto, sans-serif;
 
   --fs-12: 12px;
   --fs-16: 16px;
@@ -55,8 +55,6 @@ body {
   --padding-0: 0px;
   --padding-4: 4px;
   --padding-8: 8px;
-
-  --font-roboto: Roboto;
 
   --fs-12: 12px;
   --fs-14: 14px;

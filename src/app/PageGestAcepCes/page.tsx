@@ -313,56 +313,6 @@ export default function PageGestAcepCes() {
               </Box>
             </Box>
 
-            {/* Tarjetas de información */}
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2,
-                mb: 3,
-                flexWrap: "wrap",
-              }}
-            >
-              {/* Tarjeta 1 - Fecha final */}
-              <Box
-                sx={{
-                  flex: "1 1 calc(50% - 8px)",
-                  minWidth: "300px",
-                  backgroundColor: "#fff",
-                  p: 2,
-                  borderRadius: "8px",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                }}
-              >
-                <CalendarMonthRounded sx={{ fontSize: 24, color: "#3D3D3D" }} />
-                <Typography variant="body1" sx={{ color: "#3D3D3D" }}>
-                  Próxima fecha inicio ingreso de aceptaciones 02 de Oct 2025
-                </Typography>
-              </Box>
-
-              {/* Tarjeta 2 - Cantidad de operaciones */}
-              <Box
-                sx={{
-                  flex: "1 1 calc(50% - 8px)",
-                  minWidth: "300px",
-                  backgroundColor: "#fff",
-                  p: 2,
-                  borderRadius: "8px",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                }}
-              >
-                <DescriptionIcon sx={{ fontSize: 24, color: "#3D3D3D" }} />
-                <Typography variant="body1" sx={{ color: "#3D3D3D" }}>
-                  Cantidad de operaciones: 50
-                </Typography>
-              </Box>
-            </Box>
-
             {/* Tabla de Operaciones */}
             <OperationsTable
               searchEmisor={searchEmisor}

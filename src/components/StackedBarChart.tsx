@@ -38,6 +38,9 @@ export interface SerieItem {
   duration: string;
   type: string;
   color: string;
+  hourlyData: {
+    [hour: string]: number;
+  };
 }
 
 export const seriesData: SerieItem[] = [
@@ -47,6 +50,17 @@ export const seriesData: SerieItem[] = [
     duration: "A18 - 18 meses en ",
     type: "Tasa Fija E.A.",
     color: "#b22a09",
+    hourlyData: {
+      "8:00": 6200000,
+      "9:00": 1350000,
+      "10:00": 1500000,
+      "11:00": 4680000,
+      "12:00": 1850000,
+      "13:00": 2000000,
+      "14:00": 2180000,
+      "15:00": 6350000,
+      "16:00": 500000,
+    },
   },
   {
     id: 2,
@@ -54,6 +68,17 @@ export const seriesData: SerieItem[] = [
     duration: "B24 - 24 meses en ",
     type: "Tasa Fija E.A.",
     color: "#ff411c",
+    hourlyData: {
+      "8:00": 1500000,
+      "9:00": 8700000,
+      "10:00": 1900000,
+      "11:00": 2100000,
+      "12:00": 2300000,
+      "13:00": 2500000,
+      "14:00": 2700000,
+      "15:00": 2900000,
+      "16:00": 3100000,
+    },
   },
   {
     id: 3,
@@ -61,6 +86,17 @@ export const seriesData: SerieItem[] = [
     duration: "B72 - 72 meses en ",
     type: "IBR + Margen N.M.V.",
     color: "#ffa47f",
+    hourlyData: {
+      "8:00": 2000000,
+      "9:00": 2250000,
+      "10:00": 2500000,
+      "11:00": 2750000,
+      "12:00": 13000000,
+      "13:00": 3250000,
+      "14:00": 3500000,
+      "15:00": 3750000,
+      "16:00": 4000000,
+    },
   },
   {
     id: 4,
@@ -68,6 +104,17 @@ export const seriesData: SerieItem[] = [
     duration: "B96 - 96 meses en ",
     type: "Tasa Fija E.A.",
     color: "#FF8F00",
+    hourlyData: {
+      "8:00": 2500000,
+      "9:00": 2800000,
+      "10:00": 3100000,
+      "11:00": 7400000,
+      "12:00": 3700000,
+      "13:00": 4000000,
+      "14:00": 14300000,
+      "15:00": 4600000,
+      "16:00": 4900000,
+    },
   },
   {
     id: 5,
@@ -75,6 +122,17 @@ export const seriesData: SerieItem[] = [
     duration: "C24 - 24 meses en ",
     type: "Tasa Fija E.A.",
     color: "#3D3D3D",
+    hourlyData: {
+      "8:00": 3000000,
+      "9:00": 4350000,
+      "10:00": 6700000,
+      "11:00": 2050000,
+      "12:00": 5500000,
+      "13:00": 2750000,
+      "14:00": 8100000,
+      "15:00": 5450000,
+      "16:00": 9800000,
+    },
   },
   {
     id: 6,
@@ -82,6 +140,17 @@ export const seriesData: SerieItem[] = [
     duration: "B32 - 32 meses en ",
     type: "IPC + Margen E.A.",
     color: "#8F8F8F",
+    hourlyData: {
+      "8:00": 500000,
+      "9:00": 7900000,
+      "10:00": 2300000,
+      "11:00": 8700000,
+      "12:00": 5100000,
+      "13:00": 5500000,
+      "14:00": 5900000,
+      "15:00": 9300000,
+      "16:00": 16700000,
+    },
   },
   {
     id: 7,
@@ -89,6 +158,17 @@ export const seriesData: SerieItem[] = [
     duration: "A48 - 48 meses en ",
     type: "Tasa Fija E.A.",
     color: "#4dd0e1",
+    hourlyData: {
+      "8:00": 4000000,
+      "9:00": 7450000,
+      "10:00": 3900000,
+      "11:00": 5350000,
+      "12:00": 5800000,
+      "13:00": 9250000,
+      "14:00": 12700000,
+      "15:00": 7150000,
+      "16:00": 7600000,
+    },
   },
 ];
 
@@ -103,10 +183,6 @@ export const timeLabels = [
   "15:00",
   "16:00",
 ];
-
-const generateDataForSerie = (baseValue: number, growth: number) => {
-  return timeLabels.map((_, index) => baseValue + growth * index);
-};
 
 export function StackedBarChart({
   selectedSerieId,
@@ -349,13 +425,10 @@ export function StackedBarChart({
   };
 
   const data = {
-    labels: filteredTimeLabels, // ← Cambiado de timeLabels
-    datasets: filteredSeriesData.map((serie, index) => ({
+    labels: filteredTimeLabels,
+    datasets: filteredSeriesData.map((serie) => ({
       label: `${serie.duration}${serie.type}`,
-      data: generateDataForSerie(
-        1000000 + index * 500000,
-        300000 + index * 100000
-      ).slice(0, filteredTimeLabels.length), // ← Agregar slice para ajustar longitud
+      data: filteredTimeLabels.map((time) => serie.hourlyData[time] || 0), // ← Obtener datos por hora
       backgroundColor: serie.color,
       borderWidth: 0,
     })),

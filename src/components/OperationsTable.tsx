@@ -39,6 +39,7 @@ interface Operation {
   startDate: string;
   offerAmount: string;
   totalAmount: string;
+  maxAmount: string;
   closeDate: string;
   seriesNumber: string;
   currency?: string;
@@ -55,6 +56,7 @@ const mockData: Operation[] = [
     startDate: "03 de octubre 2025",
     offerAmount: "",
     totalAmount: "$50.000.000",
+    maxAmount: "50.000.000",
     closeDate: "03 de octubre 2025 - 03 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "PEN",
@@ -69,6 +71,7 @@ const mockData: Operation[] = [
     startDate: "03 de octubre 2025",
     offerAmount: "",
     totalAmount: "$500.000",
+    maxAmount: "500.000",
     closeDate: "03 de octubre 2025 - 03 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "USD",
@@ -83,6 +86,7 @@ const mockData: Operation[] = [
     startDate: "03 de octubre 2025",
     offerAmount: "1.000.000",
     totalAmount: "",
+    maxAmount: "",
     closeDate: "03 de octubre 2025 - 03 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -97,6 +101,7 @@ const mockData: Operation[] = [
     startDate: "04 de octubre 2025",
     offerAmount: "4.870.000",
     totalAmount: "",
+    maxAmount: "",
     closeDate: "04 de octubre 2025 - 04 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -111,6 +116,7 @@ const mockData: Operation[] = [
     startDate: "04 de octubre 2025",
     offerAmount: "50.000.000",
     totalAmount: "",
+    maxAmount: "",
     closeDate: "04 de octubre 2025 - 04 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -125,6 +131,7 @@ const mockData: Operation[] = [
     startDate: "06 de octubre 2025",
     offerAmount: "500.000",
     totalAmount: "",
+    maxAmount: "",
     closeDate: "06 de octubre 2025 - 06 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -139,6 +146,7 @@ const mockData: Operation[] = [
     startDate: "08 de octubre 2025",
     offerAmount: "70.000",
     totalAmount: "",
+    maxAmount: "",
     closeDate: "08 de octubre 2025 - 08 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -153,6 +161,7 @@ const mockData: Operation[] = [
     startDate: "10 de octubre 2025",
     offerAmount: "2.500.000",
     totalAmount: "",
+    maxAmount: "",
     closeDate: "10 de octubre 2025 - 10 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -167,6 +176,7 @@ const mockData: Operation[] = [
     startDate: "14 de octubre 2025",
     offerAmount: "348.454.870",
     totalAmount: "",
+    maxAmount: "",
     closeDate: "14 de octubre 2025 - 14 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -181,6 +191,7 @@ const mockData: Operation[] = [
     startDate: "16 de octubre 2025",
     offerAmount: "10.000.000",
     totalAmount: "",
+    maxAmount: "",
     closeDate: "16 de octubre 2025 - 16 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "Acciones",
@@ -451,6 +462,15 @@ export function OperationsTable({
                       color: "rgba(0,0,0,0.87)",
                     }}
                   >
+                    Monto máximo
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 600,
+                      fontSize: "14px",
+                      color: "rgba(0,0,0,0.87)",
+                    }}
+                  >
                     Moneda de la oferta
                   </TableCell>
                   <TableCell
@@ -544,6 +564,11 @@ export function OperationsTable({
                         sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
                       >
                         {row.offerAmount}
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
+                      >
+                        {row.maxAmount}
                       </TableCell>
                       <TableCell
                         sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}

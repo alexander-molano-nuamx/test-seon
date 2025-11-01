@@ -21,6 +21,7 @@ interface Operation {
   operationType: string;
   totalAmount: string;
   offerAmount: string;
+  maxAmount: string;
   closeDate: string;
   seriesNumber: string;
   currency?: string;
@@ -187,7 +188,58 @@ export function OperationsCards({ dataCard: data }: OperationsCardsProps) {
                             fontWeight: 500,
                           }}
                         >
-                          Monto total ofertado
+                          Monto de la oferta
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            fontSize: "16px",
+                            fontWeight: 500,
+                            color: "#3D3D3D",
+                          }}
+                        >
+                          {operation.totalAmount} {operation.currency}
+                        </Typography>
+                      </Box>
+                    )
+                  )}
+                  {operation.maxAmount !== "" &&
+                  operation.maxAmount !== "No aplica" ? (
+                    <Box sx={{ mb: 1 }}>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          fontSize: "12px",
+                          color: "rgba(0,0,0,0.6)",
+                          fontWeight: 500,
+                        }}
+                      >
+                        Monto máximo
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontSize: "16px",
+                          fontWeight: 500,
+                          color: "#3D3D3D",
+                        }}
+                      >
+                        {operation.maxAmount}
+                      </Typography>
+                    </Box>
+                  ) : (
+                    operation.totalAmount !== "" &&
+                    operation.totalAmount !== "No aplica" && (
+                      <Box sx={{ mb: 1 }}>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            fontSize: "12px",
+                            color: "rgba(0,0,0,0.6)",
+                            fontWeight: 500,
+                          }}
+                        >
+                          Monto de la oferta
                         </Typography>
                         <Typography
                           variant="body1"
