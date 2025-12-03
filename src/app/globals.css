@@ -19,11 +19,20 @@ body {
   --color-silver: #b8b8b8;
   --color-white: #fff;
 
+  --gray-100: rgb(224, 224, 224);
+  --gray-500: rgb(143, 143, 143);
+  --gray-900: rgb(61, 61, 61);
+  --amber-800: rgb(255, 143, 0);
+  --primario-nuam-100: rgb(255, 164, 127);
+  --primario-nuam-400: rgba(255, 65, 28, 1);
+  --primario-nuam-900: rgba(178, 42, 9, 1);
+
+
   --padding-0: 0px;
   --padding-4: 4px;
   --padding-8: 8px;
 
-  --font-roboto: Roboto;
+  --font-roboto: Roboto, sans-serif;
 
   --fs-12: 12px;
   --fs-16: 16px;
@@ -33,9 +42,7 @@ body {
   --width-24: 24px;
 
   --lh-24: 24px;
-}
 
-:root {
   --color-gray-100: rgba(0, 0, 0, 0.6);
   --color-gray-200: rgba(0, 0, 0, 0.38);
   --color-gray-300: rgba(0, 0, 0, 0.87);
@@ -48,8 +55,6 @@ body {
   --padding-0: 0px;
   --padding-4: 4px;
   --padding-8: 8px;
-
-  --font-roboto: Roboto;
 
   --fs-12: 12px;
   --fs-14: 14px;

@@ -48,27 +48,7 @@ export function AppSidebar({ open, width = 240 }: AppSidebarProps) {
       path: "/dashboard",
     },
     {
-      text: "Resumen de operaciones",
-      icon: <Work />,
-      children: [
-        {
-          text: "Parametrización de operaciones",
-          path: "/operations/params",
-        },
-      ],
-    },
-    {
-      text: "Administrador de Usuarios",
-      icon: <People />,
-      path: "/users",
-    },
-    {
-      text: "Administrador y Gestión de Roles",
-      icon: <PersonAdd />,
-      path: "/roles",
-    },
-    {
-      text: "Gestión de Aceptaciones y Cesiones",
+      text: "Operaciones especiales",
       icon: <PersonAdd />,
       path: "/acceptances",
       active: true,

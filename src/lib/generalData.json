@@ -1,0 +1,41 @@
+{
+  "columns": [
+    {
+      "title": "Columna 1",
+      "rows": [
+        { "label": "Fecha de registro", "value": "11/12/2024" },
+        { "label": "País", "value": "Colombia" },
+        { "label": "Tipo de operación", "value": "OPA" },
+        { "label": "ISIN", "value": "COBXXASFJK" },
+        {
+          "label": "Participante",
+          "value": "10 - Valores Bancolombia lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet"
+        },
+        { "label": "Monto de liquidación", "value": "123.000.500,00" },
+        { "label": "Cantidad de Folios", "value": "100", "hasButton": true }
+      ]
+    },
+    {
+      "title": "Columna 2",
+      "rows": [
+        { "label": "Fecha de cumplimiento", "value": "30/01/2025" },
+        { "label": "ID de la operación especial", "value": "AG21587" },
+        { "label": "Mercado", "value": "Renta variable secundaria" },
+        { "label": "Depósito", "value": "DVL - DECEVAL" },
+        { "label": "Precio negociación", "value": "-" },
+        { "label": "Cantidad de unidades", "value": "20.000" }
+      ]
+    },
+    {
+      "title": "Columna 3",
+      "rows": [
+        { "label": "Días al cumplimiento", "value": "3" },
+        { "label": "Nombre de la operación especial", "value": "OPA NUTRESA" },
+        { "label": "Nemotécnico", "value": "ECOPETROL" },
+        { "label": "Punta Cliente", "value": "Compra" },
+        { "label": "Precio liquidación", "value": "-" },
+        { "label": "Estado", "value": "Pendiente pago comprador" }
+      ]
+    }
+  ]
+}

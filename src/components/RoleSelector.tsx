@@ -9,6 +9,7 @@ import {
   Stack,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 // Importar las imágenes desde los assets de Figma
 const kallpaAvatar = "/assets/kallpa-avatar.png";
@@ -26,7 +27,7 @@ function RoleCard({ avatar, name, location, role, onClick }: RoleCardProps) {
   const router = useRouter();
 
   const handleClick = () => {
-    if (name === "Chavin") {
+    if (role === "Operador") {
       router.push("/PageGestAcepCes");
     } else if (onClick) {
       onClick();
@@ -88,21 +89,14 @@ export default function RoleSelector() {
       location: "Perú",
       role: "Operador",
     },
-    {
-      id: 3,
-      avatar: chavinAvatar,
-      name: "Chavin",
-      location: "Perú",
-      role: "Emisor",
-    },
   ];
 
   const handleRoleSelect = (roleId: number) => {
     console.log(`Role selected: ${roleId}`);
   };
 
-  const handleLogout = () => {
-    console.log("Logout clicked");
+  const handleLogout = async () => {
+    await signOut({ redirect: true, callbackUrl: "/" });
   };
 
   return (

@@ -31,7 +31,7 @@ interface OperationsTableProps {
 
 interface Operation {
   id: number;
-  status: "vigente" | "cerrada" | "finalizada" | "adjudicada";
+  status: "inscrita" | "vigente" | "cerrada" | "finalizada" | "adjudicada";
   issuer: string;
   issuerLogo?: string;
   operationType: string;
@@ -39,6 +39,7 @@ interface Operation {
   startDate: string;
   offerAmount: string;
   totalAmount: string;
+  maxAmount: string;
   closeDate: string;
   seriesNumber: string;
   currency?: string;
@@ -47,14 +48,15 @@ interface Operation {
 const mockData: Operation[] = [
   {
     id: 1,
-    status: "vigente",
+    status: "inscrita",
     issuer: "ALICORP",
     issuerLogo: "/assets/alicorp.png",
     operationType: "OPP RF",
     nemotechnical: "ALICORP",
     startDate: "03 de octubre 2025",
-    offerAmount: "No aplica",
+    offerAmount: "",
     totalAmount: "$50.000.000",
+    maxAmount: "50.000.000",
     closeDate: "03 de octubre 2025 - 03 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "PEN",
@@ -67,95 +69,102 @@ const mockData: Operation[] = [
     operationType: "OPP RF",
     nemotechnical: "SYRUS1CP1C",
     startDate: "03 de octubre 2025",
-    offerAmount: "No aplica",
-    totalAmount: "500.000",
+    offerAmount: "",
+    totalAmount: "$500.000",
+    maxAmount: "500.000",
     closeDate: "03 de octubre 2025 - 03 de octubre 2025",
     seriesNumber: "No de Series 7",
     currency: "USD",
   },
   {
     id: 3,
-    status: "cerrada",
-    issuer: "BBVA",
-    issuerLogo: "/assets/bbva.png",
+    status: "vigente",
+    issuer: "Bam",
+    issuerLogo: "/assets/Bam.png",
     operationType: "OPA",
-    nemotechnical: "BBVAEJEMPLO",
+    nemotechnical: "Bam",
     startDate: "03 de octubre 2025",
     offerAmount: "1.000.000",
-    totalAmount: "No aplica",
+    totalAmount: "",
+    maxAmount: "",
     closeDate: "03 de octubre 2025 - 03 de octubre 2025",
     seriesNumber: "No de Series 7",
-    currency: "PEN",
+    currency: "Acciones",
   },
   {
     id: 4,
     status: "cerrada",
     issuer: "CREDICORP",
-    issuerLogo: "/assets/credicorp-capital.png",
+    issuerLogo: "/assets/volcan.png",
     operationType: "OPA",
-    nemotechnical: "CREDIECXAMPLE",
+    nemotechnical: "VOLCAN",
     startDate: "04 de octubre 2025",
     offerAmount: "4.870.000",
-    totalAmount: "No aplica",
+    totalAmount: "",
+    maxAmount: "",
     closeDate: "04 de octubre 2025 - 04 de octubre 2025",
     seriesNumber: "No de Series 7",
-    currency: "USD",
+    currency: "Acciones",
   },
   {
     id: 5,
     status: "cerrada",
-    issuer: "NUTRESA",
-    issuerLogo: "/assets/nutresa.png",
+    issuer: "INCIMMET",
+    issuerLogo: "/assets/Incimmet.png",
     operationType: "OPA",
-    nemotechnical: "NUTRESA",
+    nemotechnical: "INCIMMET",
     startDate: "04 de octubre 2025",
-    offerAmount: "500.000",
-    totalAmount: "No aplica",
+    offerAmount: "50.000.000",
+    totalAmount: "",
+    maxAmount: "",
     closeDate: "04 de octubre 2025 - 04 de octubre 2025",
     seriesNumber: "No de Series 7",
-    currency: "PEN",
+    currency: "Acciones",
   },
   {
     id: 6,
     status: "finalizada",
-    issuer: "BTG",
-    issuerLogo: "/assets/bg-pactual.png",
+    issuer: "AJAIMEROJAS",
+    issuerLogo: "/assets/ajaimerojas.png",
     operationType: "OPC",
-    nemotechnical: "BGTBEISPIEL",
+    nemotechnical: "AJAIMEROJAS",
     startDate: "06 de octubre 2025",
     offerAmount: "500.000",
-    totalAmount: "No aplica",
+    totalAmount: "",
+    maxAmount: "",
     closeDate: "06 de octubre 2025 - 06 de octubre 2025",
     seriesNumber: "No de Series 7",
-    currency: "PEN",
+    currency: "Acciones",
   },
   {
     id: 7,
     status: "cerrada",
-    issuer: "INTELIGO",
-    issuerLogo: "/assets/btg.png",
+    issuer: "CAJAHUANCAYO",
+    issuerLogo: "/assets/cajahuancayo.png",
     operationType: "OPC",
-    nemotechnical: "INTELEXEMPLE",
+    nemotechnical: "CAJAHUANCAYO",
     startDate: "08 de octubre 2025",
     offerAmount: "70.000",
-    totalAmount: "No aplica",
+    totalAmount: "",
+    maxAmount: "",
     closeDate: "08 de octubre 2025 - 08 de octubre 2025",
     seriesNumber: "No de Series 7",
-    currency: "PEN",
+    currency: "Acciones",
   },
   {
     id: 8,
     status: "adjudicada",
-    issuer: "DIVISO",
-    issuerLogo: "/assets/diviso.png",
+    issuer: "ECOSAC",
+    issuerLogo: "/assets/ecosac.png",
     operationType: "OPC",
-    nemotechnical: "DIVISOLIZI",
+    nemotechnical: "ECOSAC",
     startDate: "10 de octubre 2025",
     offerAmount: "2.500.000",
-    totalAmount: "No aplica",
+    totalAmount: "",
+    maxAmount: "",
     closeDate: "10 de octubre 2025 - 10 de octubre 2025",
     seriesNumber: "No de Series 7",
-    currency: "PEN",
+    currency: "Acciones",
   },
   {
     id: 9,
@@ -166,24 +175,26 @@ const mockData: Operation[] = [
     nemotechnical: "SCOTIAREI",
     startDate: "14 de octubre 2025",
     offerAmount: "348.454.870",
-    totalAmount: "No aplica",
+    totalAmount: "",
+    maxAmount: "",
     closeDate: "14 de octubre 2025 - 14 de octubre 2025",
     seriesNumber: "No de Series 7",
-    currency: "USD",
+    currency: "Acciones",
   },
   {
     id: 10,
     status: "cerrada",
-    issuer: "FDN",
-    issuerLogo: "/assets/fdn.png",
+    issuer: "CHAVIN",
+    issuerLogo: "/assets/Chavin.png",
     operationType: "OPV",
-    nemotechnical: "NEXUSAMPLE",
+    nemotechnical: "CHAVIN",
     startDate: "16 de octubre 2025",
     offerAmount: "10.000.000",
-    totalAmount: "No aplica",
+    totalAmount: "",
+    maxAmount: "",
     closeDate: "16 de octubre 2025 - 16 de octubre 2025",
     seriesNumber: "No de Series 7",
-    currency: "PEN",
+    currency: "Acciones",
   },
 ];
 
@@ -193,6 +204,7 @@ const getStatusChip = (status: Operation["status"]) => {
     cerrada: { label: "Cerrada", bg: "rgba(0,0,0,0.08)" },
     finalizada: { label: "Finalizada", bg: "rgba(0,0,0,0.08)" },
     adjudicada: { label: "Adjudicada", bg: "#f8e2da" },
+    inscrita: { label: "Inscrita", bg: "#FFF59D" },
   };
 
   const config = statusConfig[status];
@@ -382,7 +394,7 @@ export function OperationsTable({
                 <TableRow sx={{ backgroundColor: "#fafafa" }}>
                   <TableCell
                     sx={{
-                      fontWeight: 500,
+                      fontWeight: 600,
                       fontSize: "14px",
                       color: "rgba(0,0,0,0.87)",
                       width: "132px",
@@ -394,7 +406,7 @@ export function OperationsTable({
                   </TableCell>
                   <TableCell
                     sx={{
-                      fontWeight: 500,
+                      fontWeight: 600,
                       fontSize: "14px",
                       color: "rgba(0,0,0,0.87)",
                       width: "132px",
@@ -406,7 +418,7 @@ export function OperationsTable({
                   </TableCell>
                   <TableCell
                     sx={{
-                      fontWeight: 500,
+                      fontWeight: 600,
                       fontSize: "14px",
                       color: "rgba(0,0,0,0.87)",
                       minWidth: "132px",
@@ -417,26 +429,17 @@ export function OperationsTable({
                   </TableCell>
                   <TableCell
                     sx={{
-                      fontWeight: 500,
+                      fontWeight: 600,
                       fontSize: "14px",
                       color: "rgba(0,0,0,0.87)",
                     }}
                   >
                     Tipo de operación
                   </TableCell>
-                  <TableCell
-                    sx={{
-                      fontWeight: 500,
-                      fontSize: "14px",
-                      color: "rgba(0,0,0,0.87)",
-                    }}
-                  >
-                    Nemotécnico
-                  </TableCell>
 
                   <TableCell
                     sx={{
-                      fontWeight: 500,
+                      fontWeight: 600,
                       fontSize: "14px",
                       color: "rgba(0,0,0,0.87)",
                     }}
@@ -445,7 +448,7 @@ export function OperationsTable({
                   </TableCell>
                   <TableCell
                     sx={{
-                      fontWeight: 500,
+                      fontWeight: 600,
                       fontSize: "14px",
                       color: "rgba(0,0,0,0.87)",
                     }}
@@ -454,7 +457,16 @@ export function OperationsTable({
                   </TableCell>
                   <TableCell
                     sx={{
-                      fontWeight: 500,
+                      fontWeight: 600,
+                      fontSize: "14px",
+                      color: "rgba(0,0,0,0.87)",
+                    }}
+                  >
+                    Monto máximo
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: 600,
                       fontSize: "14px",
                       color: "rgba(0,0,0,0.87)",
                     }}
@@ -463,7 +475,7 @@ export function OperationsTable({
                   </TableCell>
                   <TableCell
                     sx={{
-                      fontWeight: 500,
+                      fontWeight: 600,
                       fontSize: "14px",
                       color: "rgba(0,0,0,0.87)",
                     }}
@@ -494,7 +506,7 @@ export function OperationsTable({
                         }}
                       >
                         <Link
-                          href="#"
+                          href="/PageIngresoAcep"
                           sx={{
                             color: "#FF4201",
                             textDecoration: "underline",
@@ -547,16 +559,16 @@ export function OperationsTable({
                       >
                         {row.operationType}
                       </TableCell>
-                      <TableCell
-                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
-                      >
-                        {row.nemotechnical}
-                      </TableCell>
 
                       <TableCell
                         sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
                       >
                         {row.offerAmount}
+                      </TableCell>
+                      <TableCell
+                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
+                      >
+                        {row.maxAmount}
                       </TableCell>
                       <TableCell
                         sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
