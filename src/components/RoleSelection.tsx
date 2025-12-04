@@ -3,25 +3,29 @@
 import Image from "next/image";
 import styles from "@/styles/index.module.css";
 import RoleSelector from "./RoleSelector";
+import { Box } from "@mui/material";
+import IsotypeName from "./IsotypeName/IsotypeName";
 
 export function RoleSelectorView() {
   return (
     <>
       <div className={styles.idKcHeader}>
-        <div className={styles.idKcHeaderImage}>
-          <Image
-            className={styles.logoIcon}
-            src="/Logo.svg"
-            alt="Logo"
-            width={213}
-            height={49}
+        {/* Logo and Header */}
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          mb={0.5}
+        >
+          <IsotypeName
+            logoSrc="/assets/isotype.svg"
+            projectName="seon"
+            variant="horizontal"
+            size="md"
+            className="logo-container"
+            alt="Logo NUAM Platform"
           />
-        </div>
-        <div className={styles.idKcHeaderText}>
-          <div className={styles.sistemaDeEmisiones}>
-            seon - Sistema de Emisiones y Operaciones Especiales
-          </div>
-        </div>
+        </Box>
       </div>
       <div className={styles.cardPf}>
         <RoleSelector />

@@ -1,20 +1,15 @@
+"use client";
+
 import React from "react";
+import { Link, Typography } from "@nuam/common-fe-lib-components";
+import { Box, Chip, ToggleButtonGroup, ToggleButton } from "@mui/material";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Chip,
-  Link,
-  Box,
-  TablePagination,
-  Typography,
-  ToggleButtonGroup,
-  ToggleButton,
-} from "@mui/material";
+  DataGridPro,
+  GridColDef,
+  GridToolbar,
+  GridRenderCellParams,
+} from "@mui/x-data-grid-pro";
+import { esES } from "@mui/x-data-grid-pro/locales";
 import {
   ViewList as ViewListIcon,
   ViewModule as ViewModuleIcon,
@@ -26,7 +21,7 @@ interface OperationsTableProps {
   searchEmisor?: string;
   filterDate?: string;
   filterStatus?: string;
-  startDate?: Date | null;
+  dateRange?: [Date | null, Date | null];
 }
 
 interface Operation {
@@ -258,12 +253,19 @@ const parseSpanishDate = (dateString: string): Date | null => {
 
 export function OperationsTable({
   searchEmisor = "",
-  startDate = null,
+  dateRange = [null, null],
   filterStatus = "",
 }: OperationsTableProps) {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [viewMode, setViewMode] = React.useState<"table" | "cards">("table");
+
+  const handleViewModeChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newViewMode: "table" | "cards" | null
+  ) => {
+    if (newViewMode !== null) {
+      setViewMode(newViewMode);
+    }
+  };
 
   // Filtrar datos
   const filteredData = React.useMemo(() => {
@@ -273,30 +275,44 @@ export function OperationsTable({
         searchEmisor === "" ||
         item.issuer.toLowerCase().includes(searchEmisor.toLowerCase());
 
-      // Filtro por fecha de inicio
+      // Filtro por rango de fechas
       let matchesDate = true;
-      if (startDate) {
-        // Convertir startDate a Date si no lo es
-        const selectedDate =
-          startDate instanceof Date ? startDate : new Date(startDate);
+      const [startDate, endDate] = dateRange;
 
-        // Verificar que sea una fecha válida
-        if (!isNaN(selectedDate.getTime())) {
-          const itemDate = parseSpanishDate(item.startDate);
-          if (itemDate) {
-            // Comparar solo año, mes y día (ignorar hora)
+      if (startDate || endDate) {
+        const itemDate = parseSpanishDate(item.startDate);
+        if (itemDate) {
+          const itemDateOnly = new Date(
+            itemDate.getFullYear(),
+            itemDate.getMonth(),
+            itemDate.getDate()
+          );
+
+          // Si hay fecha de inicio, verificar que itemDate >= startDate
+          if (startDate) {
             const startDateOnly = new Date(
-              selectedDate.getFullYear(),
-              selectedDate.getMonth(),
-              selectedDate.getDate()
+              startDate.getFullYear(),
+              startDate.getMonth(),
+              startDate.getDate()
             );
-            const itemDateOnly = new Date(
-              itemDate.getFullYear(),
-              itemDate.getMonth(),
-              itemDate.getDate()
-            );
-            matchesDate = itemDateOnly >= startDateOnly;
+            if (itemDateOnly < startDateOnly) {
+              matchesDate = false;
+            }
           }
+
+          // Si hay fecha fin, verificar que itemDate <= endDate
+          if (endDate && matchesDate) {
+            const endDateOnly = new Date(
+              endDate.getFullYear(),
+              endDate.getMonth(),
+              endDate.getDate()
+            );
+            if (itemDateOnly > endDateOnly) {
+              matchesDate = false;
+            }
+          }
+        } else {
+          matchesDate = false;
         }
       }
 
@@ -308,32 +324,103 @@ export function OperationsTable({
 
       return matchesEmisor && matchesDate && matchesStatus;
     });
-  }, [searchEmisor, startDate, filterStatus]);
+  }, [searchEmisor, dateRange, filterStatus]);
 
-  // Reset page cuando cambian los filtros
-  React.useEffect(() => {
-    setPage(0);
-  }, [searchEmisor, startDate, filterStatus]);
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleViewModeChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newViewMode: "table" | "cards" | null
-  ) => {
-    if (newViewMode !== null) {
-      setViewMode(newViewMode);
-    }
-  };
+  // Definición de columnas para DataGrid Premium
+  const columns: GridColDef[] = [
+    {
+      field: "details",
+      headerName: "Detalles",
+      width: 150,
+      sortable: false,
+      filterable: false,
+      renderCell: () => (
+        <Link
+          href="/PageIngresoAcep"
+          sx={{
+            color: "#FF4201",
+            textDecoration: "underline",
+            fontSize: "14px",
+            "&:hover": {
+              color: "#FF3700",
+            },
+          }}
+        >
+          Ver Detalles
+        </Link>
+      ),
+    },
+    {
+      field: "status",
+      headerName: "Estado",
+      width: 150,
+      renderCell: (params: GridRenderCellParams) => getStatusChip(params.value as Operation["status"]),
+    },
+    {
+      field: "issuer",
+      headerName: "Emisor",
+      width: 180,
+      renderCell: (params: GridRenderCellParams) => (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1.5,
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <Box
+            sx={{
+              width: 80,
+              height: 24,
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Image
+              src={params.row.issuerLogo || "/assets/default.png"}
+              alt={params.value as string}
+              width={80}
+              height={24}
+              style={{ objectFit: "contain" }}
+            />
+          </Box>
+        </Box>
+      ),
+    },
+    {
+      field: "operationType",
+      headerName: "Tipo de operación",
+      width: 180,
+    },
+    {
+      field: "offerAmount",
+      headerName: "Cantidad de la oferta",
+      width: 180,
+    },
+    {
+      field: "maxAmount",
+      headerName: "Monto de la oferta",
+      width: 180,
+    },
+    {
+      field: "totalAmount",
+      headerName: "Monto máximo",
+      width: 180,
+    },
+    {
+      field: "currency",
+      headerName: "Moneda de la oferta",
+      width: 180,
+    },
+    {
+      field: "startDate",
+      headerName: "Fecha de ingreso de aceptaciones",
+      width: 250,
+    },
+  ];
 
   return (
     <Box>
@@ -381,237 +468,46 @@ export function OperationsTable({
 
       {/* Mostrar tabla o tarjetas según el modo */}
       {viewMode === "table" ? (
-        <>
-          <TableContainer
-            component={Paper}
-            sx={{
-              border: "1px solid rgba(0,0,0,0.12)",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+        <Box sx={{ height: 700, width: "100%" }}>
+          <DataGridPro
+            rows={filteredData}
+            columns={columns}
+            pagination
+            pageSizeOptions={[5, 10, 25, 50, 100]}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 10, page: 0 },
+              },
             }}
-          >
-            <Table>
-              <TableHead>
-                <TableRow sx={{ backgroundColor: "#fafafa" }}>
-                  <TableCell
-                    sx={{
-                      fontWeight: 600,
-                      fontSize: "14px",
-                      color: "rgba(0,0,0,0.87)",
-                      width: "132px",
-                      minWidth: "132px",
-                      maxWidth: "132px",
-                    }}
-                  >
-                    Detalles
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontWeight: 600,
-                      fontSize: "14px",
-                      color: "rgba(0,0,0,0.87)",
-                      width: "132px",
-                      minWidth: "132px",
-                      maxWidth: "132px",
-                    }}
-                  >
-                    Estado
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontWeight: 600,
-                      fontSize: "14px",
-                      color: "rgba(0,0,0,0.87)",
-                      minWidth: "132px",
-                      maxWidth: "132px",
-                    }}
-                  >
-                    Emisor
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontWeight: 600,
-                      fontSize: "14px",
-                      color: "rgba(0,0,0,0.87)",
-                    }}
-                  >
-                    Tipo de operación
-                  </TableCell>
-
-                  <TableCell
-                    sx={{
-                      fontWeight: 600,
-                      fontSize: "14px",
-                      color: "rgba(0,0,0,0.87)",
-                    }}
-                  >
-                    Cantidad de la oferta
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontWeight: 600,
-                      fontSize: "14px",
-                      color: "rgba(0,0,0,0.87)",
-                    }}
-                  >
-                    Monto de la oferta
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontWeight: 600,
-                      fontSize: "14px",
-                      color: "rgba(0,0,0,0.87)",
-                    }}
-                  >
-                    Monto máximo
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontWeight: 600,
-                      fontSize: "14px",
-                      color: "rgba(0,0,0,0.87)",
-                    }}
-                  >
-                    Moneda de la oferta
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontWeight: 600,
-                      fontSize: "14px",
-                      color: "rgba(0,0,0,0.87)",
-                    }}
-                  >
-                    Fecha de ingreso de aceptaciones
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredData
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
-                    <TableRow
-                      key={row.id}
-                      hover
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: "rgba(0,0,0,0.04)",
-                        },
-                      }}
-                    >
-                      <TableCell
-                        sx={{
-                          padding: 0,
-                          width: "132px",
-                          minWidth: "132px",
-                          maxWidth: "132px",
-                        }}
-                      >
-                        <Link
-                          href="/PageIngresoAcep"
-                          sx={{
-                            color: "#FF4201",
-                            textDecoration: "underline",
-                            fontSize: "14px",
-                            display: "block",
-                            width: "100%",
-                            height: "100%",
-                            padding: "16px",
-                            "&:hover": {
-                              color: "#FF3700",
-                              backgroundColor: "rgba(255, 66, 1, 0.04)",
-                            },
-                          }}
-                        >
-                          Ver Detalles
-                        </Link>
-                      </TableCell>
-                      <TableCell>{getStatusChip(row.status)}</TableCell>
-                      <TableCell>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 1.5,
-                          }}
-                        >
-                          <Box
-                            sx={{
-                              width: 32,
-                              height: 32,
-                              position: "relative",
-                              display: "flex",
-                              flex: "1 0 0",
-                              alignItems: "center",
-                              justifyContent: "left",
-                            }}
-                          >
-                            <Image
-                              src={row.issuerLogo || "/assets/default.png"}
-                              alt={row.issuer}
-                              width={80}
-                              height={12}
-                              style={{ objectFit: "fill" }}
-                            />
-                          </Box>
-                        </Box>
-                      </TableCell>
-                      <TableCell
-                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
-                      >
-                        {row.operationType}
-                      </TableCell>
-
-                      <TableCell
-                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
-                      >
-                        {row.offerAmount}
-                      </TableCell>
-                      <TableCell
-                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
-                      >
-                        {row.maxAmount}
-                      </TableCell>
-                      <TableCell
-                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
-                      >
-                        {row.totalAmount}
-                      </TableCell>
-                      <TableCell
-                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
-                      >
-                        {row.currency}
-                      </TableCell>
-                      <TableCell
-                        sx={{ fontSize: "14px", color: "rgba(0,0,0,0.87)" }}
-                      >
-                        {row.startDate}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={filteredData.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            labelRowsPerPage="Filas por página:"
-            labelDisplayedRows={({ from, to, count }) =>
-              `${from}-${to} de ${count}`
-            }
+            slots={{
+              toolbar: GridToolbar,
+            }}
+            slotProps={{
+              toolbar: {
+                showQuickFilter: true,
+                quickFilterProps: { debounceMs: 500 },
+              },
+            }}
+            localeText={esES.components.MuiDataGrid.defaultProps.localeText}
             sx={{
               backgroundColor: "#fff",
-              borderTop: "1px solid rgba(0,0,0,0.12)",
-              "& .MuiTablePagination-toolbar": {
-                justifyContent: "flex-end",
+              border: "1px solid rgba(0,0,0,0.12)",
+              "& .MuiDataGrid-cell": {
+                fontSize: "14px",
+                color: "rgba(0,0,0,0.87)",
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: "#fafafa",
+                fontSize: "14px",
+                fontWeight: 600,
+                color: "rgba(0,0,0,0.87)",
+              },
+              "& .MuiDataGrid-row:hover": {
+                backgroundColor: "rgba(0,0,0,0.04)",
               },
             }}
           />
-        </>
+        </Box>
       ) : (
         <OperationsCards dataCard={filteredData} />
       )}

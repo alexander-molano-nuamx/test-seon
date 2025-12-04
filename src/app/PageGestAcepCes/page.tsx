@@ -20,6 +20,7 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { es } from "date-fns/locale";
 import { RestrictedDevice } from "@/components/RestrictedDevice";
 import { AppHeader } from "@/components/AppHeader";
@@ -33,11 +34,6 @@ import { RoleProtectedRoute } from "@/components/RoleProtectedRoute";
 const Autocomplete = dynamic(
   () =>
     import("@nuam/common-fe-lib-components").then((mod) => mod.Autocomplete),
-  { ssr: false }
-);
-
-const DatePicker = dynamic(
-  () => import("@nuam/common-fe-lib-components").then((mod) => mod.DatePicker),
   { ssr: false }
 );
 
@@ -100,7 +96,10 @@ export default function PageGestAcepCes() {
 
   // Estados para los filtros
   const [searchEmisor, setSearchEmisor] = useState("");
-  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
   const [filterStatus, setFilterStatus] = useState("");
 
   // Detecta si está en tablet o mobile (<= 1024px)
@@ -112,9 +111,12 @@ export default function PageGestAcepCes() {
     setFilterStatus(typedValue?.id || "todos");
   };
 
-  const handleDateChange = (newValue: unknown) => {
-    const typedValue = newValue as Date | null;
-    setStartDate(typedValue);
+  const handleDateRangeChange = (newValue: any) => {
+    const convertedValue: [Date | null, Date | null] = [
+      newValue[0] ? newValue[0].$d || newValue[0] : null,
+      newValue[1] ? newValue[1].$d || newValue[1] : null,
+    ];
+    setDateRange(convertedValue);
   };
 
   // Si es dispositivo móvil o tablet, mostrar RestrictedDevice centrado
@@ -266,19 +268,19 @@ export default function PageGestAcepCes() {
                 />
               </Box>
 
-              {/* Selector de Fecha */}
+              {/* Selector de Rango de Fecha */}
               <Box sx={{ flex: "1 1 0", minWidth: "250px" }}>
                 <LocalizationProvider
                   dateAdapter={AdapterDateFns}
                   adapterLocale={es}
                 >
-                  <DatePicker
-                    label="Fecha Inicio"
-                    value={startDate}
-                    onChange={handleDateChange}
+                  <DateRangePicker
+                    localeText={{ start: "Fecha Inicio", end: "Fecha Fin" }}
+                    value={dateRange}
+                    onChange={handleDateRangeChange}
                     slotProps={{
                       textField: {
-                        fullWidth: true, // Importante
+                        fullWidth: true,
                         sx: {
                           backgroundColor: "#fff",
                           "& .MuiOutlinedInput-root": {
@@ -320,7 +322,7 @@ export default function PageGestAcepCes() {
             {/* Tabla de Operaciones */}
             <OperationsTable
               searchEmisor={searchEmisor}
-              startDate={startDate}
+              dateRange={dateRange}
               filterStatus={filterStatus}
             />
           </Box>

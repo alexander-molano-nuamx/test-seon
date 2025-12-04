@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { Typography } from "@nuam/common-fe-lib-components";
 import {
   AppBar,
   Toolbar,
   Box,
-  Typography,
   IconButton,
   Avatar,
   Badge,

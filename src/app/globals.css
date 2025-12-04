@@ -1,6 +1,19 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500&display=swap");
 @import "tailwindcss";
 @custom-variant dark (&:is(.dark *));
+
+/* Fuente Handel Gothic BT desde archivo local */
+@font-face {
+  font-family: 'HandelGothicBT';
+  src: url('https://db.onlinewebfonts.com/t/ef85869cff99da25a2bfbaf7c7967d29.eot');
+  src: url('https://db.onlinewebfonts.com/t/ef85869cff99da25a2bfbaf7c7967d29.eot?#iefix') format('embedded-opentype'),
+    url('https://db.onlinewebfonts.com/t/ef85869cff99da25a2bfbaf7c7967d29.woff2') format('woff2'),
+    url('https://db.onlinewebfonts.com/t/ef85869cff99da25a2bfbaf7c7967d29.woff') format('woff'),
+    url('https://db.onlinewebfonts.com/t/ef85869cff99da25a2bfbaf7c7967d29.ttf') format('truetype'),
+    url('https://db.onlinewebfonts.com/t/ef85869cff99da25a2bfbaf7c7967d29.svg#HandelGothic BT WXX Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 html,
 body {

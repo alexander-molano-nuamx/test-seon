@@ -1,8 +1,8 @@
 "use client";
 
+import { Button, TextField as NuamTextField } from "@nuam/common-fe-lib-components";
 import {
-  Button,
-  TextField,
+  TextField as MuiTextField,
   InputAdornment,
   IconButton,
   Box,
@@ -138,13 +138,15 @@ export function LoginForm() {
         control={control}
         defaultValue=""
         render={({ field }) => (
-          <TextField
-            {...field}
+          <NuamTextField
+            value={field.value}
+            onChange={(value: string) => field.onChange(value)}
+            onBlur={field.onBlur}
             label="Ingresar Correo Electrónico"
-            aria-label=""
             variant="outlined"
             fullWidth
-            className={styles.textFieldCustom}
+            size="small"
+            placeholder="Ingresa tu usuario"
             slotProps={{
               inputLabel: {
                 shrink: true,
@@ -163,13 +165,14 @@ export function LoginForm() {
         control={control}
         defaultValue=""
         render={({ field }) => (
-          <TextField
+          <MuiTextField
             {...field}
             label="Contraseña"
             variant="outlined"
             fullWidth
+            size="small"
+            placeholder="Ingresa tu contraseña"
             type={showPassword ? "text" : "password"}
-            className={styles.textFieldCustom}
             slotProps={{
               inputLabel: {
                 shrink: true,
@@ -211,7 +214,6 @@ export function LoginForm() {
           type="submit"
           variant="contained"
           fullWidth
-          className={styles.kcFormButtonsIniciarSesio}
           disabled={isLoading || !captchaToken}
         >
           <div className={styles.base}>

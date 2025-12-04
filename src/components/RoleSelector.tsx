@@ -1,10 +1,9 @@
+import { Button, Typography } from "@nuam/common-fe-lib-components";
 import {
   Card,
   CardContent,
   Avatar,
   Chip,
-  Typography,
-  Button,
   Box,
   Stack,
 } from "@mui/material";

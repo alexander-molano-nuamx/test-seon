@@ -1,0 +1,266 @@
+/**
+ * Estilos adicionales para el componente IsotypeName en el Login
+ * Estos estilos complementan los estilos inline del componente
+ */
+
+/* Contenedor principal del logo */
+.logo-container {
+  position: fixed;
+  top: 92px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Responsive: ajustar posición en tablets */
+@media (max-width: 960px) {
+  .logo-container {
+    top: 30px;
+  }
+}
+
+/* Responsive: ajustar posición en móviles */
+@media (max-width: 600px) {
+  .logo-container {
+    top: 20px;
+    position: absolute;
+    /* Cambiar a absolute para mejor control */
+  }
+}
+
+/* Variante para páginas MFA - logo estático en el flujo del documento */
+.logo-static {
+  position: static !important;
+  transform: none !important;
+  animation: fadeIn 0.5s ease forwards;
+  z-index: auto;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.logo-static:hover {
+  transform: scale(1.02) !important;
+}
+
+/* Ajuste de z-index para evitar conflictos con modal */
+.background-main {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  filter: none;
+  backdrop-filter: none;
+}
+
+/* Asegurar que las cards estén por encima del background pero debajo del logo */
+.MuiCard-root,
+.MuiPaper-root {
+  position: relative;
+  z-index: 1;
+}
+
+/* Estilos para el modo oscuro si se implementa */
+@media (prefers-color-scheme: dark) {
+  .logo-container {
+    filter: brightness(1.1);
+  }
+}
+
+/* Animación hover sutil para el logo */
+.logo-container:hover {
+  transform: translateX(-50%) scale(1.02);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mejora de contraste para accesibilidad */
+@media (prefers-contrast: high) {
+  .logo-container {
+    filter: contrast(1.2);
+  }
+}
+
+/* Soporte para motion reducido (accesibilidad) */
+@media (prefers-reduced-motion: reduce) {
+  .logo-container {
+    animation: none;
+    transition: none;
+  }
+
+  .logo-container:hover {
+    transform: translateX(-50%);
+  }
+}
+
+/* Layout centrado de la página de login */
+.login-page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+}
+
+/* Ajustes para el contenedor del formulario */
+.login-form-wrapper {
+  margin-top: 140px;
+  /* Espacio para el logo fijo */
+  width: 100%;
+  max-width: 442px;
+  position: relative;
+}
+
+@media (max-width: 600px) {
+  .login-form-wrapper {
+    margin-top: 100px;
+    /* Reducir espacio en móviles */
+  }
+}
+
+/* Estilos para las variantes del componente cuando se usa en diferentes contextos */
+
+/* Variante para header de aplicación (después del login) */
+.header-logo {
+  position: static;
+  transform: none;
+  animation: none;
+}
+
+/* Variante para sidebar */
+.sidebar-logo {
+  padding: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/* Variante para email templates */
+.email-logo {
+  padding: 24px;
+  text-align: center;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+/* Estilos de impresión */
+@media print {
+  .logo-container {
+    position: static;
+    transform: none;
+    animation: none;
+    page-break-inside: avoid;
+  }
+}
+
+/* Mejoras de performance */
+.logo-container img {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Fallback para navegadores antiguos */
+@supports not (transform: translate(-50%, 0)) {
+  .logo-container {
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Skeleton loader para cuando el logo está cargando */
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.logo-skeleton {
+  background: linear-gradient(90deg,
+      #f0f0f0 0px,
+      #e0e0e0 40px,
+      #f0f0f0 80px);
+  background-size: 200px 100%;
+  animation: skeleton-loading 1.5s infinite linear;
+  border-radius: 8px;
+}
+
+/* Transiciones suaves para cambios de tema */
+.logo-container * {
+  transition-property: color, background-color, border-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+/* Ajuste fino para alineación con el resto del layout */
+.login-page-container>* {
+  animation-fill-mode: both;
+}
+
+/* Mejoras de legibilidad para el texto del logo */
+.logo-container h1 {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus visible para accesibilidad con teclado */
+.logo-container:focus-visible {
+  outline: 2px solid #ff4201;
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+/* Ajustes para pantallas ultra-wide */
+@media (min-width: 1920px) {
+  .logo-container {
+    top: 60px;
+  }
+
+  .login-form-wrapper {
+    margin-top: 180px;
+  }
+}
+
+/* Ajustes para pantallas pequeñas (landscape) */
+@media (max-height: 600px) and (orientation: landscape) {
+  .logo-container {
+    position: static;
+    margin-bottom: 20px;
+  }
+
+  .login-form-wrapper {
+    margin-top: 20px;
+  }
+}
