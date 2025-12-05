@@ -10,7 +10,8 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import ReCAPTCHA from "react-google-recaptcha";
+import dynamic from "next/dynamic";
+import type ReCAPTCHAType from "react-google-recaptcha";
 
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -19,6 +20,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/index.module.css";
 import { signIn } from "next-auth/react";
+
+// Dynamically import ReCAPTCHA to prevent SSR issues with document access
+const ReCAPTCHA = dynamic<React.ComponentProps<typeof ReCAPTCHAType>>(
+  () => import("react-google-recaptcha"),
+  {
+    ssr: false,
+  }
+);
 
 const schema = yup
   .object({

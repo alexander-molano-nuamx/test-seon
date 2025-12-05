@@ -196,6 +196,7 @@ export function StackedBarChart({
   // Limpiar tooltip al desmontar
   useEffect(() => {
     return () => {
+      if (typeof document === "undefined") return;
       const tooltipEl = document.getElementById("chartjs-tooltip");
       if (tooltipEl && tooltipEl.parentNode) {
         tooltipEl.parentNode.removeChild(tooltipEl);
@@ -277,6 +278,8 @@ export function StackedBarChart({
         position: "nearest",
         external: function (context) {
           // Tooltip Element
+          if (typeof document === "undefined") return;
+
           let tooltipEl = document.getElementById("chartjs-tooltip");
 
           // Crear elemento si no existe
@@ -295,7 +298,7 @@ export function StackedBarChart({
             tooltipEl.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
             tooltipEl.style.minWidth = "350px";
             tooltipEl.style.zIndex = "1000";
-            document.body.appendChild(tooltipEl);
+            if (document?.body) document.body.appendChild(tooltipEl);
           }
 
           // Ocultar si no hay tooltip

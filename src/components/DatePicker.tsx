@@ -1,3 +1,5 @@
+"use client";
+
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import {
   DatePickerProps,

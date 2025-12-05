@@ -1,5 +1,8 @@
 "use client";
 
+//Force dynamic rendering to prevent SSR issues with MUI X Date Pickers
+export const dynamic = 'force-dynamic';
+
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { SessionProvider } from "next-auth/react";
 import { LicenseInfo } from "@mui/x-license";

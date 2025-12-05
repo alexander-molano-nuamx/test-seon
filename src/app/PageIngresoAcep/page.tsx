@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import dynamicImport from "next/dynamic";
 import {
   Box,
   IconButton,
@@ -31,14 +32,41 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { Breadcrumbs } from "../../components/Breadcrumbs";
 import { Autocomplete } from "@/components/Autocomplete";
 import { RestrictedDevice } from "@/components/RestrictedDevice";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import type { PickerRangeValue } from "@mui/x-date-pickers/internals";
+import type { DateRange } from "@mui/x-date-pickers-pro";
+import { StackedBarChart } from "@/components/StackedBarChart";
+
+// Dynamically import MUI X Date Pickers to prevent SSR issues with document access
+const LocalizationProvider = dynamicImport(
+  () =>
+    import("@mui/x-date-pickers/LocalizationProvider").then(
+      (mod) => mod.LocalizationProvider
+    ),
+  { ssr: false }
+);
+
+const DateRangePicker = dynamicImport(
+  () =>
+    import("@mui/x-date-pickers-pro/DateRangePicker").then(
+      (mod) => mod.DateRangePicker
+    ),
+  { ssr: false }
+);
+
+const DesktopTimePicker = dynamicImport(
+  () =>
+    import("@mui/x-date-pickers/DesktopTimePicker").then(
+      (mod) => mod.DesktopTimePicker
+    ),
+  { ssr: false }
+);
+
+// Force dynamic rendering to prevent SSR issues
+export const dynamic = 'force-dynamic';
+
+// Import adapter and locale separately (these don't access document)
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { es } from "date-fns/locale";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
-import type { PickerRangeValue } from "@mui/x-date-pickers/internals";
-import { DateRange } from "@mui/x-date-pickers-pro";
-import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
-import { StackedBarChart } from "@/components/StackedBarChart";
 import { RegistroAceptaciones } from "@/components/RegistroAceptaciones";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { RoleProtectedRoute } from "@/components/RoleProtectedRoute";

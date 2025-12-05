@@ -1,5 +1,8 @@
 "use client";
 
+// Force dynamic rendering to prevent SSR issues
+export const dynamic = 'force-dynamic';
+
 import type { NextPage } from "next";
 import styles from "@/styles/index.module.css";
 import { useMediaQuery } from "@mui/material";

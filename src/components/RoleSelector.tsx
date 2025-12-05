@@ -1,12 +1,5 @@
-import { Button, Typography } from "@nuam/common-fe-lib-components";
-import {
-  Card,
-  CardContent,
-  Avatar,
-  Chip,
-  Box,
-  Stack,
-} from "@mui/material";
+import { Button, Typography } from "@mui/material";
+import { Card, CardContent, Avatar, Chip, Box, Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 

@@ -1,6 +1,5 @@
 import React from "react";
-import { Box, styled } from "@mui/material";
-import { Typography } from "@nuam/common-fe-lib-components";
+import { Box, styled, Typography } from "@mui/material";
 
 /**
  * Props interface para el componente IsotypeName
@@ -283,7 +282,6 @@ export const IsotypeName: React.FC<IsotypeNameProps> = ({
       <ProjectText
         themeVariant={themeVariant}
         componentSize={size}
-        component="h1"
         sx={{
           fontFamily: "HandelGothicBT, Arial, sans-serif !important",
           fontSize: SIZE_CONFIG[size].fontSize + " !important",

@@ -6,6 +6,9 @@ import { useMediaQuery } from "@mui/material";
 import { RestrictedDevice } from "@/components/RestrictedDevice";
 import { MainForm } from "@/components/MainLogin";
 
+// Force dynamic rendering to prevent SSR issues with document access
+export const dynamic = 'force-dynamic';
+
 const Login: NextPage = () => {
   const isMobileOrTablet = useMediaQuery("(max-width:1024px)");
   return (

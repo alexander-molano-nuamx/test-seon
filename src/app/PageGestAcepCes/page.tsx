@@ -1,8 +1,10 @@
 "use client";
 
+// Force dynamic rendering to prevent SSR issues
+export const dynamic = 'force-dynamic';
+
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
 import {
   Box,
   Typography,
@@ -14,11 +16,6 @@ import {
 } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
 import ClearIcon from "@mui/icons-material/Clear";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
-import type { PickerRangeValue } from "@mui/x-date-pickers/internals";
-import { es } from "date-fns/locale";
 import { RestrictedDevice } from "@/components/RestrictedDevice";
 import { AppHeader } from "@/components/AppHeader";
 import { AppSidebar } from "@/components/AppSidebar";
@@ -27,12 +24,8 @@ import { Breadcrumbs } from "../../components/Breadcrumbs";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { RoleProtectedRoute } from "@/components/RoleProtectedRoute";
 
-// Importar dinámicamente sin SSR
-const Autocomplete = dynamic(
-  () =>
-    import("@nuam/common-fe-lib-components").then((mod) => mod.Autocomplete),
-  { ssr: false }
-);
+// Use the project's local Autocomplete component instead of the external package
+import { Autocomplete } from "@/components/Autocomplete";
 
 const drawerWidth = 240;
 
@@ -93,10 +86,6 @@ export default function PageGestAcepCes() {
 
   // Estados para los filtros
   const [searchEmisor, setSearchEmisor] = useState("");
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-    null,
-    null,
-  ]);
   const [filterStatus, setFilterStatus] = useState("");
 
   // Detecta si está en tablet o mobile (<= 1024px)
@@ -106,30 +95,6 @@ export default function PageGestAcepCes() {
     const typedValue = value as { id: string; name: string } | null;
     setSelectedStatus(typedValue || { id: "todos", name: "Todos" });
     setFilterStatus(typedValue?.id || "todos");
-  };
-
-  // Helper to convert adapter-wrapped or native dates to native Date
-  const toNativeDate = (value: PickerRangeValue[number]): Date | null => {
-    if (!value) return null;
-    const asObj = value as unknown as Record<string, unknown>;
-    // Check if it has adapter internals ($d property)
-    if ("$d" in asObj && asObj.$d instanceof Date) {
-      return asObj.$d as Date;
-    }
-    // Check if it's a dayjs object with toDate() method
-    if (typeof asObj.toDate === "function") {
-      return (asObj.toDate as () => Date)();
-    }
-    // Assume it's already a native Date
-    return value as Date;
-  };
-
-  const handleDateRangeChange = (newValue: PickerRangeValue | null) => {
-    const convertedValue: [Date | null, Date | null] = [
-      newValue?.[0] ? toNativeDate(newValue[0]) : null,
-      newValue?.[1] ? toNativeDate(newValue[1]) : null,
-    ];
-    setDateRange(convertedValue);
   };
 
   // Si es dispositivo móvil o tablet, mostrar RestrictedDevice centrado
@@ -310,7 +275,6 @@ export default function PageGestAcepCes() {
             {/* Tabla de Operaciones */}
             <OperationsTable
               searchEmisor={searchEmisor}
-              dateRange={dateRange}
               filterStatus={filterStatus}
               statusTooltipMessage={(row) => {
                 // Mensajes exactos solicitados por el diseño
