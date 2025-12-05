@@ -1,27 +1,16 @@
 "use client";
 
-import type { NextPage } from "next";
-import styles from "@/styles/index.module.css";
-import { useMediaQuery } from "@mui/material";
-import { RestrictedDevice } from "@/components/RestrictedDevice";
-import { MainForm } from "@/components/MainLogin";
+import dynamicImport from 'next/dynamic';
 
-// Force dynamic rendering to prevent SSR issues with document access
+// Dynamically import the page content to prevent SSR issues with @nuam library
+const PageContent = dynamicImport(() => import('./PageContent'), {
+  ssr: false,
+  loading: () => <div>Loading...</div>,
+});
+
+// Force dynamic rendering to prevent SSR issues
 export const dynamic = 'force-dynamic';
 
-const Login: NextPage = () => {
-  const isMobileOrTablet = useMediaQuery("(max-width:1024px)");
-  return (
-    <div className={styles.login}>
-      {isMobileOrTablet ? (
-        <RestrictedDevice />
-      ) : (
-        <>
-          <MainForm />
-        </>
-      )}
-    </div>
-  );
-};
-
-export default Login;
+export default function HomePage() {
+  return <PageContent />;
+}
