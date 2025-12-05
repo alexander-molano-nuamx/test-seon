@@ -12,15 +12,12 @@ import {
   IconButton,
   Skeleton,
 } from "@mui/material";
-import {
-  Search as SearchIcon,
-  Description as DescriptionIcon,
-  CalendarMonthRounded,
-} from "@mui/icons-material";
+import { Search as SearchIcon } from "@mui/icons-material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import type { PickerRangeValue } from "@mui/x-date-pickers/internals";
 import { es } from "date-fns/locale";
 import { RestrictedDevice } from "@/components/RestrictedDevice";
 import { AppHeader } from "@/components/AppHeader";
@@ -48,7 +45,7 @@ const statusOptions = [
 ];
 
 export default function PageGestAcepCes() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { data: session, status } = useSession();
   const [lastLogin, setLastLogin] = useState<string>("");
   const [ipAddress, setIpAddress] = useState<string>("");
@@ -111,10 +108,26 @@ export default function PageGestAcepCes() {
     setFilterStatus(typedValue?.id || "todos");
   };
 
-  const handleDateRangeChange = (newValue: any) => {
+  // Helper to convert adapter-wrapped or native dates to native Date
+  const toNativeDate = (value: PickerRangeValue[number]): Date | null => {
+    if (!value) return null;
+    const asObj = value as unknown as Record<string, unknown>;
+    // Check if it has adapter internals ($d property)
+    if ("$d" in asObj && asObj.$d instanceof Date) {
+      return asObj.$d as Date;
+    }
+    // Check if it's a dayjs object with toDate() method
+    if (typeof asObj.toDate === "function") {
+      return (asObj.toDate as () => Date)();
+    }
+    // Assume it's already a native Date
+    return value as Date;
+  };
+
+  const handleDateRangeChange = (newValue: PickerRangeValue | null) => {
     const convertedValue: [Date | null, Date | null] = [
-      newValue[0] ? newValue[0].$d || newValue[0] : null,
-      newValue[1] ? newValue[1].$d || newValue[1] : null,
+      newValue?.[0] ? toNativeDate(newValue[0]) : null,
+      newValue?.[1] ? toNativeDate(newValue[1]) : null,
     ];
     setDateRange(convertedValue);
   };
@@ -234,7 +247,8 @@ export default function PageGestAcepCes() {
               {/* Buscador */}
               <Box sx={{ flex: "1 1 0", minWidth: "250px" }}>
                 <TextField
-                  placeholder="Buscar Emisor"
+                  size={"small"}
+                  placeholder="Buscar Promotor"
                   variant="outlined"
                   value={searchEmisor}
                   onChange={(e) => setSearchEmisor(e.target.value)}
@@ -260,6 +274,7 @@ export default function PageGestAcepCes() {
                     },
                   }}
                   sx={{
+                    size: "small",
                     backgroundColor: "#fff",
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "4px",
@@ -268,37 +283,10 @@ export default function PageGestAcepCes() {
                 />
               </Box>
 
-              {/* Selector de Rango de Fecha */}
-              <Box sx={{ flex: "1 1 0", minWidth: "250px" }}>
-                <LocalizationProvider
-                  dateAdapter={AdapterDateFns}
-                  adapterLocale={es}
-                >
-                  <DateRangePicker
-                    localeText={{ start: "Fecha Inicio", end: "Fecha Fin" }}
-                    value={dateRange}
-                    onChange={handleDateRangeChange}
-                    slotProps={{
-                      textField: {
-                        fullWidth: true,
-                        sx: {
-                          backgroundColor: "#fff",
-                          "& .MuiOutlinedInput-root": {
-                            borderRadius: "4px",
-                          },
-                        },
-                      },
-                      actionBar: {
-                        actions: ["clear", "accept"],
-                      },
-                    }}
-                  />
-                </LocalizationProvider>
-              </Box>
-
               {/* Desplegable Estado */}
               <Box sx={{ flex: "1 1 0", minWidth: "250px" }}>
                 <Autocomplete
+                  size={"small"}
                   options={statusOptions}
                   label="Estado"
                   labelKey="name"
@@ -324,6 +312,18 @@ export default function PageGestAcepCes() {
               searchEmisor={searchEmisor}
               dateRange={dateRange}
               filterStatus={filterStatus}
+              statusTooltipMessage={(row) => {
+                // Mensajes exactos solicitados por el diseño
+                const map: Record<string, string> = {
+                  inscrita: "Oferta Pública Próxima a su inicio.",
+                  finalizada: "Proceso de Oferta Pública finalizada.",
+                  vigente: "En Desarrollo de la Oferta Pública.",
+                  adjudicada: "Operación Adjudicada",
+                  cerrada:
+                    "Periodo de Recepción Finalizado, en proceso de Adjudicación.",
+                };
+                return map[row.status] ?? undefined;
+              }}
             />
           </Box>
         </Box>

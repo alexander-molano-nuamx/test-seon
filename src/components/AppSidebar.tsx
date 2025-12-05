@@ -43,11 +43,6 @@ export function AppSidebar({ open, width = 240 }: AppSidebarProps) {
 
   const menuItems: MenuItem[] = [
     {
-      text: "Dashboard",
-      icon: <Dashboard />,
-      path: "/dashboard",
-    },
-    {
       text: "Operaciones especiales",
       icon: <PersonAdd />,
       path: "/acceptances",

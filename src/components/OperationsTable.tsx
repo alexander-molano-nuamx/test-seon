@@ -2,18 +2,28 @@
 
 import React from "react";
 import { Link, Typography } from "@nuam/common-fe-lib-components";
-import { Box, Chip, ToggleButtonGroup, ToggleButton } from "@mui/material";
+import {
+  Box,
+  Chip,
+  ToggleButtonGroup,
+  ToggleButton,
+  Tooltip,
+} from "@mui/material";
+("@mui/icons-material");
 import {
   DataGridPro,
   GridColDef,
-  GridToolbar,
   GridRenderCellParams,
+  GridLogicOperator,
+  FilterColumnsArgs,
+  GetColumnForNewFilterArgs,
 } from "@mui/x-data-grid-pro";
 import { esES } from "@mui/x-data-grid-pro/locales";
 import {
   ViewList as ViewListIcon,
   ViewModule as ViewModuleIcon,
 } from "@mui/icons-material";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Image from "next/image";
 import { OperationsCards } from "./OperationsCards";
 
@@ -22,6 +32,11 @@ interface OperationsTableProps {
   filterDate?: string;
   filterStatus?: string;
   dateRange?: [Date | null, Date | null];
+  /**
+   * Mensaje para el tooltip de estado. Puede ser un string fijo o una función
+   * que recibe la fila y devuelve el mensaje para ese registro.
+   */
+  statusTooltipMessage?: string | ((row: Operation) => string | undefined);
 }
 
 interface Operation {
@@ -43,7 +58,7 @@ interface Operation {
 const mockData: Operation[] = [
   {
     id: 1,
-    status: "inscrita",
+    status: "vigente",
     issuer: "ALICORP",
     issuerLogo: "/assets/alicorp.png",
     operationType: "OPP RF",
@@ -58,7 +73,7 @@ const mockData: Operation[] = [
   },
   {
     id: 2,
-    status: "finalizada",
+    status: "inscrita",
     issuer: "SYRUS",
     issuerLogo: "/assets/syrus.png",
     operationType: "OPP RF",
@@ -73,7 +88,7 @@ const mockData: Operation[] = [
   },
   {
     id: 3,
-    status: "vigente",
+    status: "finalizada",
     issuer: "Bam",
     issuerLogo: "/assets/Bam.png",
     operationType: "OPA",
@@ -88,7 +103,7 @@ const mockData: Operation[] = [
   },
   {
     id: 4,
-    status: "cerrada",
+    status: "vigente",
     issuer: "CREDICORP",
     issuerLogo: "/assets/volcan.png",
     operationType: "OPA",
@@ -193,7 +208,7 @@ const mockData: Operation[] = [
   },
 ];
 
-const getStatusChip = (status: Operation["status"]) => {
+const getStatusChip = (status: Operation["status"], tooltipText?: string) => {
   const statusConfig = {
     vigente: { label: "Vigente", bg: "rgba(46,125,50,0.3)" },
     cerrada: { label: "Cerrada", bg: "rgba(0,0,0,0.08)" },
@@ -203,15 +218,44 @@ const getStatusChip = (status: Operation["status"]) => {
   };
 
   const config = statusConfig[status];
+  // Build label with optional tooltip icon rendered inside the chip
+  const labelNode = (
+    <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+      <Box component="span" sx={{ fontSize: "13px", lineHeight: 1 }}>
+        {config.label}
+      </Box>
+      {tooltipText ? (
+        <Tooltip title={tooltipText} arrow enterDelay={300}>
+          <Box
+            component="span"
+            sx={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 18,
+              height: 18,
+              borderRadius: "50%",
+            }}
+            aria-hidden
+          >
+            <InfoOutlinedIcon sx={{ fontSize: 12 }} />
+          </Box>
+        </Tooltip>
+      ) : null}
+    </Box>
+  );
+
   return (
     <Chip
-      label={config.label}
+      label={labelNode}
       size="small"
       sx={{
         backgroundColor: config.bg,
         color: "rgba(0,0,0,0.87)",
         fontSize: "13px",
         height: 24,
+        padding: "0 6px",
+        alignItems: "center",
       }}
     />
   );
@@ -255,8 +299,12 @@ export function OperationsTable({
   searchEmisor = "",
   dateRange = [null, null],
   filterStatus = "",
+  statusTooltipMessage,
 }: OperationsTableProps) {
   const [viewMode, setViewMode] = React.useState<"table" | "cards">("table");
+
+  // Estado para modelo de visibilidad de columnas
+  const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({});
 
   const handleViewModeChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -265,6 +313,38 @@ export function OperationsTable({
     if (newViewMode !== null) {
       setViewMode(newViewMode);
     }
+  };
+
+  // Función para filtrar columnas en el panel de filtros
+  // Elimina las columnas que ya tienen filtros aplicados
+  const filterColumns = ({
+    field,
+    columns,
+    currentFilters,
+  }: FilterColumnsArgs) => {
+    const filteredFields = currentFilters?.map((item) => item.field);
+    return columns
+      .filter(
+        (colDef) =>
+          colDef.filterable &&
+          (colDef.field === field || !filteredFields.includes(colDef.field))
+      )
+      .map((column) => column.field);
+  };
+
+  // Función para obtener la columna para un nuevo filtro
+  // Devuelve la primera columna filtrable que no tenga un filtro aplicado
+  const getColumnForNewFilter = ({
+    currentFilters,
+    columns,
+  }: GetColumnForNewFilterArgs) => {
+    const filteredFields = currentFilters?.map(({ field }) => field);
+    const columnForNewFilter = columns
+      .filter(
+        (colDef) => colDef.filterable && !filteredFields.includes(colDef.field)
+      )
+      .find((colDef) => colDef.filterOperators?.length);
+    return columnForNewFilter?.field ?? null;
   };
 
   // Filtrar datos
@@ -354,7 +434,25 @@ export function OperationsTable({
       field: "status",
       headerName: "Estado",
       width: 150,
-      renderCell: (params: GridRenderCellParams) => getStatusChip(params.value as Operation["status"]),
+      renderCell: (params: GridRenderCellParams) => {
+        const status = params.value as Operation["status"];
+        const row = params.row as Operation;
+
+        // Resolve tooltip message: function -> call with row, string -> use directly
+        let tooltipText: string | undefined;
+        if (typeof statusTooltipMessage === "function") {
+          tooltipText = statusTooltipMessage(row);
+        } else if (typeof statusTooltipMessage === "string") {
+          tooltipText = statusTooltipMessage;
+        }
+
+        // Render chip with optional in-chip tooltip
+        return (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            {getStatusChip(status, tooltipText)}
+          </Box>
+        );
+      },
     },
     {
       field: "issuer",
@@ -382,8 +480,8 @@ export function OperationsTable({
             <Image
               src={params.row.issuerLogo || "/assets/default.png"}
               alt={params.value as string}
-              width={80}
-              height={24}
+              fill
+              sizes="80px"
               style={{ objectFit: "contain" }}
             />
           </Box>
@@ -421,6 +519,30 @@ export function OperationsTable({
       width: 250,
     },
   ];
+
+  // Helper: Clone objects while preserving functions (renderCell, renderHeader, etc.)
+  const cloneColumnDef = (col: GridColDef): GridColDef => {
+    const cloned: GridColDef = { ...col };
+    // Preserve function references for React components
+    if (col.renderCell) cloned.renderCell = col.renderCell;
+    if (col.renderHeader) cloned.renderHeader = col.renderHeader;
+    return cloned;
+  };
+
+  // Defensive cloning to prevent DataGrid from mutating frozen/read-only objects
+  // This protects against "Cannot assign to read only property" errors
+  // Use deeper cloning for rows, but preserve function references in columns
+  const safeRows = filteredData.map((row) => JSON.parse(JSON.stringify(row)));
+  const safeColumns = columns.map(cloneColumnDef);
+  const safeLocaleText = JSON.parse(
+    JSON.stringify(esES.components.MuiDataGrid.defaultProps.localeText)
+  );
+
+  // Preparar datos para DataGridPro
+  const gridData = {
+    rows: safeRows,
+    columns: safeColumns,
+  };
 
   return (
     <Box>
@@ -470,29 +592,70 @@ export function OperationsTable({
       {viewMode === "table" ? (
         <Box sx={{ height: 700, width: "100%" }}>
           <DataGridPro
-            rows={filteredData}
-            columns={columns}
+            {...gridData}
             pagination
             pageSizeOptions={[5, 10, 25, 50, 100]}
             initialState={{
               pagination: {
                 paginationModel: { pageSize: 10, page: 0 },
               },
-            }}
-            slots={{
-              toolbar: GridToolbar,
-            }}
-            slotProps={{
-              toolbar: {
-                showQuickFilter: true,
-                quickFilterProps: { debounceMs: 500 },
+              filter: {
+                filterModel: {
+                  items: [],
+                },
               },
             }}
-            localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+            showToolbar={true}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) =>
+              setColumnVisibilityModel(newModel)
+            }
+            slotProps={{
+              columnsManagement: {
+                getTogglableColumns: (columns) => {
+                  return columns
+                    .filter((column) => column.field !== "details")
+                    .map((column) => column.field);
+                },
+              },
+              filterPanel: {
+                // Configuración del panel de filtros
+                logicOperators: [GridLogicOperator.And, GridLogicOperator.Or],
+                columnsSort: "asc",
+                filterFormProps: {
+                  filterColumns,
+                  logicOperatorInputProps: {
+                    variant: "outlined",
+                    size: "small",
+                  },
+                  columnInputProps: {
+                    variant: "outlined",
+                    size: "small",
+                  },
+                  operatorInputProps: {
+                    variant: "outlined",
+                    size: "small",
+                  },
+                  valueInputProps: {
+                    variant: "outlined",
+                    size: "small",
+                  },
+                },
+                getColumnForNewFilter,
+              },
+            }}
+            localeText={safeLocaleText}
+            // Habilitar funcionalidades de filtrado avanzado Pro
+            filterMode="client"
+            disableMultipleColumnsFiltering={false}
             sx={{
               backgroundColor: "#fff",
               border: "1px solid rgba(0,0,0,0.12)",
               "& .MuiDataGrid-cell": {
+                display: "flex",
+                alignItems: "center", // vertically center content
+                justifyContent: "flex-start", // align content to the left
+                textAlign: "left",
                 fontSize: "14px",
                 color: "rgba(0,0,0,0.87)",
               },

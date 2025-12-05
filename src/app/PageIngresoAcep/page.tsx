@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
+  IconButton,
   Card,
   CardContent,
   Typography,
@@ -23,7 +24,7 @@ import {
   Paper,
   useMediaQuery,
 } from "@mui/material";
-import { ExpandMore, ExpandLess } from "@mui/icons-material";
+import { ExpandMore, ExpandLess, RestartAlt } from "@mui/icons-material";
 import Image from "next/image";
 import { AppHeader } from "@/components/AppHeader";
 import { AppSidebar } from "@/components/AppSidebar";
@@ -33,7 +34,10 @@ import { RestrictedDevice } from "@/components/RestrictedDevice";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { es } from "date-fns/locale";
-import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
+import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import type { PickerRangeValue } from "@mui/x-date-pickers/internals";
+import { DateRange } from "@mui/x-date-pickers-pro";
+import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
 import { StackedBarChart } from "@/components/StackedBarChart";
 import { RegistroAceptaciones } from "@/components/RegistroAceptaciones";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
@@ -47,8 +51,8 @@ const drawerWidth = 240;
 export default function PageIngresoAcep() {
   const [tabValue, setTabValue] = useState(0);
   const [expanded, setExpanded] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange<Date>>([null, null]);
   const [startTime, setStartTime] = useState<Date | null>(
     new Date(2024, 0, 1, 8, 0)
   );
@@ -109,7 +113,7 @@ export default function PageIngresoAcep() {
   const entitiesData = [
     {
       id: 1,
-      entity: "Diviso SAB",
+      entity: "Kallpa",
       acceptances: 20,
       series: {
         serie01: 700000,
@@ -121,51 +125,6 @@ export default function PageIngresoAcep() {
         serie07: 2500000,
       },
       total: 10500000,
-    },
-    {
-      id: 2,
-      entity: "Credicorp capital",
-      acceptances: 30,
-      series: {
-        serie01: 700000,
-        serie02: 800000,
-        serie03: 700000,
-        serie04: 3500000,
-        serie05: 700000,
-        serie06: 700000,
-        serie07: 2500000,
-      },
-      total: 8500000,
-    },
-    {
-      id: 3,
-      entity: "Inteligo",
-      acceptances: 50,
-      series: {
-        serie01: 4000000,
-        serie02: 5000000,
-        serie03: 3000000,
-        serie04: 3000000,
-        serie05: 3000000,
-        serie06: 3000000,
-        serie07: 3000000,
-      },
-      total: 12000000,
-    },
-    {
-      id: 4,
-      entity: "BNB",
-      acceptances: 50,
-      series: {
-        serie01: 2600000,
-        serie02: 9600000,
-        serie03: 3300000,
-        serie04: 3300000,
-        serie05: 3300000,
-        serie06: 3300000,
-        serie07: 3300000,
-      },
-      total: 15300000,
     },
   ];
 
@@ -195,7 +154,7 @@ export default function PageIngresoAcep() {
   // Función helper para formatear montos
   const formatCurrency = (value?: number) => {
     if (typeof value !== "number" || isNaN(value)) return "$0";
-    return value === 0 ? "$0" : `$${value.toLocaleString("es-PE")}`;
+    return value === 0 ? "$0" : `$/ ${value.toLocaleString("es-PE")}`;
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -216,9 +175,16 @@ export default function PageIngresoAcep() {
     console.log("Serie seleccionada:", value);
   };
 
-  const handleDateChange = (newValue: unknown) => {
-    const typedValue = newValue as Date | null;
-    setStartDate(typedValue);
+  const handleResetFilters = () => {
+    // Reset date range and time filters back to defaults
+    setDateRange([null, null]);
+    setStartTime(new Date(2024, 0, 1, 8, 0));
+    setEndTime(new Date(2024, 0, 1, 16, 0));
+    setSelectedSerie(null);
+    setSelectedSerieId(0);
+    setSelectedStatus({ id: "todos", name: "Todos" });
+    // Keep other view state (tabs, expanded, etc.) untouched
+    console.log("Filtros restablecidos");
   };
 
   if (isMobileOrTablet) {
@@ -608,7 +574,7 @@ export default function PageIngresoAcep() {
 
                         <Autocomplete
                           options={seriesData}
-                          label="Filtrar por serie"
+                          label="Filtrar por Títulos Ofertado"
                           labelKey="duration"
                           valueKey="id"
                           searchKeys={["duration", "name", "type"]}
@@ -619,8 +585,9 @@ export default function PageIngresoAcep() {
                             return `${opt.name} - ${opt.duration}${opt.type}`;
                           }}
                           textFieldProps={{
+                            size: "small",
                             fullWidth: true,
-                            placeholder: "Todos",
+                            placeholder: "Filtrar por Títulos Ofertado",
                             sx: {
                               backgroundColor: "#fff",
                               "& .MuiOutlinedInput-root": {
@@ -677,7 +644,61 @@ export default function PageIngresoAcep() {
                           dateAdapter={AdapterDateFns}
                           adapterLocale={es}
                         >
-                          <MobileTimePicker
+                          <DateRangePicker
+                            localeText={{
+                              start: "Fecha Inicio",
+                              end: "Fecha Fin",
+                            }}
+                            value={dateRange}
+                            // onChange gives adapter objects (like Dayjs) or Date wrappers.
+                            // Convert safely to native Date before updating state.
+                            onChange={(newValue) => {
+                              const toNativeDate = (
+                                value: PickerRangeValue[number]
+                              ): Date | null => {
+                                if (!value) return null;
+                                const asObj = value as unknown as Record<
+                                  string,
+                                  unknown
+                                >;
+                                if ("$d" in asObj && asObj.$d instanceof Date) {
+                                  return asObj.$d as Date;
+                                }
+                                if (typeof asObj.toDate === "function") {
+                                  return (asObj.toDate as () => Date)();
+                                }
+                                return value as Date;
+                              };
+
+                              const convertedValue: DateRange<Date> = [
+                                newValue?.[0]
+                                  ? toNativeDate(newValue[0])
+                                  : null,
+                                newValue?.[1]
+                                  ? toNativeDate(newValue[1])
+                                  : null,
+                              ];
+                              setDateRange(convertedValue);
+                            }}
+                            slotProps={{
+                              textField: {
+                                size: "small",
+                                fullWidth: true,
+                                sx: { backgroundColor: "#fff" },
+                              },
+                              actionBar: {
+                                // show explicit Cancel + OK buttons
+                                actions: ["cancel", "accept"],
+                              },
+                            }}
+                          />
+                        </LocalizationProvider>
+
+                        <LocalizationProvider
+                          dateAdapter={AdapterDateFns}
+                          adapterLocale={es}
+                        >
+                          <DesktopTimePicker
                             label="Hora Inicio"
                             value={startTime}
                             onChange={(newValue) =>
@@ -687,6 +708,7 @@ export default function PageIngresoAcep() {
                             }
                             slotProps={{
                               textField: {
+                                size: "small",
                                 fullWidth: true,
                                 placeholder: "8:00",
                                 sx: {
@@ -705,7 +727,7 @@ export default function PageIngresoAcep() {
                           dateAdapter={AdapterDateFns}
                           adapterLocale={es}
                         >
-                          <MobileTimePicker
+                          <DesktopTimePicker
                             label="Hora Fin"
                             value={endTime}
                             onChange={(newValue) =>
@@ -715,6 +737,7 @@ export default function PageIngresoAcep() {
                             }
                             slotProps={{
                               textField: {
+                                size: "small",
                                 fullWidth: true,
                                 placeholder: "16:00",
                                 sx: {
@@ -728,6 +751,32 @@ export default function PageIngresoAcep() {
                             ampm={false} // Formato 24 horas
                           />
                         </LocalizationProvider>
+
+                        {/* Reset (icon) at the end of the row; keep its height in sync */}
+                        <Box
+                          sx={{
+                            flex: "0 0 auto",
+                            display: "flex",
+                            alignItems: "stretch",
+                            height: "100%",
+                          }}
+                        >
+                          <IconButton
+                            onClick={handleResetFilters}
+                            aria-label="restablecer filtros"
+                            size="medium"
+                            sx={{
+                              border: "1px solid rgba(0,0,0,0.12)",
+                              borderRadius: 1,
+                              height: "100%",
+                              width: 56,
+                              bgcolor: "transparent",
+                              ml: 1,
+                            }}
+                          >
+                            <RestartAlt />
+                          </IconButton>
+                        </Box>
                       </Box>
 
                       {/* Chart and Cards */}
@@ -738,6 +787,7 @@ export default function PageIngresoAcep() {
                             selectedSerieId={selectedSerieId}
                             startTime={startTime}
                             endTime={endTime}
+                            dateRange={dateRange}
                           />
                         </Box>
 
@@ -778,12 +828,12 @@ export default function PageIngresoAcep() {
                               <Typography
                                 sx={{ fontSize: "16px", fontWeight: 700 }}
                               >
-                                Monto <strong>$60.000.000</strong>
+                                Monto <strong>$/60.000.000</strong>
                               </Typography>
                               <Typography
                                 sx={{ fontSize: "16px", fontWeight: 700 }}
                               >
-                                Bid to Cover <strong>78,33 %</strong>
+                                Bid to Cover <strong>0,25x</strong>
                               </Typography>
                             </CardContent>
                           </Card>
@@ -820,12 +870,12 @@ export default function PageIngresoAcep() {
                               <Typography
                                 sx={{ fontSize: "16px", fontWeight: 700 }}
                               >
-                                Monto <strong>$50.000.000</strong>
+                                Monto <strong>$/50.000.000</strong>
                               </Typography>
                               <Typography
                                 sx={{ fontSize: "16px", fontWeight: 700 }}
                               >
-                                Bid to Cover <strong>94,00 %</strong>
+                                Bid to Cover <strong>0,30x</strong>
                               </Typography>
                             </CardContent>
                           </Card>
@@ -849,7 +899,7 @@ export default function PageIngresoAcep() {
                               <Typography
                                 sx={{ fontSize: "16px", fontWeight: 700 }}
                               >
-                                $47.000.000
+                                $/15.207.000
                               </Typography>
                             </CardContent>
                           </Card>
@@ -871,7 +921,7 @@ export default function PageIngresoAcep() {
                                 Entidad
                               </TableCell>
                               <TableCell sx={{ fontWeight: 500 }}>
-                                N° Aceptaciones por Entidad
+                                N° Aceptaciones
                               </TableCell>
                               {seriesColumns.map((serie) => (
                                 <TableCell
@@ -896,7 +946,7 @@ export default function PageIngresoAcep() {
                                 </TableCell>
                               ))}
                               <TableCell sx={{ fontWeight: 500 }}>
-                                Total Ofertada
+                                Total
                               </TableCell>
                             </TableRow>
                           </TableHead>
@@ -924,7 +974,7 @@ export default function PageIngresoAcep() {
                             {/* Fila de Total General */}
                             <TableRow sx={{ bgcolor: "#f4f4f4" }}>
                               <TableCell sx={{ fontWeight: 600 }}>
-                                Total General
+                                Total
                               </TableCell>
                               <TableCell sx={{ fontWeight: 600 }}>
                                 {totals.acceptances}
@@ -945,7 +995,7 @@ export default function PageIngresoAcep() {
                             {/* Fila de N° Total de Aceptaciones por Serie */}
                             <TableRow sx={{ bgcolor: "#f4f4f4" }}>
                               <TableCell sx={{ fontWeight: 600 }}>
-                                N° Total de Aceptaciones por Serie
+                                N° de Aceptaciones
                               </TableCell>
                               <TableCell></TableCell>
                               {seriesColumns.map((serie) => (
