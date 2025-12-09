@@ -1063,7 +1063,7 @@ export default function PageIngresoAcep() {
               {tabValue === 1 && (
                 <Box sx={{ p: 4 }}>
                   <Typography color="text.secondary">
-                    <IngresoAceptaciones />
+                    <IngresoAceptaciones onTabChange={setTabValue} />
                   </Typography>
                 </Box>
               )}

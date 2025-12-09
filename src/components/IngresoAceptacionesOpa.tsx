@@ -29,12 +29,14 @@ import {
   Close as CloseIcon,
   ErrorOutline as ErrorOutlineIcon,
   ExpandMore,
+  CheckCircle as CheckCircleIcon,
 } from "@mui/icons-material";
 import { Divider } from "@nuam/common-fe-lib-components";
 
 interface IngresoAceptacionesProps {
   onSubmit?: (data: FormData) => void;
   onCargaMasiva?: () => void;
+  onTabChange?: (tabIndex: number) => void;
 }
 
 interface FormData {
@@ -48,10 +50,12 @@ interface FormData {
 export function IngresoAceptacionesOpa({
   onSubmit,
   onCargaMasiva,
+  onTabChange,
 }: IngresoAceptacionesProps) {
   const [expandedPanel1, setExpandedPanel1] = useState(true);
   const [expandedPanel2, setExpandedPanel2] = useState(true);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   const [tipoDocumento, setTipoDocumento] = useState("Cédula");
   const [numeroDocumento, setNumeroDocumento] = useState("8011117866");
@@ -93,6 +97,16 @@ export function IngresoAceptacionesOpa({
 
     // Cerrar el modal
     setOpenConfirmModal(false);
+
+    // Mostrar mensaje de éxito
+    setShowSuccessAlert(true);
+
+    // Cambiar a tab "Información general" (index 0) después de un breve delay
+    setTimeout(() => {
+      if (onTabChange) {
+        onTabChange(0);
+      }
+    }, 2000);
   };
 
   const handleCancelSave = () => {
@@ -127,7 +141,7 @@ export function IngresoAceptacionesOpa({
                   "0px 1px 5px 0px rgba(0,0,0,0.12), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.2)",
               }}
             >
-              Carga masiva
+              Ingreso con Carga masiva
             </Button>
 
             {/* Alerta */}
@@ -526,6 +540,32 @@ export function IngresoAceptacionesOpa({
           </DialogContent>
         </Dialog>
       </Box>
+
+      {/* Alert de éxito */}
+      {showSuccessAlert && (
+        <Alert
+          icon={<CheckCircleIcon />}
+          severity="success"
+          onClose={() => setShowSuccessAlert(false)}
+          sx={{
+            backgroundColor: "#4caf50",
+            color: "white",
+            "& .MuiAlert-icon": {
+              color: "white",
+            },
+            "& .MuiAlert-message": {
+              fontWeight: 500,
+              fontSize: "14px",
+            },
+            "& .MuiIconButton-root": {
+              color: "white",
+            },
+          }}
+        >
+          Datos actualizados
+        </Alert>
+      )}
+
       <Divider />
       <Box>
         <Accordion defaultExpanded={false}>

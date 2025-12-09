@@ -1001,7 +1001,7 @@ export default function PageIngresoOpa() {
               {tabValue === 1 && (
                 <Box sx={{ p: 4 }}>
                   <Typography color="text.secondary">
-                    <IngresoAceptacionesOpa />
+                    <IngresoAceptacionesOpa onTabChange={setTabValue} />
                   </Typography>
                 </Box>
               )}
