@@ -5,7 +5,6 @@ import { signOut } from "next-auth/react";
 
 // Importar las imágenes desde los assets de Figma
 const kallpaAvatar = "/assets/kallpa-avatar.png";
-const chavinAvatar = "/assets/chavin-avatar.png";
 
 interface RoleCardProps {
   avatar: string;
@@ -20,6 +19,9 @@ function RoleCard({ avatar, name, location, role, onClick }: RoleCardProps) {
 
   const handleClick = () => {
     if (role === "Operador") {
+      router.push("/PageGestAcepCesOperator");
+    }
+    if (role === "Administrador") {
       router.push("/PageGestAcepCes");
     } else if (onClick) {
       onClick();

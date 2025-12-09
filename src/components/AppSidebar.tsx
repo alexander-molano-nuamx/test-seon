@@ -15,8 +15,11 @@ import {
   ExpandMore,
   People,
   PersonAdd,
+  Settings,
   Work,
 } from "@mui/icons-material";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface MenuItem {
   text: string;
@@ -35,6 +38,7 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ open, width = 240 }: AppSidebarProps) {
+  const pathname = usePathname();
   const [expandedItems, setExpandedItems] = useState<{
     [key: string]: boolean;
   }>({
@@ -43,10 +47,16 @@ export function AppSidebar({ open, width = 240 }: AppSidebarProps) {
 
   const menuItems: MenuItem[] = [
     {
+      text: "Administrador de usuarios",
+      icon: <Settings />,
+      path: "/PageGestAcepCesOperator",
+      active: pathname === "/PageGestAcepCesOperator",
+    },
+    {
       text: "Operaciones especiales",
       icon: <PersonAdd />,
-      path: "/acceptances",
-      active: true,
+      path: "/PageGestAcepCes",
+      active: pathname === "/PageGestAcepCes",
     },
   ];
 
@@ -83,6 +93,8 @@ export function AppSidebar({ open, width = 240 }: AppSidebarProps) {
             <div key={index}>
               <ListItem disablePadding>
                 <ListItemButton
+                  component={item.path && !item.children ? Link : "div"}
+                  href={item.path && !item.children ? item.path : undefined}
                   onClick={() => {
                     if (item.children) {
                       handleToggleExpand(item.text);
