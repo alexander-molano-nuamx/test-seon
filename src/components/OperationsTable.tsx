@@ -414,21 +414,49 @@ export function OperationsTable({
       width: 150,
       sortable: false,
       filterable: false,
-      renderCell: () => (
-        <Link
-          href="/PageIngresoAcep"
-          sx={{
-            color: "#FF4201",
-            textDecoration: "underline",
-            fontSize: "14px",
-            "&:hover": {
-              color: "#FF3700",
-            },
-          }}
-        >
-          Ver Detalles
-        </Link>
-      ),
+      renderCell: (params: GridRenderCellParams) => {
+        const row = params.row as Operation;
+
+        // Determinar la ruta según el issuer
+        let href: string | undefined;
+        if (row.issuer === "CREDICORP") {
+          href = "/PageIngresoOpa";
+        } else if (row.issuer === "ALICORP") {
+          href = "/PageIngresoAcep";
+        }
+
+        // Si no hay href definido, mostrar el texto sin funcionalidad
+        if (!href) {
+          return (
+            <Typography
+              sx={{
+                color: "#FF4201",
+                textDecoration: "underline",
+                fontSize: "14px",
+                cursor: "default",
+              }}
+            >
+              Ver Detalles
+            </Typography>
+          );
+        }
+
+        return (
+          <Link
+            href={href}
+            sx={{
+              color: "#FF4201",
+              textDecoration: "underline",
+              fontSize: "14px",
+              "&:hover": {
+                color: "#FF3700",
+              },
+            }}
+          >
+            Ver Detalles
+          </Link>
+        );
+      },
     },
     {
       field: "status",

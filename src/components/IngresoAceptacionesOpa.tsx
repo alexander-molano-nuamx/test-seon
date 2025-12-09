@@ -45,7 +45,7 @@ interface FormData {
   referencia: string;
 }
 
-export function IngresoAceptaciones({
+export function IngresoAceptacionesOpa({
   onSubmit,
   onCargaMasiva,
 }: IngresoAceptacionesProps) {

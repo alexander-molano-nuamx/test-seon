@@ -215,7 +215,7 @@ export const timeLabels = [
   "16:00",
 ];
 
-export function StackedBarChart({
+export function StackedBarChartOpa({
   selectedSerieId,
   startTime,
   endTime,
@@ -234,8 +234,8 @@ export function StackedBarChart({
 
   const filteredSeriesData =
     selectedSerieId && selectedSerieId !== 0
-      ? seriesData.filter((s) => s.id === selectedSerieId)
-      : seriesData;
+      ? seriesDataOpa.filter((s) => s.id === selectedSerieId)
+      : seriesDataOpa;
 
   const getFilteredTimeLabels = () => {
     if (!startTime || !endTime) return timeLabels;
@@ -276,7 +276,7 @@ export function StackedBarChart({
   // the series' existing hourly totals but scaled per-month so results are
   // stable and easy to reason about.
   const makeMonthlyDataForSeries = (
-    serie: (typeof seriesData)[number],
+    serie: (typeof seriesDataOpa)[number],
     monthlyLabels: string[]
   ) => {
     // Sum up hourly values as a base seed
@@ -360,8 +360,7 @@ export function StackedBarChart({
             border-radius: 2px;
           "></span>
           <span style="font-size: 14px; color: #000; font-weight: 500; font-family: 'Roboto', sans-serif;">
-            ${dataPoint.datasetIndex + 1}. ${serie.name} ${serie.duration}${
-                serie.type
+            ${dataPoint.datasetIndex + 1}. ${serie.name} 
               }
           </span>
         </div>
@@ -505,7 +504,6 @@ export function StackedBarChart({
   let data = {
     labels: filteredTimeLabels,
     datasets: filteredSeriesData.map((serie) => ({
-      label: `${serie.duration}${serie.type}`,
       data: filteredTimeLabels.map((time) => serie.hourlyData[time] || 0), // ← Obtener datos por hora
       backgroundColor: serie.color,
       borderWidth: 0,
@@ -522,7 +520,6 @@ export function StackedBarChart({
     data = {
       labels: monthLabels,
       datasets: filteredSeriesData.map((serie) => ({
-        label: `${serie.duration}${serie.type}`,
         data: makeMonthlyDataForSeries(serie, monthLabels),
         backgroundColor: serie.color,
         borderWidth: 0,

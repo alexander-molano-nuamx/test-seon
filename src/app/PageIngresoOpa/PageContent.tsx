@@ -41,7 +41,11 @@ import { Autocomplete } from "@/components/Autocomplete";
 import { RestrictedDevice } from "@/components/RestrictedDevice";
 import type { PickerRangeValue } from "@mui/x-date-pickers/internals";
 import type { DateRange } from "@mui/x-date-pickers-pro";
-import { StackedBarChart } from "@/components/StackedBarChart";
+import {
+  SerieItemOpa,
+  seriesDataOpa,
+  StackedBarChart,
+} from "@/components/StackedBarChart";
 
 // Dynamically import MUI X Date Pickers to prevent SSR issues with document access
 const LocalizationProvider = dynamicImport(
@@ -80,10 +84,13 @@ import { RoleProtectedRoute } from "@/components/RoleProtectedRoute";
 import { IngresoAceptaciones } from "@/components/IngresoAceptaciones";
 import { SessionInfo } from "@/components/SessionInfo";
 import { seriesData, SerieItem } from "@/components/StackedBarChart";
+import { StackedBarChartOpa } from "@/components/StackedBarChartOpa";
+import { IngresoAceptacionesOpa } from "@/components/IngresoAceptacionesOpa";
+import { RegistroAceptacionesOpa } from "@/components/RegistroAceptacionesOpa";
 
 const drawerWidth = 240;
 
-export default function PageIngresoAcep() {
+export default function PageIngresoOpa() {
   const [tabValue, setTabValue] = useState(0);
   const [expanded, setExpanded] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -132,17 +139,15 @@ export default function PageIngresoAcep() {
 
   const customLinks = [
     { name: "Operaciones especiales", path: "/PageGestAcepCes" },
-    { name: "ALICORP", path: "/PageIngresoAcep" },
+    { name: "Información General", path: "/PageIngresoOpa" },
   ];
 
   const seriesColumns = [
-    { id: "serie01", name: "Serie A18", color: "#b22a09" },
-    { id: "serie02", name: "Serie B24", color: "#ff411c" },
-    { id: "serie03", name: "Serie B72", color: "#ffa47f" },
-    { id: "serie04", name: "Serie B96", color: "#FF8F00" },
-    { id: "serie05", name: "Serie C24", color: "#3D3D3D" },
-    { id: "serie06", name: "Serie C32", color: "#8F8F8F" },
-    { id: "serie07", name: "Serie C48", color: "#4dd0e1" },
+    {
+      id: "serie01",
+      name: "Acciones Comunes con Derecho a Voto",
+      color: "#b22a09",
+    },
   ];
 
   const entitiesData = [
@@ -151,15 +156,9 @@ export default function PageIngresoAcep() {
       entity: "Kallpa",
       acceptances: 20,
       series: {
-        serie01: 700000,
-        serie02: 800000,
-        serie03: 600000,
-        serie04: 3500000,
-        serie05: 700000,
-        serie06: 600000,
-        serie07: 2500000,
+        serie01: 800000,
       },
-      total: 10500000,
+      total: 800000,
     },
   ];
 
@@ -305,10 +304,8 @@ export default function PageIngresoAcep() {
                 mb: 2,
               }}
             >
-              Tipo de Valor{" "}
-              <span style={{ fontWeight: 600 }}>
-                Bono con Deposito de Corto plazo Papel Comercial
-              </span>
+              Oferta Pública de Adquisición Posterior de Acciones Comunes de
+              Volcán Compañía Minera S.A.A.
             </Typography>
 
             {/* Card Info */}
@@ -336,21 +333,21 @@ export default function PageIngresoAcep() {
                       }}
                     >
                       <Image
-                        src={"/assets/alicorp-logo.png"}
+                        src={"/assets/volcan.png"}
                         alt="Logo"
                         width={100}
                         height={100}
                       />
                     </Box>
                     <Typography sx={{ fontSize: "16px" }}>
-                      ALICORP - OPP RF
+                      VOLCÁN - OPA
                     </Typography>
                   </Box>
 
                   {/* Monto Total */}
                   <Box sx={{ textAlign: "center" }}>
                     <Typography sx={{ fontSize: "16px" }}>
-                      Monto total ofertado
+                      Cantidad total ofertada
                     </Typography>
                     <Typography
                       sx={{
@@ -359,7 +356,7 @@ export default function PageIngresoAcep() {
                         color: "rgba(0,0,0,0.6)",
                       }}
                     >
-                      $50.000.000 - PEN
+                      1.000.000 - Aciones
                     </Typography>
                   </Box>
 
@@ -444,7 +441,7 @@ export default function PageIngresoAcep() {
                       color: "var(--color-orangered)",
                     }}
                   >
-                    Series Total Ofertadas: {seriesData.length}
+                    Títulos Ofertados: {seriesDataOpa.length}
                   </Typography>
                 </AccordionSummary>
 
@@ -457,7 +454,7 @@ export default function PageIngresoAcep() {
                       py: 1,
                     }}
                   >
-                    {seriesData.map((serie) => (
+                    {seriesDataOpa.map((serie) => (
                       <Box
                         key={serie.id}
                         sx={{
@@ -487,60 +484,6 @@ export default function PageIngresoAcep() {
                         >
                           {serie.id}. {serie.name}
                         </Typography>
-                        <Typography
-                          component="span"
-                          sx={{
-                            fontWeight: 500,
-                            fontSize: "14px",
-                            color: "rgba(0,0,0,0.6)",
-                            letterSpacing: "0.1px",
-                            lineHeight: 1.57,
-                          }}
-                        >
-                          •
-                        </Typography>
-                        <Typography
-                          component="span"
-                          sx={{
-                            fontWeight: 600,
-                            fontSize: "14px",
-                            color: "rgba(0,0,0,0.6)",
-                            letterSpacing: "0.1px",
-                            lineHeight: 1.57,
-                          }}
-                        >
-                          {serie.duration}
-                        </Typography>
-                        {Array.isArray(serie.type) ? (
-                          serie.type.map((info, idx) => (
-                            <Typography
-                              key={idx}
-                              component="span"
-                              sx={{
-                                fontWeight: 600,
-                                fontSize: "14px",
-                                color: "rgba(0,0,0,0.6)",
-                                letterSpacing: "0.1px",
-                                lineHeight: 1.57,
-                              }}
-                            >
-                              {info}
-                            </Typography>
-                          ))
-                        ) : serie.type ? (
-                          <Typography
-                            component="span"
-                            sx={{
-                              fontWeight: 600,
-                              fontSize: "14px",
-                              color: "rgba(0,0,0,0.6)",
-                              letterSpacing: "0.1px",
-                              lineHeight: 1.57,
-                            }}
-                          >
-                            {serie.type}
-                          </Typography>
-                        ) : null}
                       </Box>
                     ))}
                   </Box>
@@ -629,7 +572,9 @@ export default function PageIngresoAcep() {
                           }}
                           // Renderizar cada opción con más detalle
                           renderOption={(props, option) => {
-                            const opt = option as SerieItem & { label: string };
+                            const opt = option as SerieItemOpa & {
+                              label: string;
+                            };
                             return (
                               <Box
                                 component="li"
@@ -656,13 +601,6 @@ export default function PageIngresoAcep() {
                                     sx={{ fontWeight: 500 }}
                                   >
                                     {opt.name}
-                                  </Typography>
-                                  <Typography
-                                    variant="caption"
-                                    sx={{ color: "rgba(0,0,0,0.6)" }}
-                                  >
-                                    {opt.duration}
-                                    {opt.type}
                                   </Typography>
                                 </Box>
                               </Box>
@@ -815,7 +753,7 @@ export default function PageIngresoAcep() {
                       <Stack direction="row" spacing={3} sx={{ mb: 3 }}>
                         {/* Chart Placeholder */}
                         <Box sx={{ flex: "0 0 80%" }}>
-                          <StackedBarChart
+                          <StackedBarChartOpa
                             selectedSerieId={selectedSerieId}
                             startTime={startTime}
                             endTime={endTime}
@@ -854,18 +792,18 @@ export default function PageIngresoAcep() {
                                     color: "rgba(0,0,0,0.6)",
                                   }}
                                 >
-                                  Máximo Total Ofertado
+                                  Cantidad Máxima Ofertada
                                 </Typography>
                               </Stack>
                               <Typography
                                 sx={{ fontSize: "16px", fontWeight: 700 }}
                               >
-                                Monto <strong>$/60.000.000</strong>
+                                Monto <strong>1.000.000</strong>
                               </Typography>
                               <Typography
                                 sx={{ fontSize: "16px", fontWeight: 700 }}
                               >
-                                Bid to Cover <strong>0,25x</strong>
+                                Bid to Cover <strong>0,8x</strong>
                               </Typography>
                             </CardContent>
                           </Card>
@@ -896,18 +834,18 @@ export default function PageIngresoAcep() {
                                     color: "rgba(0,0,0,0.6)",
                                   }}
                                 >
-                                  Total Ofertado
+                                  Cantidad Mínima Ofertada
                                 </Typography>
                               </Stack>
                               <Typography
                                 sx={{ fontSize: "16px", fontWeight: 700 }}
                               >
-                                Monto <strong>$/50.000.000</strong>
+                                Monto <strong>500.000</strong>
                               </Typography>
                               <Typography
                                 sx={{ fontSize: "16px", fontWeight: 700 }}
                               >
-                                Bid to Cover <strong>0,30x</strong>
+                                Bid to Cover <strong>1,6x</strong>
                               </Typography>
                             </CardContent>
                           </Card>
@@ -926,12 +864,12 @@ export default function PageIngresoAcep() {
                                   mb: 1,
                                 }}
                               >
-                                Monto Total en Aceptaciones
+                                Cantidad Total en Aceptaciones
                               </Typography>
                               <Typography
                                 sx={{ fontSize: "16px", fontWeight: 700 }}
                               >
-                                $/15.207.000
+                                800.000
                               </Typography>
                             </CardContent>
                           </Card>
@@ -1054,7 +992,7 @@ export default function PageIngresoAcep() {
                       </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <RegistroAceptaciones />
+                      <RegistroAceptacionesOpa />
                     </AccordionDetails>
                   </Accordion>
                 </Box>
@@ -1063,7 +1001,7 @@ export default function PageIngresoAcep() {
               {tabValue === 1 && (
                 <Box sx={{ p: 4 }}>
                   <Typography color="text.secondary">
-                    <IngresoAceptaciones />
+                    <IngresoAceptacionesOpa />
                   </Typography>
                 </Box>
               )}

@@ -160,7 +160,7 @@ const mockData = [
   },
 ];
 
-export function RegistroAceptaciones() {
+export function RegistroAceptacionesOpa() {
   const [tabValue, setTabValue] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [operador, setOperador] = useState("");
@@ -585,7 +585,7 @@ export function RegistroAceptaciones() {
                   label="Seleccionar Títulos Ofertados *"
                 >
                   <MenuItem value="serie-a18">
-                    Serie A18 -18 Meses en Tasa Fija E.A
+                    Acciones Comunes con Derecho a Voto
                   </MenuItem>
                 </Select>
               </FormControl>
@@ -637,7 +637,7 @@ export function RegistroAceptaciones() {
                       <TextField
                         fullWidth
                         label="Mínimo de la Aceptación"
-                        defaultValue="$1.000.000"
+                        defaultValue="1"
                         size="small"
                         slotProps={{ input: { readOnly: true } }}
                         sx={{ bgcolor: "rgba(0,0,0,0.02)" }}
@@ -645,7 +645,7 @@ export function RegistroAceptaciones() {
                       <TextField
                         fullWidth
                         label="Múltiplo de la Aceptación"
-                        defaultValue="$1.000.000"
+                        defaultValue="1"
                         size="small"
                         slotProps={{ input: { readOnly: true } }}
                         sx={{ bgcolor: "rgba(0,0,0,0.02)" }}
@@ -677,7 +677,7 @@ export function RegistroAceptaciones() {
                       <TextField
                         fullWidth
                         label="Monto de la Aceptación (PEN) *"
-                        defaultValue="$2.000.000"
+                        defaultValue="$0,500"
                         size="small"
                         slotProps={{ input: { readOnly: true } }}
                         sx={{ bgcolor: "rgba(0,0,0,0.02)" }}
@@ -690,6 +690,17 @@ export function RegistroAceptaciones() {
                         slotProps={{ input: { readOnly: true } }}
                         sx={{ bgcolor: "rgba(0,0,0,0.02)" }}
                       />
+                    </Box>
+                    <Box sx={{ display: "flex", gap: 2 }}>
+                      <TextField
+                        fullWidth
+                        label="Forma de Pago de la Aceptación *"
+                        defaultValue="PEN"
+                        size="small"
+                        slotProps={{ input: { readOnly: true } }}
+                        sx={{ bgcolor: "rgba(0,0,0,0.02)" }}
+                      />
+                      <Box sx={{ width: "100%" }}></Box>
                     </Box>
                   </Box>
                 </AccordionDetails>
