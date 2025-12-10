@@ -188,7 +188,7 @@ export default function PageIngresoOpa() {
   // Función helper para formatear montos
   const formatCurrency = (value?: number) => {
     if (typeof value !== "number" || isNaN(value)) return "$0";
-    return value === 0 ? "$0" : `$/ ${value.toLocaleString("es-PE")}`;
+    return value === 0 ? "$0" : `${value.toLocaleString("es-PE")}`;
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -973,7 +973,7 @@ export default function PageIngresoOpa() {
                                   key={serie.id}
                                   sx={{ fontWeight: 600 }}
                                 >
-                                  {acceptancesBySeries[serie.id]}
+                                  {totals.acceptances}
                                 </TableCell>
                               ))}
                               <TableCell sx={{ fontWeight: 600 }}>
