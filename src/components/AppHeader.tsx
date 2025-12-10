@@ -103,8 +103,8 @@ export function AppHeader({ sidebarOpen, setSidebarOpen }: AppHeaderProps) {
   // Determinar avatar según la empresa
   const getAvatarSrc = (company?: string) => {
     switch (company?.toLowerCase()) {
-      case "BBVA":
-        return "/assets/BBVA-2.svg";
+      case "Inteligo":
+        return "/assets/inteligo-1.png";
       case "chavin":
         return "/assets/Chavin.png";
       default:

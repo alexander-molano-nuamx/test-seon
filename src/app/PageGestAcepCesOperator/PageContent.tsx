@@ -1182,7 +1182,7 @@ export default function PageGestAcepCesOperator() {
                               color: "rgba(0,0,0,0.87)",
                             }}
                           >
-                            Kalpa Perú
+                            Inteligo Perú
                           </Typography>
                         </Box>
 
@@ -2412,7 +2412,7 @@ export default function PageGestAcepCesOperator() {
                             color: "rgba(0,0,0,0.87)",
                           }}
                         >
-                          Kalpa Perú
+                          Inteligo Perú
                         </Typography>
                       </Box>
 

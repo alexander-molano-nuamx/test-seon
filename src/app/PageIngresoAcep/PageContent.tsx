@@ -148,7 +148,7 @@ export default function PageIngresoAcep() {
   const entitiesData = [
     {
       id: 1,
-      entity: "BBVA",
+      entity: "Inteligo",
       acceptances: 20,
       series: {
         serie01: 700000,

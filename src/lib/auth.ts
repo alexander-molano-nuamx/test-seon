@@ -30,9 +30,9 @@ const VALID_USERS = [
     id: "4",
     email: "usuario1@sab.com",
     password: "SabOper2024",
-    name: "Usuario BBVA",
+    name: "Usuario Inteligo",
     role: "operator",
-    company: "BBVA",
+    company: "Inteligo",
   },
 ];
 
