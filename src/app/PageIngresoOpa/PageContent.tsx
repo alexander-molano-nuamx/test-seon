@@ -153,7 +153,7 @@ export default function PageIngresoOpa() {
   const entitiesData = [
     {
       id: 1,
-      entity: "Kallpa",
+      entity: "BBVA",
       acceptances: 20,
       series: {
         serie01: 800000,

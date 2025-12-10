@@ -202,7 +202,11 @@ export function IngresoAceptacionesOpa({
               expandIcon={<ExpandMoreIcon sx={{ color: "rgba(0,0,0,0.56)" }} />}
               sx={{ px: 2 }}
             >
-              <Typography variant="h6" sx={{ color: "rgba(0,0,0,0.87)" }}>
+              <Typography
+                variant="h6"
+                component="span"
+                sx={{ color: "rgba(0,0,0,0.87)" }}
+              >
                 Datos del Inversionista
               </Typography>
             </AccordionSummary>
@@ -261,7 +265,11 @@ export function IngresoAceptacionesOpa({
               expandIcon={<ExpandMoreIcon sx={{ color: "rgba(0,0,0,0.56)" }} />}
               sx={{ px: 2 }}
             >
-              <Typography variant="h6" sx={{ color: "rgba(0,0,0,0.87)" }}>
+              <Typography
+                variant="h6"
+                component="span"
+                sx={{ color: "rgba(0,0,0,0.87)" }}
+              >
                 Datos de la Aceptación
               </Typography>
             </AccordionSummary>
@@ -486,6 +494,7 @@ export function IngresoAceptacionesOpa({
               {/* Texto de confirmación */}
               <Typography
                 variant="h6"
+                component="span"
                 sx={{
                   textAlign: "center",
                   color: "rgba(0,0,0,0.87)",

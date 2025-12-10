@@ -69,7 +69,7 @@ const mockUsers: User[] = [
     id: 1,
     nombre: "Oscar Javier",
     apellido: "Ballesteros Marin",
-    correo: "Usuario1@kallpa.com",
+    correo: "Usuario1@sab.com",
     telefono: "+51 325 000 2522",
     roles: "Administrador",
     estado: "Activo",
@@ -78,7 +78,7 @@ const mockUsers: User[] = [
     id: 2,
     nombre: "Juan",
     apellido: "Mejia",
-    correo: "Usuario2@kallpa.com",
+    correo: "Usuario2@sab.com",
     telefono: "+51 325 000 8020",
     roles: "Operador",
     estado: "Activo",
@@ -651,6 +651,7 @@ export default function PageGestAcepCesOperator() {
           <DialogTitle sx={{ p: 0, mb: 3, position: "relative" }}>
             <Typography
               variant="h6"
+              component="span"
               sx={{
                 color: "rgba(0,0,0,0.87)",
                 fontWeight: 500,
@@ -870,6 +871,7 @@ export default function PageGestAcepCesOperator() {
           <DialogTitle sx={{ p: 0, mb: 3, position: "relative" }}>
             <Typography
               variant="h6"
+              component="span"
               sx={{
                 color: "rgba(0,0,0,0.87)",
                 fontWeight: 500,
@@ -1355,6 +1357,7 @@ export default function PageGestAcepCesOperator() {
           <DialogTitle sx={{ p: 0, mb: 3, position: "relative" }}>
             <Typography
               variant="h6"
+              component="span"
               sx={{
                 color: "rgba(0,0,0,0.87)",
                 fontWeight: 500,
@@ -2074,6 +2077,7 @@ export default function PageGestAcepCesOperator() {
           <DialogTitle sx={{ p: 0, mb: 3, position: "relative" }}>
             <Typography
               variant="h6"
+              component="span"
               sx={{
                 color: "rgba(0,0,0,0.87)",
                 fontWeight: 500,

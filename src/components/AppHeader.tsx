@@ -103,8 +103,8 @@ export function AppHeader({ sidebarOpen, setSidebarOpen }: AppHeaderProps) {
   // Determinar avatar según la empresa
   const getAvatarSrc = (company?: string) => {
     switch (company?.toLowerCase()) {
-      case "kallpa":
-        return "/assets/kallpa-avatar.png";
+      case "BBVA":
+        return "/assets/BBVA-2.svg";
       case "chavin":
         return "/assets/Chavin.png";
       default:
@@ -161,6 +161,7 @@ export function AppHeader({ sidebarOpen, setSidebarOpen }: AppHeaderProps) {
           ) : (
             <Typography
               variant="h6"
+              component="span"
               sx={{ fontWeight: "bold", color: "#3D3D3D" }}
             >
               {session?.user?.company || "Usuario"}

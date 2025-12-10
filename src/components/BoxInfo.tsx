@@ -105,7 +105,11 @@ export const BoxInfo: React.FC<BoxInfoProps> = ({
   return (
     <div className="w-full">
       {title && (
-        <Typography variant="h6" className="mb-[24px] font-Roboto">
+        <Typography
+          variant="h6"
+          component="span"
+          className="mb-[24px] font-Roboto"
+        >
           {title}
         </Typography>
       )}

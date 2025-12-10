@@ -128,6 +128,7 @@ export function OperationsCards({ dataCard: data }: OperationsCardsProps) {
                   {/* Tipo de operación */}
                   <Typography
                     variant="h6"
+                    component="span"
                     sx={{
                       fontSize: "16px",
                       fontWeight: 500,

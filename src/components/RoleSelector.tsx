@@ -5,6 +5,7 @@ import { signOut } from "next-auth/react";
 
 // Importar las imágenes desde los assets de Figma
 const kallpaAvatar = "/assets/kallpa-avatar.png";
+const bbvaAvatar = "/assets/BBVA-2.svg";
 
 interface RoleCardProps {
   avatar: string;
@@ -71,15 +72,15 @@ export default function RoleSelector() {
   const roles = [
     {
       id: 1,
-      avatar: kallpaAvatar,
-      name: "Kallpa",
+      avatar: bbvaAvatar,
+      name: "BBVA",
       location: "Perú",
       role: "Administrador",
     },
     {
       id: 2,
-      avatar: kallpaAvatar,
-      name: "Kallpa",
+      avatar: bbvaAvatar,
+      name: "BBVA",
       location: "Perú",
       role: "Operador",
     },

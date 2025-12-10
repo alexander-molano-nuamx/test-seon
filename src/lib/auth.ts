@@ -26,6 +26,14 @@ const VALID_USERS = [
     role: "manager",
     company: "Operaciones",
   },
+  {
+    id: "4",
+    email: "usuario1@sab.com",
+    password: "SabOper2024",
+    name: "Usuario BBVA",
+    role: "operator",
+    company: "BBVA",
+  },
 ];
 
 export const authOptions: NextAuthOptions = {
