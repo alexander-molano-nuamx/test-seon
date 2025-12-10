@@ -25,6 +25,7 @@ import {
   Stepper,
   Step,
   StepLabel,
+  Stack,
 } from "@mui/material";
 import {
   Search as SearchIcon,
@@ -60,6 +61,7 @@ interface User {
   correo: string;
   telefono: string;
   roles: string;
+  estado: "Activo" | "Bloqueado" | "Inactivo" | "Suspendido";
 }
 
 const mockUsers: User[] = [
@@ -70,6 +72,7 @@ const mockUsers: User[] = [
     correo: "Usuario1@kallpa.com",
     telefono: "+51 325 000 2522",
     roles: "Administrador",
+    estado: "Activo",
   },
   {
     id: 2,
@@ -78,6 +81,7 @@ const mockUsers: User[] = [
     correo: "Usuario2@kallpa.com",
     telefono: "+51 325 000 8020",
     roles: "Operador",
+    estado: "Activo",
   },
 ];
 
@@ -118,6 +122,15 @@ export default function PageGestAcepCesOperator() {
       emisor: false,
     },
   });
+  const [users, setUsers] = useState<User[]>(mockUsers);
+
+  const handleEstadoChange = (userId: number, newEstado: User["estado"]) => {
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user.id === userId ? { ...user, estado: newEstado } : user
+      )
+    );
+  };
 
   useEffect(() => {
     // Obtener fecha/hora actual del navegador
@@ -230,7 +243,8 @@ export default function PageGestAcepCesOperator() {
     {
       field: "detalle",
       headerName: "Detalle",
-      width: 120,
+      flex: 1,
+      minWidth: 120,
       sortable: false,
       filterable: false,
       renderCell: (params: GridRenderCellParams) => {
@@ -259,27 +273,69 @@ export default function PageGestAcepCesOperator() {
     {
       field: "nombre",
       headerName: "Nombre",
-      width: 150,
+      flex: 1,
+      minWidth: 120,
     },
     {
       field: "apellido",
       headerName: "Apellido",
-      width: 200,
+      flex: 1.2,
+      minWidth: 150,
     },
     {
       field: "correo",
       headerName: "Correo",
-      width: 220,
+      flex: 1.5,
+      minWidth: 180,
     },
     {
       field: "telefono",
       headerName: "Teléfono de Celular",
-      width: 180,
+      flex: 1.2,
+      minWidth: 150,
     },
     {
       field: "roles",
       headerName: "Roles",
-      width: 150,
+      flex: 1,
+      minWidth: 120,
+    },
+    {
+      field: "estado",
+      headerName: "Estado",
+      flex: 1.2,
+      minWidth: 150,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => {
+        const row = params.row as User;
+        return (
+          <FormControl size="small" fullWidth>
+            <Select
+              value={row.estado}
+              onChange={(e) =>
+                handleEstadoChange(row.id, e.target.value as User["estado"])
+              }
+              sx={{
+                fontSize: "14px",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "rgba(0,0,0,0.23)",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "rgba(0,0,0,0.87)",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#FF4201",
+                },
+              }}
+            >
+              <MenuItem value="Activo">Activo</MenuItem>
+              <MenuItem value="Bloqueado">Bloqueado</MenuItem>
+              <MenuItem value="Inactivo">Inactivo</MenuItem>
+              <MenuItem value="Suspendido">Suspendido</MenuItem>
+            </Select>
+          </FormControl>
+        );
+      },
     },
   ];
 
@@ -390,18 +446,9 @@ export default function PageGestAcepCesOperator() {
             </Typography>
 
             {/* Filtros */}
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2,
-                mb: 3,
-                flexWrap: "wrap",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
+            <Stack spacing={1} direction="row" sx={{ mb: 3 }}>
               {/* Buscador */}
-              <Box sx={{ flex: "1 1 0", minWidth: "250px", maxWidth: "400px" }}>
+              <Box sx={{ width: "100%" }}>
                 <TextField
                   size="small"
                   placeholder="Buscar por nombre o correo"
@@ -439,7 +486,7 @@ export default function PageGestAcepCesOperator() {
               </Box>
 
               {/* Selector de Rol */}
-              <Box sx={{ minWidth: "200px" }}>
+              <Box sx={{ width: "100%" }}>
                 <FormControl size="small" fullWidth>
                   <InputLabel>Seleccionar Rol</InputLabel>
                   <Select
@@ -456,7 +503,7 @@ export default function PageGestAcepCesOperator() {
                   </Select>
                 </FormControl>
               </Box>
-            </Box>
+            </Stack>
 
             {/* Botones de acción */}
             <Box
@@ -541,9 +588,9 @@ export default function PageGestAcepCesOperator() {
             </Box>
 
             {/* Tabla de Usuarios */}
-            <Box sx={{ height: 600, width: "100%" }}>
+            <Box sx={{ height: 700, width: "100%" }}>
               <DataGridPro
-                rows={mockUsers}
+                rows={users}
                 columns={columns}
                 pagination
                 pageSizeOptions={[5, 10, 25]}
@@ -554,11 +601,14 @@ export default function PageGestAcepCesOperator() {
                 }}
                 checkboxSelection
                 disableRowSelectionOnClick
-                localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+                disableColumnSelector
+                hideFooterSelectedRowCount
                 sx={{
                   backgroundColor: "#fff",
                   border: "1px solid rgba(0,0,0,0.12)",
                   "& .MuiDataGrid-cell": {
+                    display: "flex",
+                    alignItems: "center",
                     fontSize: "14px",
                     color: "rgba(0,0,0,0.87)",
                   },
@@ -568,10 +618,16 @@ export default function PageGestAcepCesOperator() {
                     fontWeight: 600,
                     color: "rgba(0,0,0,0.87)",
                   },
+                  "& .MuiDataGrid-columnHeader[data-field='__check__']": {
+                    "& .MuiCheckbox-root": {
+                      visibility: "hidden",
+                    },
+                  },
                   "& .MuiDataGrid-row:hover": {
                     backgroundColor: "rgba(0,0,0,0.04)",
                   },
                 }}
+                localeText={esES.components.MuiDataGrid.defaultProps.localeText}
               />
             </Box>
           </Box>

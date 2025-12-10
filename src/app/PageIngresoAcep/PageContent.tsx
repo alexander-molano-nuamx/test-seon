@@ -131,7 +131,7 @@ export default function PageIngresoAcep() {
   }, []);
 
   const customLinks = [
-    { name: "Operaciones especiales", path: "/PageGestAcepCes" },
+    { name: "Operaciones Especiales", path: "/PageGestAcepCes" },
     { name: "ALICORP", path: "/PageIngresoAcep" },
   ];
 

@@ -53,7 +53,7 @@ export function AppSidebar({ open, width = 240 }: AppSidebarProps) {
       active: pathname === "/PageGestAcepCesOperator",
     },
     {
-      text: "Operaciones especiales",
+      text: "Operaciones Especiales",
       icon: <PersonAdd />,
       path: "/PageGestAcepCes",
       active: pathname === "/PageGestAcepCes",

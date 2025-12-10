@@ -69,7 +69,7 @@ export default function PageGestAcepCes() {
   };
 
   const customLinks = [
-    { name: "Operaciones especiales", path: "/PageGestAcepCes" },
+    { name: "Operaciones Especiales", path: "/PageGestAcepCes" },
   ];
 
   const handleClear = () => {

@@ -138,7 +138,7 @@ export default function PageIngresoOpa() {
   }, []);
 
   const customLinks = [
-    { name: "Operaciones especiales", path: "/PageGestAcepCes" },
+    { name: "Operaciones Especiales", path: "/PageGestAcepCes" },
     { name: "Información General", path: "/PageIngresoOpa" },
   ];
 
