@@ -25,7 +25,13 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
           minHeight: "100vh",
         }}
       >
-        <CircularProgress />
+        <CircularProgress
+          sx={{
+            color: "#FF4201",
+            width: "80px",
+            height: "80px",
+          }}
+        />
       </Box>
     );
   }

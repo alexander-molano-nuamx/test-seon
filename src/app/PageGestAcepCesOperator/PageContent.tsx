@@ -82,7 +82,7 @@ const mockUsers: User[] = [
 ];
 
 export default function PageGestAcepCesOperator() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const { data: session, status } = useSession();
   const [lastLogin, setLastLogin] = useState<string>("");
   const [ipAddress, setIpAddress] = useState<string>("");
@@ -1223,7 +1223,9 @@ export default function PageGestAcepCesOperator() {
                             </Box>
                             <IconButton
                               size="small"
-                              onClick={() => handleOpenPermissionsModal("Emisor")}
+                              onClick={() =>
+                                handleOpenPermissionsModal("Emisor")
+                              }
                             >
                               <VisibilityRounded sx={{ fontSize: 18, mr: 2 }} />
                             </IconButton>
@@ -2517,7 +2519,9 @@ export default function PageGestAcepCesOperator() {
                       Datos del Usuario
                     </Typography>
 
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+                    >
                       <Box
                         sx={{
                           display: "grid",
@@ -2654,9 +2658,13 @@ export default function PageGestAcepCesOperator() {
                       Roles Asignados
                     </Typography>
 
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                    >
                       {createUserFormData.roles.administrador && (
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        >
                           <Box
                             sx={{
                               width: 8,
@@ -2671,7 +2679,9 @@ export default function PageGestAcepCesOperator() {
                         </Box>
                       )}
                       {createUserFormData.roles.operador && (
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        >
                           <Box
                             sx={{
                               width: 8,
@@ -2680,11 +2690,15 @@ export default function PageGestAcepCesOperator() {
                               backgroundColor: "#FF4201",
                             }}
                           />
-                          <Typography sx={{ fontSize: "14px" }}>Operador</Typography>
+                          <Typography sx={{ fontSize: "14px" }}>
+                            Operador
+                          </Typography>
                         </Box>
                       )}
                       {createUserFormData.roles.emisor && (
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        >
                           <Box
                             sx={{
                               width: 8,
@@ -2693,7 +2707,9 @@ export default function PageGestAcepCesOperator() {
                               backgroundColor: "#FF4201",
                             }}
                           />
-                          <Typography sx={{ fontSize: "14px" }}>Emisor</Typography>
+                          <Typography sx={{ fontSize: "14px" }}>
+                            Emisor
+                          </Typography>
                         </Box>
                       )}
                       {!createUserFormData.roles.administrador &&

@@ -35,7 +35,7 @@ const statusOptions = [
 ];
 
 export default function PageGestAcepCes() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const { data: session, status } = useSession();
   const [lastLogin, setLastLogin] = useState<string>("");
   const [ipAddress, setIpAddress] = useState<string>("");
