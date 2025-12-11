@@ -28,6 +28,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { IsotypeName } from "./IsotypeName";
+import { getCompanyLogo } from "@/config/companies";
 
 interface AppHeaderProps {
   sidebarOpen: boolean;
@@ -100,16 +101,12 @@ export function AppHeader({ sidebarOpen, setSidebarOpen }: AppHeaderProps) {
       .slice(0, 2);
   };
 
-  // Determinar avatar según la empresa
+  // Determinar avatar según la empresa usando el mapeo centralizado
   const getAvatarSrc = (company?: string) => {
-    switch (company?.toLowerCase()) {
-      case "BTG Pactual SAB":
-        return "/assets/btg-pacta.svg";
-      case "chavin":
-        return "/assets/Chavin.png";
-      default:
-        return null;
-    }
+    if (!company) return null;
+    const logo = getCompanyLogo(company);
+    // Si el logo es el default (isotype), retornar null para mostrar las iniciales
+    return logo === "/assets/isotype.svg" ? null : logo;
   };
 
   return (

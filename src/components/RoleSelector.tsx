@@ -1,11 +1,8 @@
 import { Button, Typography } from "@mui/material";
 import { Card, CardContent, Avatar, Chip, Box, Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
-
-// Importar las imágenes desde los assets de Figma
-const kallpaAvatar = "/assets/kallpa-avatar.png";
-const bbvaAvatar = "/assets/btg-pacta.svg";
+import { signOut, useSession } from "next-auth/react";
+import { getCompanyLogo } from "@/config/companies";
 
 interface RoleCardProps {
   avatar: string;
@@ -69,20 +66,28 @@ function RoleCard({ avatar, name, location, role, onClick }: RoleCardProps) {
 }
 
 export default function RoleSelector() {
+  const { data: session } = useSession();
+  const userCompany = session?.user?.company || "";
+  const userRole = session?.user?.role || "";
+
+  // Get company logo dynamically based on user's company
+  const companyLogo = getCompanyLogo(userCompany);
+
+  // Map role from session to display text
+  const getRoleDisplayText = (role: string) => {
+    if (role === "operator") return "Operador";
+    if (role === "admin") return "Administrador";
+    if (role === "manager") return "Gestor";
+    return role;
+  };
+
   const roles = [
     {
       id: 1,
-      avatar: bbvaAvatar,
-      name: "BTG Pactual SAB",
+      avatar: companyLogo,
+      name: userCompany,
       location: "Perú",
-      role: "Administrador",
-    },
-    {
-      id: 2,
-      avatar: bbvaAvatar,
-      name: "BTG Pactual SAB",
-      location: "Perú",
-      role: "Operador",
+      role: getRoleDisplayText(userRole),
     },
   ];
 

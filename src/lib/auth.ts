@@ -16,7 +16,7 @@ const VALID_USERS = [
     password: "Kallpa2024",
     name: "Usuario Kallpa",
     role: "operator",
-    company: "Kallpa",
+    company: "Kallpa SAB",
   },
   {
     id: "3",
@@ -41,6 +41,30 @@ const VALID_USERS = [
     name: "Usuario BTG Pactual SAB",
     role: "operator",
     company: "BTG Pactual SAB",
+  },
+  {
+    id: "6",
+    email: "usuario3@sab.com",
+    password: "SabOp2024",
+    name: "Usuario BBVA",
+    role: "operator",
+    company: "BBVA",
+  },
+  {
+    id: "7",
+    email: "usuario4@sab.com",
+    password: "SabOp2024",
+    name: "Usuario Credicorp Capital SAB",
+    role: "operator",
+    company: "Credicorp Capital SAB",
+  },
+  {
+    id: "8",
+    email: "usuario5@sab.com",
+    password: "SabOp2024",
+    name: "BNB Valores SAB",
+    role: "operator",
+    company: "BNB Valores SAB",
   },
 ];
 

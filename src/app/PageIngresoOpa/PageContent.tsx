@@ -97,10 +97,14 @@ import { seriesData, SerieItem } from "@/components/StackedBarChart";
 import { StackedBarChartOpa } from "@/components/StackedBarChartOpa";
 import { IngresoAceptacionesOpa } from "@/components/IngresoAceptacionesOpa";
 import { RegistroAceptacionesOpa } from "@/components/RegistroAceptacionesOpa";
+import { useSession } from "next-auth/react";
 
 const drawerWidth = 240;
 
 export default function PageIngresoOpa() {
+  const { data: session } = useSession();
+  const userCompany = session?.user?.company || "BTG Pactual SAB";
+
   const [tabValue, setTabValue] = useState(0);
   const [expanded, setExpanded] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -163,7 +167,7 @@ export default function PageIngresoOpa() {
   const entitiesData = [
     {
       id: 1,
-      entity: "BTG Pactual SAB",
+      entity: userCompany,
       acceptances: 20,
       series: {
         serie01: 800000,

@@ -80,10 +80,14 @@ import { RoleProtectedRoute } from "@/components/RoleProtectedRoute";
 import { IngresoAceptaciones } from "@/components/IngresoAceptaciones";
 import { SessionInfo } from "@/components/SessionInfo";
 import { seriesData, SerieItem } from "@/components/StackedBarChart";
+import { useSession } from "next-auth/react";
 
 const drawerWidth = 240;
 
 export default function PageIngresoAcep() {
+  const { data: session } = useSession();
+  const userCompany = session?.user?.company || "BTG Pactual SAB";
+
   const [tabValue, setTabValue] = useState(0);
   const [expanded, setExpanded] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -148,7 +152,7 @@ export default function PageIngresoAcep() {
   const entitiesData = [
     {
       id: 1,
-      entity: "BTG Pactual SAB",
+      entity: userCompany,
       acceptances: 20,
       series: {
         serie01: 700000,
