@@ -58,9 +58,10 @@ export function IngresoAceptacionesOpa({
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   const [tipoDocumento, setTipoDocumento] = useState("Cédula");
+  const [coin, setcoin] = useState("PEN");
   const [numeroDocumento, setNumeroDocumento] = useState("8011117866");
-  const [tasaAceptacion, setTasaAceptacion] = useState("9,75%");
-  const [monto, setMonto] = useState("$/2.000.000");
+  const [tasaAceptacion, setTasaAceptacion] = useState("10.000");
+  const [monto, setMonto] = useState("5.000");
   const [referencia, setReferencia] = useState("26598941EEBC");
 
   const handleClearField = (setter: (value: string) => void) => {
@@ -183,7 +184,7 @@ export function IngresoAceptacionesOpa({
                   label="Seleccionar Títulos Ofertados *"
                 >
                   <MenuItem value="serie-a18">
-                    Serie A18 -18 Meses en Tasa Fija E.A
+                    Acciones Comunes con Derecho a Voto
                   </MenuItem>
                 </Select>
               </FormControl>
@@ -294,14 +295,14 @@ export function IngresoAceptacionesOpa({
                       <TextField
                         fullWidth
                         label="Mínimo de la Aceptación"
-                        defaultValue="$1.000.000"
+                        defaultValue="1"
                         variant="outlined"
                         slotProps={{ input: { readOnly: true } }}
                       />
                       <TextField
                         fullWidth
                         label="Múltiplo de negociación"
-                        defaultValue="$1.000.000"
+                        defaultValue="1"
                         variant="outlined"
                         slotProps={{
                           inputLabel: {
@@ -331,7 +332,7 @@ export function IngresoAceptacionesOpa({
                     >
                       <TextField
                         fullWidth
-                        label="Tasa Máxima de rentabilidad (E.A)"
+                        label="Precio Ofrecido (PEN)"
                         defaultValue="10,5%"
                         variant="outlined"
                         InputProps={{
@@ -340,7 +341,7 @@ export function IngresoAceptacionesOpa({
                       />
                       <TextField
                         fullWidth
-                        label="Tasa de la Aceptación *"
+                        label="Cantidad de la Aceptación *"
                         value={tasaAceptacion}
                         onChange={(e) => setTasaAceptacion(e.target.value)}
                         variant="outlined"
@@ -408,6 +409,22 @@ export function IngresoAceptacionesOpa({
                           },
                         }}
                       />
+                      <TextField
+                        select
+                        fullWidth
+                        label="Cuenta de Inversionista *"
+                        value={coin}
+                        onChange={(e) => setcoin(e.target.value)}
+                        variant="outlined"
+                        sx={{
+                          "& .MuiInputBase-input": {
+                            textAlign: "left", // ← Alinear texto
+                          },
+                        }}
+                      >
+                        <MenuItem value="PEN">PEN</MenuItem>
+                        <MenuItem value="USD">USD</MenuItem>
+                      </TextField>
                     </Box>
                   </Stack>
                 </Paper>

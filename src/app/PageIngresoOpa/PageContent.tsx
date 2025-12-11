@@ -356,7 +356,7 @@ export default function PageIngresoOpa() {
                         color: "rgba(0,0,0,0.6)",
                       }}
                     >
-                      1.000.000 - Aciones
+                      1.000.000 - Acciones
                     </Typography>
                   </Box>
 
