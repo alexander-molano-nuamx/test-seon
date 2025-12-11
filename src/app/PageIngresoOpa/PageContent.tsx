@@ -47,6 +47,16 @@ import {
   StackedBarChart,
 } from "@/components/StackedBarChart";
 
+// Type adapter for Autocomplete compatibility
+type AutocompleteOption = {
+  id: number;
+  name: string;
+  duration: string;
+  type: string;
+  color: string;
+  [key: string]: string | number;
+};
+
 // Dynamically import MUI X Date Pickers to prevent SSR issues with document access
 const LocalizationProvider = dynamicImport(
   () =>
@@ -548,7 +558,7 @@ export default function PageIngresoOpa() {
                         {/* Desplegable Estado */}
 
                         <Autocomplete
-                          options={seriesDataOpa}
+                          options={seriesDataOpa as unknown as AutocompleteOption[]}
                           label="Filtrar por Títulos Ofertado"
                           labelKey="duration"
                           valueKey="id"

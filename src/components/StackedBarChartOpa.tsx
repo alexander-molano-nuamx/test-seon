@@ -48,11 +48,13 @@ export interface SerieItem {
 export interface SerieItemOpa {
   id: number;
   name: string;
-
+  duration?: string;
+  type?: string;
   color: string;
   hourlyData: {
     [hour: string]: number;
   };
+  [key: string]: string | number | { [hour: string]: number } | undefined;
 }
 
 export const seriesData: SerieItem[] = [
@@ -187,7 +189,8 @@ export const seriesDataOpa: SerieItemOpa[] = [
   {
     id: 1,
     name: "Acciones Comunes con Derecho a Voto",
-
+    duration: "Acciones Comunes con Derecho a Voto",
+    type: "Acciones",
     color: "#b22a09",
     hourlyData: {
       "8:00": 6200000,
