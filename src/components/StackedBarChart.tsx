@@ -201,6 +201,23 @@ export const seriesDataOpa: SerieItemOpa[] = [
       "16:00": 500000,
     },
   },
+  {
+    id: 2,
+    name: "Acciones Comunes sin Derecho a Voto",
+
+    color: "#ff411c",
+    hourlyData: {
+      "8:00": 6200000,
+      "9:00": 1350000,
+      "10:00": 1500000,
+      "11:00": 4680000,
+      "12:00": 1850000,
+      "13:00": 2000000,
+      "14:00": 2180000,
+      "15:00": 6350000,
+      "16:00": 500000,
+    },
+  },
 ];
 
 export const timeLabels = [

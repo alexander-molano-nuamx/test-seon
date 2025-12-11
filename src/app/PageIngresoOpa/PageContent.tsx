@@ -153,7 +153,7 @@ export default function PageIngresoOpa() {
   const entitiesData = [
     {
       id: 1,
-      entity: "Inteligo",
+      entity: "BTG Pactual SAB",
       acceptances: 20,
       series: {
         serie01: 800000,
@@ -548,7 +548,7 @@ export default function PageIngresoOpa() {
                         {/* Desplegable Estado */}
 
                         <Autocomplete
-                          options={seriesData}
+                          options={seriesDataOpa}
                           label="Filtrar por Títulos Ofertado"
                           labelKey="duration"
                           valueKey="id"
@@ -556,8 +556,8 @@ export default function PageIngresoOpa() {
                           value={selectedSerie}
                           onChange={handleStatusChange}
                           getOptionLabel={(option) => {
-                            const opt = option as SerieItem;
-                            return `${opt.name} - ${opt.duration}${opt.type}`;
+                            const opt = option as SerieItemOpa;
+                            return `${opt.name}`;
                           }}
                           textFieldProps={{
                             size: "small",

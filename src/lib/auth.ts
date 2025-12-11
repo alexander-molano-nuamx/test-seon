@@ -34,6 +34,14 @@ const VALID_USERS = [
     role: "operator",
     company: "Inteligo",
   },
+  {
+    id: "5",
+    email: "usuario2@sab.com",
+    password: "SabOp2024",
+    name: "Usuario BTG Pactual SAB",
+    role: "operator",
+    company: "BTG Pactual SAB",
+  },
 ];
 
 export const authOptions: NextAuthOptions = {
